@@ -3,122 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Euronics HR Command Centre</title>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+:root{
+  --teal:#0f5f6d;--teal-2:#147b8d;--teal-soft:#e9f5f6;--navy:#15333a;--bg:#f4f7f8;--card:#fff;
+  --border:#dfe8eb;--text:#16343b;--muted:#7f989e;--green:#16835b;--amber:#b8750a;--red:#c52d4c;
+  --violet:#6a55b7;--shadow:0 8px 24px rgba(18,73,84,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit} button{cursor:pointer}.app-shell{min-height:100vh;display:flex}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:238px;background:#0f3f49;color:white;padding:20px 16px;display:flex;flex-direction:column;z-index:20}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px 22px}.brand-mark{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#2b93a7,#65b9c7);display:grid;place-items:center;font-weight:800;font-size:20px}
+.brand-name{font-weight:800;letter-spacing:.7px}.brand-sub{font-size:11px;color:#bdd6db;margin-top:2px}
+.nav{display:flex;flex-direction:column;gap:4px}.nav-item{border:0;background:transparent;color:#d5e6e9;text-align:left;padding:11px 12px;border-radius:9px;font-size:12.5px;font-weight:600}
+.nav-item:hover{background:rgba(255,255,255,.07)}.nav-item.active{background:#fff;color:#0f5f6d;box-shadow:0 4px 14px rgba(0,0,0,.13)}
+.sidebar-footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.11);padding:16px 8px 4px;display:flex;gap:8px;align-items:center;font-size:10.5px;color:#c5dadd}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#48c78e}
+.main{margin-left:238px;width:calc(100% - 238px)}
+.topbar{height:76px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:15}
+.topbar h1{font-size:20px;margin:0;color:var(--navy)}.topbar p{font-size:11.5px;color:var(--muted);margin:4px 0 0}
+.top-actions{display:flex;gap:12px;align-items:center}.search-wrap input{width:280px;border:1px solid var(--border);border-radius:9px;padding:10px 12px;background:#f9fbfb;outline:none;font-size:12px}
+.date-chip{background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:11.5px;border-radius:9px;padding:10px 13px}
+.filters{display:flex;gap:10px;align-items:center;padding:14px 30px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:76px;z-index:14}
+.filters select{border:1px solid var(--border);background:#fff;border-radius:8px;padding:8px 10px;color:var(--text);font-size:11.5px;min-width:150px}
+.btn{border:0;border-radius:9px;padding:9px 14px;font-size:11.5px;font-weight:700}.btn-primary{background:var(--teal);color:#fff}.btn-light{background:#eef3f4;color:#49676e}
+.link-btn{border:0;background:transparent;color:var(--teal);font-size:11px;font-weight:700}
+.page{display:none;padding:24px 30px 40px}.page.active{display:block}
+.section-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.section-toolbar h2{margin:0;font-size:19px}.section-toolbar p{margin:4px 0 0;font-size:11.5px;color:var(--muted)}
+.attention-strip{background:linear-gradient(90deg,#123f48,#176f7e);color:#fff;border-radius:14px;padding:18px 20px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+.attention-strip .eyebrow{color:#bfe0e5}.attention-text{font-size:13px;font-weight:600;margin-top:5px}.eyebrow{text-transform:uppercase;font-size:9.5px;letter-spacing:.7px;font-weight:800;color:var(--muted)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:18px}
+.kpi-card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:16px;box-shadow:var(--shadow)}
+.kpi-card .label{font-size:10.5px;font-weight:800;text-transform:uppercase;color:#56757c;letter-spacing:.35px}.kpi-card .value{font-size:26px;font-weight:800;color:#113f49;margin-top:8px}.kpi-card .sub{font-size:10.5px;color:var(--muted);margin-top:6px}
+.kpi-card .sub.good{color:var(--green);font-weight:700}.kpi-card .sub.bad{color:var(--red);font-weight:700}.kpi-card.highlight{background:#f8f6ff}.kpi-card.warn{background:#fff8ee}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}.panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}.panel-head h3{margin:0;font-size:13px}.panel-head p{margin:4px 0 0;color:var(--muted);font-size:10.5px}.panel canvas{width:100%!important;height:270px!important}
+.health-row,.alert-card,.issue-row,.learning-row,.compliance-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #edf2f3}
+.health-main{display:flex;align-items:center;gap:10px}.health-dot{width:9px;height:9px;border-radius:50%}.health-dot.green{background:var(--green)}.health-dot.amber{background:var(--amber)}.health-dot.red{background:var(--red)}
+.health-name{font-size:11.5px;font-weight:700}.health-meta{font-size:10.5px;color:var(--muted)}.health-score{font-size:11px;font-weight:800}
+.alert-left{display:flex;gap:10px;align-items:flex-start}.priority-pill,.status-pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:9.5px;font-weight:800;white-space:nowrap}
+.priority-critical,.status-red,.status-pip{background:#fde9ee;color:var(--red)}.priority-high,.status-yellow{background:#fff1d8;color:var(--amber)}.priority-medium{background:#edf4ff;color:#456a9c}
+.status-green{background:#e9f7f0;color:var(--green)}.status-open{background:#eef6ff;color:#3a6f9f}.status-done{background:#e9f7f0;color:var(--green)}.status-inprogress{background:#fff1d8;color:var(--amber)}
+.alert-title{font-size:11.5px;font-weight:700}.alert-meta{font-size:10px;color:var(--muted);margin-top:3px}
+.table-tools{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.table-tools input{border:1px solid var(--border);border-radius:8px;padding:9px 11px;width:260px;font-size:11.5px}.table-meta{font-size:10.5px;color:var(--muted)}
+.table-scroll{overflow:auto}.crm-table{width:100%;border-collapse:collapse;font-size:11.5px}.crm-table th{text-align:left;padding:10px;background:#f2f5fb;color:#35535b;text-transform:uppercase;font-size:9.5px;letter-spacing:.45px}.crm-table td{padding:11px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.emp-name{font-weight:700}.emp-role{font-size:9.8px;color:var(--muted);margin-top:3px}.view-btn{border:0;background:#eaf5f6;color:var(--teal);border-radius:7px;padding:6px 9px;font-size:10px;font-weight:800}
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.stage{background:#eef3f4;border:1px solid var(--border);border-radius:13px;padding:12px;min-height:320px}
+.stage-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.stage-title{font-size:11px;font-weight:800}.stage-count{background:#fff;border-radius:999px;padding:3px 7px;font-size:9.5px;font-weight:800}
+.req-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:9px;box-shadow:0 5px 14px rgba(0,0,0,.04)}.req-role{font-size:10.8px;font-weight:800}.req-meta{font-size:9.5px;color:var(--muted);margin-top:5px}.req-age{font-size:9.5px;color:var(--red);font-weight:700;margin-top:6px}
+.matrix-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;align-items:center;padding:11px;border-bottom:1px solid var(--border);font-size:11px}.matrix-head{font-weight:800;background:#f4f7f8;border-radius:8px}.matrix-name{font-weight:700}
+.drawer-overlay{position:fixed;inset:0;background:rgba(12,36,41,.32);display:none;z-index:39}.drawer-overlay.open{display:block}.drawer{position:fixed;right:-520px;top:0;bottom:0;width:500px;background:#fff;z-index:40;box-shadow:-18px 0 40px rgba(12,36,41,.18);transition:.25s ease;display:flex;flex-direction:column}.drawer.open{right:0}
+.drawer-head{padding:22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}.drawer-head h2{margin:4px 0 0;font-size:20px}.drawer-head p{margin:5px 0 0;color:var(--muted);font-size:11.5px}
+.icon-btn{border:0;background:#eef3f4;width:32px;height:32px;border-radius:8px;font-size:18px}.drawer-body{padding:20px;overflow:auto}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.profile-card{border:1px solid var(--border);border-radius:11px;padding:13px}.profile-label{font-size:9.5px;color:var(--muted);text-transform:uppercase;font-weight:800}.profile-value{font-size:12px;font-weight:700;margin-top:5px}
+.profile-section{margin-top:18px}.profile-section h4{font-size:11px;text-transform:uppercase;letter-spacing:.4px;margin:0 0 9px;color:#46656d}.timeline-item{border-left:2px solid #d8e7ea;padding:0 0 14px 12px;font-size:10.5px}.timeline-item strong{display:block;font-size:11px;margin-bottom:3px}
+@media(max-width:1100px){.sidebar{width:200px}.main{margin-left:200px;width:calc(100% - 200px)}.grid-2{grid-template-columns:1fr}.pipeline{grid-template-columns:1fr 1fr}.search-wrap input{width:220px}}
 
-  <link rel="stylesheet" href="css/styles.css" />
+</style>
 </head>
-
 <body>
-
 <div class="app-shell">
-
-  <!-- SIDEBAR -->
-
   <aside class="sidebar">
-
     <div class="brand">
       <div class="brand-mark">E</div>
-
       <div>
         <div class="brand-name">EURONICS</div>
         <div class="brand-sub">HR Command Centre</div>
       </div>
     </div>
-
-
     <nav class="nav">
-
-      <button class="nav-item active" data-page="overview">
-        Overview
-      </button>
-
-      <button class="nav-item" data-page="employees">
-        Employee CRM
-      </button>
-
-      <button class="nav-item" data-page="recruitment">
-        Recruitment
-      </button>
-
-      <button class="nav-item" data-page="attendance">
-        Attendance
-      </button>
-
-      <button class="nav-item" data-page="performance">
-        Performance
-      </button>
-
-      <button class="nav-item" data-page="payroll">
-        Payroll
-      </button>
-
-      <button class="nav-item" data-page="learning">
-        L&D / EuroVersity
-      </button>
-
-      <button class="nav-item" data-page="engagement">
-        Engagement
-      </button>
-
-      <button class="nav-item" data-page="compliance">
-        Compliance
-      </button>
-
-      <button class="nav-item" data-page="alerts">
-        Alerts & Actions
-      </button>
-
+      <button class="nav-item active" data-page="overview">Overview</button>
+      <button class="nav-item" data-page="employees">Employee CRM</button>
+      <button class="nav-item" data-page="recruitment">Recruitment</button>
+      <button class="nav-item" data-page="attendance">Attendance</button>
+      <button class="nav-item" data-page="performance">Performance</button>
+      <button class="nav-item" data-page="payroll">Payroll</button>
+      <button class="nav-item" data-page="learning">L&D / EuroVersity</button>
+      <button class="nav-item" data-page="engagement">Engagement</button>
+      <button class="nav-item" data-page="compliance">Compliance</button>
+      <button class="nav-item" data-page="alerts">Alerts & Actions</button>
     </nav>
-
-
     <div class="sidebar-footer">
       <div class="live-dot"></div>
       <span>Prototype · Dummy Data</span>
     </div>
-
   </aside>
 
-
-  <!-- MAIN -->
-
   <main class="main">
-
-    <!-- TOP BAR -->
-
     <header class="topbar">
-
       <div>
         <h1 id="pageTitle">Executive Overview</h1>
         <p id="pageSub">CEO & CHRO command view</p>
       </div>
-
-
       <div class="top-actions">
-
         <div class="search-wrap">
-          <input
-            id="globalSearch"
-            type="search"
-            placeholder="Search employee, role, manager..."
-          />
+          <input id="globalSearch" type="search" placeholder="Search employee, role, manager..." />
         </div>
-
-        <div class="date-chip">
-          August 2026
-        </div>
-
+        <div class="date-chip">August 2026</div>
       </div>
-
     </header>
 
-
-    <!-- FILTER BAR -->
-
     <section class="filters">
-
       <select id="filterLocation">
         <option value="all">All Locations</option>
         <option>Gurugram</option>
@@ -127,8 +114,6 @@
         <option>Ahmedabad</option>
         <option>Mumbai</option>
       </select>
-
-
       <select id="filterDepartment">
         <option value="all">All Departments</option>
         <option>Sales & BD</option>
@@ -139,8 +124,6 @@
         <option>Finance</option>
         <option>HR & Admin</option>
       </select>
-
-
       <select id="filterManager">
         <option value="all">All Managers</option>
         <option>Abhilash Pandey</option>
@@ -149,8 +132,6 @@
         <option>Lalit</option>
         <option>Pradip</option>
       </select>
-
-
       <select id="filterStatus">
         <option value="all">All Statuses</option>
         <option>Green</option>
@@ -158,501 +139,251 @@
         <option>Red</option>
         <option>PIP</option>
       </select>
-
-
-      <button id="resetFilters" class="btn btn-light">
-        Reset
-      </button>
-
+      <button id="resetFilters" class="btn btn-light">Reset</button>
     </section>
-
-
-    <!-- OVERVIEW PAGE -->
 
     <section id="overview" class="page active">
-
       <div class="attention-strip">
-
         <div>
-
-          <div class="eyebrow">
-            What Needs Attention
-          </div>
-
-          <div class="attention-text">
-            3 critical hiring roles, 4 PIP cases, and Plant absenteeism above threshold.
-          </div>
-
+          <div class="eyebrow">What Needs Attention</div>
+          <div class="attention-text">3 critical hiring roles, 4 PIP cases, and Plant absenteeism above threshold.</div>
         </div>
-
-
-        <button
-          class="btn btn-primary"
-          data-page-jump="alerts"
-        >
-          Open Action Centre
-        </button>
-
+        <button class="btn btn-primary" data-page-jump="alerts">Open Action Centre</button>
       </div>
-
-
-      <div
-        class="kpi-grid"
-        id="overviewKpis"
-      ></div>
-
+      <div class="kpi-grid" id="overviewKpis"></div>
 
       <div class="grid-2">
-
         <div class="panel">
-
-          <div class="panel-head">
-
-            <div>
-              <h3>Headcount Trend</h3>
-              <p>Current FY monthly movement</p>
-            </div>
-
-          </div>
-
+          <div class="panel-head"><div><h3>Headcount Trend</h3><p>Current FY monthly movement</p></div></div>
           <canvas id="headcountChart"></canvas>
-
         </div>
-
-
         <div class="panel">
-
-          <div class="panel-head">
-
-            <div>
-              <h3>Attrition Trend</h3>
-              <p>Rolling 12M by month</p>
-            </div>
-
-          </div>
-
+          <div class="panel-head"><div><h3>Attrition Trend</h3><p>Rolling 12M by month</p></div></div>
           <canvas id="attritionChart"></canvas>
-
         </div>
-
       </div>
-
 
       <div class="grid-2">
-
         <div class="panel">
-
-          <div class="panel-head">
-
-            <div>
-              <h3>Department Health</h3>
-              <p>Attendance, KRA and risk view</p>
-            </div>
-
-          </div>
-
+          <div class="panel-head"><div><h3>Department Health</h3><p>Attendance, KRA and risk view</p></div></div>
           <div id="departmentHealth"></div>
-
         </div>
-
-
         <div class="panel">
-
           <div class="panel-head">
-
-            <div>
-              <h3>Priority Alerts</h3>
-              <p>Items requiring ownership</p>
-            </div>
-
-            <button
-              class="link-btn"
-              data-page-jump="alerts"
-            >
-              View all
-            </button>
-
+            <div><h3>Priority Alerts</h3><p>Items requiring ownership</p></div>
+            <button class="link-btn" data-page-jump="alerts">View all</button>
           </div>
-
           <div id="priorityAlerts"></div>
-
         </div>
-
       </div>
-
     </section>
-
-
-    <!-- EMPLOYEE CRM -->
 
     <section id="employees" class="page">
-
       <div class="section-toolbar">
-
-        <div>
-          <h2>Employee CRM</h2>
-          <p>Searchable 360° employee operating view</p>
-        </div>
-
-        <button class="btn btn-primary">
-          + Add Employee
-        </button>
-
+        <div><h2>Employee CRM</h2><p>Searchable 360° employee operating view</p></div>
+        <button class="btn btn-primary">+ Add Employee</button>
       </div>
-
-
       <div class="panel">
-
         <div class="table-tools">
-
-          <input
-            id="employeeSearch"
-            type="search"
-            placeholder="Search employee..."
-          />
-
-          <div class="table-meta">
-            <span id="employeeCount">0</span> employees
-          </div>
-
+          <input id="employeeSearch" type="search" placeholder="Search employee..." />
+          <div class="table-meta"><span id="employeeCount">0</span> employees</div>
         </div>
-
-
         <div class="table-scroll">
-
           <table class="crm-table">
-
-            <thead>
-
-              <tr>
-                <th>Employee</th>
-                <th>Department</th>
-                <th>Manager</th>
-                <th>Location</th>
-                <th>Attendance</th>
-                <th>KRA</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-
-            </thead>
-
+            <thead><tr><th>Employee</th><th>Department</th><th>Manager</th><th>Location</th><th>Attendance</th><th>KRA</th><th>Status</th><th></th></tr></thead>
             <tbody id="employeeTableBody"></tbody>
-
           </table>
-
         </div>
-
       </div>
-
     </section>
-
-
-    <!-- RECRUITMENT -->
 
     <section id="recruitment" class="page">
-
       <div class="section-toolbar">
-
-        <div>
-          <h2>Recruitment Pipeline</h2>
-          <p>CRM-style requisition funnel</p>
-        </div>
-
-        <button class="btn btn-primary">
-          + New Requisition
-        </button>
-
+        <div><h2>Recruitment Pipeline</h2><p>CRM-style requisition funnel</p></div>
+        <button class="btn btn-primary">+ New Requisition</button>
       </div>
-
-
-      <div
-        id="recruitmentKpis"
-        class="kpi-grid"
-      ></div>
-
-
-      <div
-        class="pipeline"
-        id="recruitmentPipeline"
-      ></div>
-
+      <div id="recruitmentKpis" class="kpi-grid"></div>
+      <div class="pipeline" id="recruitmentPipeline"></div>
     </section>
-
-
-    <!-- ATTENDANCE -->
 
     <section id="attendance" class="page">
-
-      <div class="section-toolbar">
-
-        <div>
-          <h2>Attendance & Leave</h2>
-          <p>Attendance health, regularisation and leave actions</p>
-        </div>
-
-      </div>
-
-
-      <div
-        id="attendanceKpis"
-        class="kpi-grid"
-      ></div>
-
-
+      <div class="section-toolbar"><div><h2>Attendance & Leave</h2><p>Attendance health, regularisation and leave actions</p></div></div>
+      <div id="attendanceKpis" class="kpi-grid"></div>
       <div class="grid-2">
-
-        <div class="panel">
-          <canvas id="attendanceChart"></canvas>
-        </div>
-
-        <div class="panel">
-          <div id="attendanceIssues"></div>
-        </div>
-
+        <div class="panel"><canvas id="attendanceChart"></canvas></div>
+        <div class="panel"><div id="attendanceIssues"></div></div>
       </div>
-
     </section>
-
-
-    <!-- PERFORMANCE -->
 
     <section id="performance" class="page">
-
-      <div class="section-toolbar">
-
-        <div>
-          <h2>Performance Management</h2>
-          <p>Green / Yellow / Red / PIP workforce view</p>
-        </div>
-
-      </div>
-
-
-      <div
-        id="performanceKpis"
-        class="kpi-grid"
-      ></div>
-
-
-      <div class="panel">
-        <div id="performanceMatrix"></div>
-      </div>
-
+      <div class="section-toolbar"><div><h2>Performance Management</h2><p>Green / Yellow / Red / PIP workforce view</p></div></div>
+      <div id="performanceKpis" class="kpi-grid"></div>
+      <div class="panel"><div id="performanceMatrix"></div></div>
     </section>
-
-
-    <!-- PAYROLL -->
 
     <section id="payroll" class="page">
-
-      <div class="section-toolbar">
-
-        <div>
-          <h2>Payroll & Compensation</h2>
-          <p>Monthly cost, OT and comp-ratio health</p>
-        </div>
-
-      </div>
-
-
-      <div
-        id="payrollKpis"
-        class="kpi-grid"
-      ></div>
-
-
-      <div class="panel">
-        <canvas id="payrollChart"></canvas>
-      </div>
-
+      <div class="section-toolbar"><div><h2>Payroll & Compensation</h2><p>Monthly cost, OT and comp-ratio health</p></div></div>
+      <div id="payrollKpis" class="kpi-grid"></div>
+      <div class="panel"><canvas id="payrollChart"></canvas></div>
     </section>
-
-
-    <!-- LEARNING -->
 
     <section id="learning" class="page">
-
-      <div class="section-toolbar">
-
-        <div>
-          <h2>L&D / EuroVersity</h2>
-          <p>Training coverage, Dojo activity and certification</p>
-        </div>
-
-      </div>
-
-
-      <div
-        id="learningKpis"
-        class="kpi-grid"
-      ></div>
-
-
-      <div class="panel">
-        <div id="learningTable"></div>
-      </div>
-
+      <div class="section-toolbar"><div><h2>L&D / EuroVersity</h2><p>Training coverage, Dojo activity and certification</p></div></div>
+      <div id="learningKpis" class="kpi-grid"></div>
+      <div class="panel"><div id="learningTable"></div></div>
     </section>
-
-
-    <!-- ENGAGEMENT -->
 
     <section id="engagement" class="page">
-
-      <div class="section-toolbar">
-
-        <div>
-          <h2>Engagement & Culture</h2>
-          <p>eNPS, participation and recognition</p>
-        </div>
-
-      </div>
-
-
-      <div
-        id="engagementKpis"
-        class="kpi-grid"
-      ></div>
-
-
-      <div class="panel">
-        <canvas id="engagementChart"></canvas>
-      </div>
-
+      <div class="section-toolbar"><div><h2>Engagement & Culture</h2><p>eNPS, participation and recognition</p></div></div>
+      <div id="engagementKpis" class="kpi-grid"></div>
+      <div class="panel"><canvas id="engagementChart"></canvas></div>
     </section>
-
-
-    <!-- COMPLIANCE -->
 
     <section id="compliance" class="page">
-
-      <div class="section-toolbar">
-
-        <div>
-          <h2>Compliance & Statutory</h2>
-          <p>PF, ESI, POSH and audit readiness</p>
-        </div>
-
-      </div>
-
-
-      <div
-        id="complianceKpis"
-        class="kpi-grid"
-      ></div>
-
-
-      <div class="panel">
-        <div id="complianceList"></div>
-      </div>
-
+      <div class="section-toolbar"><div><h2>Compliance & Statutory</h2><p>PF, ESI, POSH and audit readiness</p></div></div>
+      <div id="complianceKpis" class="kpi-grid"></div>
+      <div class="panel"><div id="complianceList"></div></div>
     </section>
-
-
-    <!-- ALERTS -->
 
     <section id="alerts" class="page">
-
       <div class="section-toolbar">
-
-        <div>
-          <h2>Alerts & Action Centre</h2>
-          <p>Owners, due dates, severity and action status</p>
-        </div>
-
-        <button class="btn btn-primary">
-          + Add Action
-        </button>
-
+        <div><h2>Alerts & Action Centre</h2><p>Owners, due dates, severity and action status</p></div>
+        <button class="btn btn-primary">+ Add Action</button>
       </div>
-
-
       <div class="panel">
-
         <div class="table-scroll">
-
           <table class="crm-table">
-
-            <thead>
-
-              <tr>
-                <th>Priority</th>
-                <th>Action</th>
-                <th>Owner</th>
-                <th>Due</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-
-            </thead>
-
+            <thead><tr><th>Priority</th><th>Action</th><th>Owner</th><th>Due</th><th>Status</th><th></th></tr></thead>
             <tbody id="alertTableBody"></tbody>
-
           </table>
-
         </div>
-
       </div>
-
     </section>
-
   </main>
-
 </div>
 
-
-<!-- EMPLOYEE DRAWER -->
-
-<div
-  class="drawer-overlay"
-  id="drawerOverlay"
-></div>
-
-
-<aside
-  class="drawer"
-  id="employeeDrawer"
->
-
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="employeeDrawer">
   <div class="drawer-head">
-
-    <div>
-
-      <div class="eyebrow">
-        Employee 360°
-      </div>
-
-      <h2 id="drawerName">
-        Employee
-      </h2>
-
-      <p id="drawerRole"></p>
-
-    </div>
-
-
-    <button
-      class="icon-btn"
-      id="drawerClose"
-    >
-      ×
-    </button>
-
+    <div><div class="eyebrow">Employee 360°</div><h2 id="drawerName">Employee</h2><p id="drawerRole"></p></div>
+    <button class="icon-btn" id="drawerClose">×</button>
   </div>
-
-
-  <div
-    class="drawer-body"
-    id="drawerBody"
-  ></div>
-
+  <div class="drawer-body" id="drawerBody"></div>
 </aside>
 
+<script>
+const HR_DATA = {
+  employees: [
+    {id:1,name:'Rahul Sharma',role:'Regional Sales Manager',department:'Sales & BD',manager:'Abhilash Pandey',location:'Gurugram',attendance:96.2,kra:84,status:'Green',tenure:'3.8 yrs',joining:'12 Nov 2022',band:'M3',leave:'14 days',training:'18 hrs',recognition:'2 awards',timeline:['Jul 2026 · KRA score 84%','Jun 2026 · Product certification completed','Apr 2026 · Promoted to Regional Sales Manager']},
+    {id:2,name:'Amit Verma',role:'Business Development Manager',department:'Sales & BD',manager:'Lalit',location:'Gurugram',attendance:91.4,kra:67,status:'Yellow',tenure:'2.2 yrs',joining:'04 Jun 2024',band:'M2',leave:'9 days',training:'11 hrs',recognition:'0 awards',timeline:['Jul 2026 · Yellow performance card','Jun 2026 · Attendance warning','May 2026 · Coaching plan started']},
+    {id:3,name:'Neha Gupta',role:'Finance Manager',department:'Finance',manager:'CFO',location:'Gurugram',attendance:97.8,kra:91,status:'Green',tenure:'5.1 yrs',joining:'21 Jul 2021',band:'M3',leave:'17 days',training:'24 hrs',recognition:'3 awards',timeline:['Jul 2026 · KRA 91%','Jun 2026 · Recognition award','Apr 2026 · Audit lead']},
+    {id:4,name:'Rohit Singh',role:'Shift Supervisor',department:'Production',manager:'Plant Head',location:'Gurugram',attendance:84.1,kra:61,status:'PIP',tenure:'4.6 yrs',joining:'03 Jan 2022',band:'S2',leave:'4 days',training:'8 hrs',recognition:'0 awards',timeline:['Jul 2026 · PIP initiated','Jun 2026 · Red performance card','May 2026 · Attendance escalation']}
+  ],
+  alerts: [
+    {priority:'Critical',action:'Healthcare Business Head role open 81 days',owner:'Suman · TA',due:'29 Aug',status:'Open'},
+    {priority:'Critical',action:'2 Sales PIP cases approaching cycle-end review',owner:'Abhilash',due:'31 Aug',status:'In Progress'},
+    {priority:'High',action:'Plant absenteeism at 11.2% — Mon/Fri pattern',owner:'Plant HR',due:'30 Aug',status:'Open'},
+    {priority:'High',action:'Attendance sync issue bucket not falling',owner:'HRIS',due:'02 Sep',status:'In Progress'}
+  ],
+  requisitions: [
+    {role:'Healthcare Business Head',dept:'Sales',owner:'Suman',stage:'Sourcing',days:81},
+    {role:'BDM — West',dept:'Sales',owner:'Naman',stage:'Interview',days:58},
+    {role:'QC Engineer',dept:'Quality',owner:'Rishita',stage:'Interview',days:44},
+    {role:'PCB Design Engineer',dept:'Engineering',owner:'Nainika',stage:'Offer',days:29},
+    {role:'HR Executive — Plant',dept:'HR',owner:'Snigdha',stage:'Joined',days:17}
+  ]
+};
 
-<script src="js/data.js"></script>
-<script src="js/charts.js"></script>
-<script src="js/app.js"></script>
+const CHARTS = {};
+function makeLineChart(id, labels, data, label) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (CHARTS[id]) CHARTS[id].destroy();
+  CHARTS[id] = new Chart(el, {
+    type:'line',
+    data:{labels:labels,datasets:[{label:label,data:data,borderColor:'#147b8d',backgroundColor:'rgba(20,123,141,.10)',fill:true,tension:.35,pointRadius:3,borderWidth:2.4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(15,95,109,.08)'}}}}
+  });
+}
 
+const pageTitles={overview:['Executive Overview','CEO & CHRO command view'],employees:['Employee CRM','Searchable employee 360° operating view'],recruitment:['Recruitment Pipeline','Requisition-to-joining funnel'],attendance:['Attendance & Leave','Attendance health and regularisation'],performance:['Performance Management','Green / Yellow / Red / PIP view'],payroll:['Payroll & Compensation','Cost and compensation health'],learning:['L&D / EuroVersity','Training and certification'],engagement:['Engagement & Culture','Sentiment and recognition'],compliance:['Compliance & Statutory','Statutory readiness'],alerts:['Alerts & Action Centre','Ownership, due dates and follow-up']};
+
+function navigate(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+  document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
+  document.getElementById('pageTitle').textContent=pageTitles[page][0];
+  document.getElementById('pageSub').textContent=pageTitles[page][1];
+}
+document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.page)));
+document.querySelectorAll('[data-page-jump]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.pageJump)));
+
+function kpi(label,value,sub='',cls=''){return `<div class="kpi-card ${cls}"><div class="label">${label}</div><div class="value">${value}</div><div class="sub ${sub.includes('▲')?'good':sub.includes('▼')?'bad':''}">${sub}</div></div>`;}
+
+document.getElementById('overviewKpis').innerHTML=[
+  kpi('Total Headcount','612','▲ +6 vs June'),
+  kpi('Attendance Rate','93.4%','Jul MTD avg'),
+  kpi('Open Positions','18','3 aged >8 weeks','warn'),
+  kpi('Attrition (Rolling 12M)','14.2%','Sales 18.4% · Non-Sales 9.7%'),
+  kpi('PIP Cases','4','2 Sales · 1 Plant · 1 Corp'),
+  kpi('eNPS Score','+32','▲ +4 vs last survey','highlight')
+].join('');
+
+makeLineChart('headcountChart',['Apr','May','Jun','Jul','Aug'],[605,606,606,612,618],'Headcount');
+makeLineChart('attritionChart',['Apr','May','Jun','Jul','Aug'],[15.4,15.1,14.8,14.2,13.9],'Attrition %');
+
+const departments=[['Production',89.1,81,'red'],['Sales & BD',96.2,74,'amber'],['Quality',94.8,85,'green'],['Supply Chain',95.5,79,'green'],['Engineering/NPD',97.1,88,'green']];
+document.getElementById('departmentHealth').innerHTML=departments.map(d=>`<div class="health-row"><div class="health-main"><div class="health-dot ${d[3]}"></div><div><div class="health-name">${d[0]}</div><div class="health-meta">Attendance ${d[1]}% · Avg KRA ${d[2]}%</div></div></div><div class="health-score">${d[2]}%</div></div>`).join('');
+
+function alertCard(a){return `<div class="alert-card"><div class="alert-left"><span class="priority-pill priority-${a.priority.toLowerCase()}">${a.priority}</span><div><div class="alert-title">${a.action}</div><div class="alert-meta">${a.owner} · Due ${a.due}</div></div></div><span class="status-pill status-${a.status.toLowerCase().replaceAll(' ','')}">${a.status}</span></div>`;}
+document.getElementById('priorityAlerts').innerHTML=HR_DATA.alerts.map(alertCard).join('');
+
+function renderEmployees(){
+  const q=document.getElementById('employeeSearch').value.toLowerCase();
+  const gq=document.getElementById('globalSearch').value.toLowerCase();
+  const loc=document.getElementById('filterLocation').value;
+  const dept=document.getElementById('filterDepartment').value;
+  const manager=document.getElementById('filterManager').value;
+  const status=document.getElementById('filterStatus').value;
+  const rows=HR_DATA.employees.filter(e=>{
+    const text=`${e.name} ${e.role} ${e.department} ${e.manager} ${e.location}`.toLowerCase();
+    return (!q||text.includes(q))&&(!gq||text.includes(gq))&&(loc==='all'||e.location===loc)&&(dept==='all'||e.department===dept)&&(manager==='all'||e.manager===manager)&&(status==='all'||e.status===status);
+  });
+  document.getElementById('employeeCount').textContent=rows.length;
+  document.getElementById('employeeTableBody').innerHTML=rows.map(e=>`<tr><td><div class="emp-name">${e.name}</div><div class="emp-role">${e.role}</div></td><td>${e.department}</td><td>${e.manager}</td><td>${e.location}</td><td>${e.attendance}%</td><td>${e.kra}%</td><td><span class="status-pill status-${e.status.toLowerCase()}">${e.status}</span></td><td><button class="view-btn" onclick="openEmployee(${e.id})">View 360°</button></td></tr>`).join('');
+}
+document.getElementById('employeeSearch').addEventListener('input',renderEmployees);
+document.getElementById('globalSearch').addEventListener('input',renderEmployees);
+['filterLocation','filterDepartment','filterManager','filterStatus'].forEach(id=>document.getElementById(id).addEventListener('change',renderEmployees));
+document.getElementById('resetFilters').addEventListener('click',()=>{['filterLocation','filterDepartment','filterManager','filterStatus'].forEach(id=>document.getElementById(id).value='all');document.getElementById('globalSearch').value='';document.getElementById('employeeSearch').value='';renderEmployees();});
+renderEmployees();
+
+function openEmployee(id){
+  const e=HR_DATA.employees.find(x=>x.id===id); if(!e)return;
+  document.getElementById('drawerName').textContent=e.name;
+  document.getElementById('drawerRole').textContent=`${e.role} · ${e.department}`;
+  document.getElementById('drawerBody').innerHTML=`<div class="profile-grid">${[['Manager',e.manager],['Location',e.location],['Joining Date',e.joining],['Tenure',e.tenure],['Attendance',e.attendance+'%'],['KRA Score',e.kra+'%'],['Status',e.status],['Band',e.band]].map(x=>`<div class="profile-card"><div class="profile-label">${x[0]}</div><div class="profile-value">${x[1]}</div></div>`).join('')}</div>`;
+  document.getElementById('employeeDrawer').classList.add('open');document.getElementById('drawerOverlay').classList.add('open');
+}
+document.getElementById('drawerClose').addEventListener('click',()=>{document.getElementById('employeeDrawer').classList.remove('open');document.getElementById('drawerOverlay').classList.remove('open');});
+document.getElementById('drawerOverlay').addEventListener('click',()=>{document.getElementById('employeeDrawer').classList.remove('open');document.getElementById('drawerOverlay').classList.remove('open');});
+
+document.getElementById('recruitmentKpis').innerHTML=[kpi('Open Positions','18','3 critical roles'),kpi('Avg Time-to-Hire','34 days','▼ 4 days vs Q1'),kpi('Offer Accept Rate','81%','Q2 rolling avg'),kpi('Requisitions MTD','12','7 Sales · 3 Plant · 2 Corp')].join('');
+const stages=['Requisition','Sourcing','Interview','Offer','Joined'];
+document.getElementById('recruitmentPipeline').innerHTML=stages.map(stage=>{const list=HR_DATA.requisitions.filter(r=>r.stage===stage);return `<div class="stage"><div class="stage-head"><div class="stage-title">${stage}</div><div class="stage-count">${list.length}</div></div>${list.map(r=>`<div class="req-card"><div class="req-role">${r.role}</div><div class="req-meta">${r.dept} · ${r.owner}</div><div class="req-age">${r.days} days open</div></div>`).join('')}</div>`;}).join('');
+
+document.getElementById('attendanceKpis').innerHTML=[kpi('Overall Attendance','93.4%','Jul MTD'),kpi('Plant Absenteeism','11.2%','Mon/Fri pattern','warn'),kpi('Pending Leave Approvals','18','Awaiting manager action'),kpi('Regularisation','98','▼ 14.8% MoM')].join('');
+makeLineChart('attendanceChart',['Apr','May','Jun','Jul','Aug'],[93.0,93.1,93.2,93.4,93.6],'Attendance %');
+document.getElementById('performanceKpis').innerHTML=[kpi('Avg KRA Score','78%','Company-wide'),kpi('Green','71%','Healthy workforce'),kpi('Yellow','18%','Coaching required','warn'),kpi('Red / PIP','11%','Immediate action')].join('');
+document.getElementById('payrollKpis').innerHTML=[kpi('Payroll Cost','₹1.42 Cr/mo','Excl Directors'),kpi('OT Cost','₹4.8 L','▲ 6% vs Jun','warn'),kpi('Comp Ratio','0.96','Vs band midpoint'),kpi('Increment Budget','68%','FY26-27 utilised')].join('');
+makeLineChart('payrollChart',['Apr','May','Jun','Jul','Aug'],[1.34,1.36,1.39,1.42,1.44],'Payroll ₹Cr');
+document.getElementById('learningKpis').innerHTML=[kpi('Training Coverage','74%','Eligible workforce'),kpi('Sales Training','118 h','July'),kpi('Dojo Sessions','6','This month'),kpi('Certifications','22','BIS + product certs')].join('');
+document.getElementById('engagementKpis').innerHTML=[kpi('eNPS','+32','▲ +4 vs last survey'),kpi('Survey Participation','87%','Latest pulse'),kpi('R&R Nominations','14','Across 6 categories'),kpi('Town Hall Attendance','96%','Last quarter')].join('');
+makeLineChart('engagementChart',['Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26'],[21,26,28,32],'eNPS');
+document.getElementById('complianceKpis').innerHTML=[kpi('PF Compliance','100%','On-time filing'),kpi('ESI Compliance','100%','On-time filing'),kpi('POSH Cases','0','No pending cases'),kpi('Audit Pending','1','Factories Act · Aug','warn')].join('');
+document.getElementById('alertTableBody').innerHTML=HR_DATA.alerts.map(a=>`<tr><td><span class="priority-pill priority-${a.priority.toLowerCase()}">${a.priority}</span></td><td><strong>${a.action}</strong></td><td>${a.owner}</td><td>${a.due}</td><td><span class="status-pill status-${a.status.toLowerCase().replaceAll(' ','')}">${a.status}</span></td><td><button class="view-btn">Open</button></td></tr>`).join('');
+
+</script>
 </body>
 </html>
