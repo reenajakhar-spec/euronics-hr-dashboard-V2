@@ -606,259 +606,209 @@ function normalizeRecruitmentRow(row) {
     raw: row,
 
     reqNo:
-      recruitmentField(
-        row,
-        [
-          'Req. No.',
-          'Req No.',
-          'Req No',
-          'reqNo'
-        ]
-      ),
+      recruitmentField(row, [
+        'reqId',
+        'Req. No.',
+        'Req No.',
+        'Req No',
+        'reqNo'
+      ]),
 
     reqDate:
-      recruitmentField(
-        row,
-        [
-          'Req Date',
-          'Req. Date',
-          'reqDate'
-        ]
-      ),
+      recruitmentField(row, [
+        'reqDate',
+        'Req Date',
+        'Req. Date'
+      ]),
 
     jobTitle:
-      recruitmentField(
-        row,
-        [
-          'Job Title',
-          'jobTitle'
-        ]
-      ),
+      recruitmentField(row, [
+        'jobTitle',
+        'Job Title'
+      ]),
 
     posted:
-      recruitmentField(
-        row,
-        [
-          'Source of Hire',
-          'Posted',
-          'Source'
-        ]
-      ),
+      recruitmentField(row, [
+        'sourceOfHire',
+        'Source of Hire',
+        'posted',
+        'Posted',
+        'Source'
+      ]),
 
     department:
-      recruitmentField(
-        row,
-        [
-          'Department',
-          'department'
-        ]
-      ),
+      recruitmentField(row, [
+        'department',
+        'Department'
+      ]),
 
     location:
-      recruitmentField(
-        row,
-        [
-          'Location',
-          'location'
-        ]
-      ),
+      recruitmentField(row, [
+        'location',
+        'Location'
+      ]),
 
     remarks:
-      recruitmentField(
-        row,
-        [
-          'Remarks',
-          'remarks'
-        ]
-      ),
+      recruitmentField(row, [
+        'remarks',
+        'Remarks'
+      ]),
 
     status:
-      recruitmentField(
-        row,
-        [
-          'Status',
-          'status'
-        ]
-      ),
+      recruitmentField(row, [
+        'status',
+        'Status'
+      ]),
 
     priority:
-      recruitmentField(
-        row,
-        [
-          'Priority',
-          'priority'
-        ]
-      ),
+      recruitmentField(row, [
+        'priority',
+        'Priority'
+      ]),
 
     recruiter:
-      recruitmentField(
-        row,
-        [
-          'Recruiter',
-          'recruiter'
-        ]
-      ),
+      recruitmentField(row, [
+        'recruiter',
+        'Recruiter'
+      ]),
 
     calls:
-      recruitmentField(
-        row,
-        [
-          'Total Calls Done (Count)',
-          'Total Calls Done',
-          'Calls'
-        ]
-      ),
+      recruitmentField(row, [
+        'totalCalls',
+        'calls',
+        'Total Calls Done (Count)',
+        'Total Calls Done',
+        'Calls'
+      ]),
 
     screened:
-      recruitmentField(
-        row,
-        [
-          'Screened (Called and had a first discussion about role)',
-          'Screened'
-        ]
-      ),
+      recruitmentField(row, [
+        'screened',
+        'Screened (Called and had a first discussion about role)',
+        'Screened'
+      ]),
 
     nextRound:
-      recruitmentField(
-        row,
-        [
-          'Next Round (Count out of Screened)',
-          'Next Round'
-        ]
-      ),
+      recruitmentField(row, [
+        'nextRound',
+        'Next Round (Count out of Screened)',
+        'Next Round'
+      ]),
 
     rejected:
-      recruitmentField(
-        row,
-        [
-          'Rejected (Count Out of Screened)',
-          'Rejected'
-        ]
-      ),
+      recruitmentField(row, [
+        'rejected',
+        'Rejected (Count Out of Screened)',
+        'Rejected'
+      ]),
 
     hiringManager:
-      recruitmentField(
-        row,
-        [
-          'Hiring Manager',
-          'HiringManager'
-        ]
-      ),
+      recruitmentField(row, [
+        'hiringManager',
+        'Hiring Manager',
+        'HiringManager'
+      ]),
 
     reqType:
       normalizeReqType(
-        recruitmentField(
-          row,
-          [
-            'Req Type\n(New Hire / Replacement)',
-            'Req Type (New Hire / Replacement)',
-            'Req Type'
-          ]
-        )
+        recruitmentField(row, [
+          'reqType',
+          'Req Type\n(New Hire / Replacement)',
+          'Req Type (New Hire / Replacement)',
+          'Req Type'
+        ])
       ),
 
     budget:
-      recruitmentField(
-        row,
-        [
-          'Budget\n(CTC Range ₹)',
-          'Budget (CTC Range ₹)',
-          'Budget'
-        ]
-      ),
+      recruitmentField(row, [
+        'budget',
+        'Budget\n(CTC Range ₹)',
+        'Budget (CTC Range ₹)',
+        'Budget'
+      ]),
 
     experience:
-      recruitmentField(
-        row,
-        [
-          'Experience\nRequired',
-          'Experience Required',
-          'Experience'
-        ]
-      ),
+      recruitmentField(row, [
+        'experience',
+        'Experience\nRequired',
+        'Experience Required',
+        'Experience'
+      ]),
 
     tat:
-      recruitmentField(
-        row,
-        [
-          'Target Close Days (TAT)',
-          'Target Close Days',
-          'TAT'
-        ]
-      ),
+      recruitmentField(row, [
+        'tatDays',
+        'Target Close Days (TAT)',
+        'Target Close Days',
+        'TAT'
+      ]),
 
     positionType:
-      recruitmentField(
-        row,
-        [
-          'Position Type'
-        ]
-      ),
+      recruitmentField(row, [
+        'positionType',
+        'Position Type'
+      ]),
 
     headCount:
-      recruitmentField(
-        row,
-        [
-          'Head count',
-          'Headcount'
-        ]
-      ),
+      recruitmentField(row, [
+        'headcount',
+        'Head count',
+        'Headcount'
+      ]),
 
     replacementName:
-      recruitmentField(
-        row,
-        [
-          ' Replacement Name ',
-          'Replacement Name'
-        ]
-      ),
+      recruitmentField(row, [
+        'replacementName',
+        ' Replacement Name ',
+        'Replacement Name'
+      ]),
 
     candidateShortlistedDate:
-      recruitmentField(
-        row,
-        [
-          'Candidate Shortlisted Date',
-          'Shortlisted Date'
-        ]
-      ),
+      recruitmentField(row, [
+        'shortlistedDate',
+        'Candidate Shortlisted Date',
+        'Shortlisted Date'
+      ]),
 
     offerDate:
-      recruitmentField(
-        row,
-        [
-          'Offer Date'
-        ]
-      ),
+      recruitmentField(row, [
+        'offerDate',
+        'Offer Date'
+      ]),
 
     candidateName:
-      recruitmentField(
-        row,
-        [
-          'Candidate Name'
-        ]
-      ),
+      recruitmentField(row, [
+        'candidateName',
+        'Candidate Name'
+      ]),
 
     candidateDoj:
-      recruitmentField(
-        row,
-        [
-          'Candidate DOJ',
-          'DOJ'
-        ]
-      ),
+      recruitmentField(row, [
+        'candidateDOJ',
+        'candidateDoj',
+        'Candidate DOJ',
+        'DOJ'
+      ]),
 
     positionLevel:
-      recruitmentField(
-        row,
-        [
-          'Position Level'
-        ]
-      )
+      recruitmentField(row, [
+        'positionLevel',
+        'Position Level'
+      ]),
+
+    apiAgeDays:
+      recruitmentField(row, [
+        'ageDays'
+      ]),
+
+    timeToHireDays:
+      recruitmentField(row, [
+        'timeToHireDays'
+      ])
 
   };
 
 }
-
 
 function parseRecruitmentDate(value) {
 
