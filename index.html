@@ -631,504 +631,6 @@ button{
 }
 
 
-
-/* ================================
-   RECRUITMENT CONNECTION STATUS
-================================ */
-
-.recruitment-status{
-
-  margin-bottom:14px;
-
-  padding:
-    11px 14px;
-
-  border-radius:9px;
-
-  background:#eef6f7;
-
-  color:#4f6f76;
-
-  font-size:11px;
-
-  font-weight:600;
-
-}
-
-
-.recruitment-status.success{
-
-  background:#eaf7f1;
-
-  color:var(--green);
-
-}
-
-
-.recruitment-status.error{
-
-  background:#fdecef;
-
-  color:var(--red);
-
-}
-
-
-
-/* ================================
-   AGEING
-================================ */
-
-.ageing-grid{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:14px;
-
-}
-
-
-.age-card{
-
-  border:
-    1px solid var(--border);
-
-  border-radius:12px;
-
-  background:#fff;
-
-  padding:16px;
-
-  text-align:left;
-
-}
-
-
-.age-card:hover{
-
-  transform:
-    translateY(-2px);
-
-  box-shadow:var(--shadow);
-
-}
-
-
-.age-card.selected{
-
-  outline:
-    2px solid var(--teal);
-
-}
-
-
-.age-green{
-
-  border-left:
-    4px solid var(--green);
-
-}
-
-
-.age-blue{
-
-  border-left:
-    4px solid var(--blue);
-
-}
-
-
-.age-amber{
-
-  border-left:
-    4px solid var(--amber);
-
-}
-
-
-.age-red{
-
-  border-left:
-    4px solid var(--red);
-
-}
-
-
-.age-label{
-
-  display:block;
-
-  font-size:10px;
-
-  font-weight:800;
-
-  text-transform:uppercase;
-
-}
-
-
-.age-card strong{
-
-  display:block;
-
-  margin-top:8px;
-
-  font-size:28px;
-
-}
-
-
-.age-card small{
-
-  display:block;
-
-  margin-top:4px;
-
-  color:var(--muted);
-
-  font-size:10px;
-
-}
-
-
-
-/* ================================
-   FUNNEL
-================================ */
-
-.funnel-grid{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
-  gap:12px;
-
-}
-
-
-.funnel-box{
-
-  padding:15px;
-
-  text-align:center;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:11px;
-
-  background:#f5f9fa;
-
-}
-
-
-.funnel-number{
-
-  color:var(--teal);
-
-  font-size:25px;
-
-  font-weight:800;
-
-}
-
-
-.funnel-label{
-
-  margin-top:5px;
-
-  color:var(--muted);
-
-  font-size:10px;
-
-  font-weight:700;
-
-}
-
-
-
-/* ================================
-   FILTERS
-================================ */
-
-.recruitment-filter-row{
-
-  display:flex;
-
-  flex-wrap:wrap;
-
-  align-items:center;
-
-  gap:10px;
-
-}
-
-
-.recruitment-filter-row input,
-.recruitment-filter-row select{
-
-  padding:
-    9px 10px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:8px;
-
-  background:#fff;
-
-  font-size:11px;
-
-}
-
-
-.recruitment-filter-row input{
-
-  min-width:280px;
-
-}
-
-
-
-/* ================================
-   TABLE
-================================ */
-
-.table-scroll{
-
-  width:100%;
-
-  overflow:auto;
-
-}
-
-
-.crm-table{
-
-  width:100%;
-
-  border-collapse:collapse;
-
-  font-size:11px;
-
-}
-
-
-.crm-table th{
-
-  padding:
-    10px;
-
-  text-align:left;
-
-  background:#f2f5fb;
-
-  color:#35535b;
-
-  font-size:9px;
-
-  font-weight:800;
-
-  text-transform:uppercase;
-
-  letter-spacing:.4px;
-
-  white-space:nowrap;
-
-}
-
-
-.crm-table td{
-
-  padding:
-    10px;
-
-  border-bottom:
-    1px solid var(--border);
-
-  vertical-align:top;
-
-}
-
-
-.recruitment-table{
-
-  min-width:4400px;
-
-}
-
-
-.recruitment-table td{
-
-  white-space:nowrap;
-
-}
-
-
-.recruitment-table td.wrap{
-
-  min-width:220px;
-
-  white-space:normal;
-
-}
-
-
-
-/* ================================
-   BADGES
-================================ */
-
-.age-badge,
-.status-badge,
-.priority-badge{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  padding:
-    4px 7px;
-
-  border-radius:999px;
-
-  font-size:9px;
-
-  font-weight:800;
-
-  white-space:nowrap;
-
-}
-
-
-.age-badge.fresh{
-
-  background:#e9f7f0;
-
-  color:var(--green);
-
-}
-
-
-.age-badge.watch{
-
-  background:#eef6ff;
-
-  color:var(--blue);
-
-}
-
-
-.age-badge.ageing{
-
-  background:#fff1d8;
-
-  color:#a56400;
-
-}
-
-
-.age-badge.critical{
-
-  background:#fde9ee;
-
-  color:var(--red);
-
-}
-
-
-.status-open{
-
-  background:#eef6ff;
-
-  color:var(--blue);
-
-}
-
-
-.status-joined{
-
-  background:#e9f7f0;
-
-  color:var(--green);
-
-}
-
-
-.status-hold{
-
-  background:#fff1d8;
-
-  color:var(--amber);
-
-}
-
-
-.status-offer{
-
-  background:#f1edff;
-
-  color:var(--violet);
-
-}
-
-
-
-/* ================================
-   LISTS
-================================ */
-
-.recruitment-list-row{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:flex-start;
-
-  gap:14px;
-
-  padding:
-    11px 0;
-
-  border-bottom:
-    1px solid var(--border);
-
-}
-
-
-.recruitment-list-row:last-child{
-
-  border-bottom:0;
-
-}
-
-
-.role-name{
-
-  font-size:11px;
-
-  font-weight:700;
-
-}
-
-
-.role-meta{
-
-  margin-top:4px;
-
-  color:var(--muted);
-
-  font-size:9.5px;
-
-}
-
-
 .empty-state{
 
   padding:20px;
@@ -1150,9 +652,7 @@ button{
 @media(max-width:1100px){
 
   .grid-2{
-
     grid-template-columns:1fr;
-
   }
 
 }
@@ -1161,39 +661,185 @@ button{
 @media(max-width:760px){
 
   .sidebar{
-
     display:none;
-
   }
 
   .main{
-
     margin-left:0;
-
     width:100%;
-
   }
 
   .page{
-
     padding:
       18px 16px;
-
   }
 
   .topbar{
-
     padding:
       0 16px;
-
   }
 
-  .ageing-grid,
-  .funnel-grid{
+}
 
-    grid-template-columns:
-      1fr 1fr;
 
+/* =========================================================
+   RECRUITMENT APPS SCRIPT EMBED
+========================================================= */
+
+.recruitment-page{
+  padding:0 !important;
+  background:#f4f7f8;
+}
+
+
+.recruitment-embed-header{
+  min-height:76px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:15px;
+
+  padding:
+    18px 30px;
+
+  background:#ffffff;
+
+  border-bottom:
+    1px solid var(--border);
+}
+
+
+.recruitment-embed-header h2{
+  margin:0;
+
+  font-size:20px;
+
+  color:var(--navy);
+}
+
+
+.recruitment-embed-header p{
+  margin:
+    5px 0 0;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+}
+
+
+.recruitment-embed-container{
+  position:relative;
+
+  width:100%;
+
+  height:
+    calc(100vh - 152px);
+
+  min-height:850px;
+
+  background:#ffffff;
+
+  overflow:hidden;
+}
+
+
+.recruitment-iframe{
+  display:block;
+
+  width:100%;
+
+  height:100%;
+
+  min-height:850px;
+
+  border:0;
+
+  margin:0;
+
+  padding:0;
+
+  background:#ffffff;
+}
+
+
+.recruitment-iframe-loading{
+  position:absolute;
+
+  inset:0;
+
+  z-index:5;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:14px;
+
+  background:#f4f7f8;
+
+  color:var(--teal);
+
+  font-size:13px;
+
+  font-weight:700;
+}
+
+
+.recruitment-loader{
+  width:34px;
+
+  height:34px;
+
+  border-radius:50%;
+
+  border:
+    4px solid #d9e8eb;
+
+  border-top-color:
+    var(--teal);
+
+  animation:
+    recruitmentSpin .8s linear infinite;
+}
+
+
+@keyframes recruitmentSpin{
+
+  to{
+    transform:
+      rotate(360deg);
+  }
+
+}
+
+
+@media(max-width:760px){
+
+  .recruitment-embed-header{
+    padding:
+      15px 16px;
+  }
+
+
+  .recruitment-embed-container{
+    height:
+      calc(100vh - 145px);
+
+    min-height:900px;
+  }
+
+
+  .recruitment-iframe{
+    min-height:900px;
   }
 
 }
@@ -1459,7 +1105,7 @@ Employee data will be connected in the next phase.
 
 
 <!-- ==========================================================
-     RECRUITMENT
+     RECRUITMENT - LIVE APPS SCRIPT DASHBOARD
 =========================================================== -->
 
 <section
@@ -1471,7 +1117,6 @@ Employee data will be connected in the next phase.
 
     <div>
       <h2>Recruitment Command Centre</h2>
-
       <p>
         Live Euronics Talent Acquisition System
       </p>
@@ -1493,11 +1138,13 @@ Employee data will be connected in the next phase.
       id="recruitmentLoading"
       class="recruitment-iframe-loading"
     >
+
       <div class="recruitment-loader"></div>
 
       <div>
         Loading Recruitment Command Centre...
       </div>
+
     </div>
 
 
@@ -1507,7 +1154,7 @@ Employee data will be connected in the next phase.
       src="https://script.google.com/a/macros/euronics.co.in/s/AKfycbxA8vc8YBnpl1u3lbi8L-K_jHOKVXJPc3j1h1Ggs7c_M2MhpUFxFSGZFDyy88zMLTPg/exec"
       title="Euronics Recruitment Command Centre"
       loading="eager"
-      allow="fullscreen"
+      allowfullscreen
       onload="recruitmentFrameLoaded()"
     ></iframe>
 
@@ -1516,7 +1163,10 @@ Employee data will be connected in the next phase.
 </section>
 
 
-<!-- OTHER MODULES -->
+
+<!-- ============================
+     ATTENDANCE
+============================= -->
 
 <section
   id="attendance"
@@ -1535,6 +1185,10 @@ Attendance module will be connected later.
 
 
 
+<!-- ============================
+     PERFORMANCE
+============================= -->
+
 <section
   id="performance"
   class="page"
@@ -1551,6 +1205,10 @@ Performance module will be connected later.
 </section>
 
 
+
+<!-- ============================
+     PAYROLL
+============================= -->
 
 <section
   id="payroll"
@@ -1569,6 +1227,10 @@ Payroll module will be connected later.
 
 
 
+<!-- ============================
+     LEARNING
+============================= -->
+
 <section
   id="learning"
   class="page"
@@ -1585,6 +1247,10 @@ L&D module will be connected later.
 </section>
 
 
+
+<!-- ============================
+     ENGAGEMENT
+============================= -->
 
 <section
   id="engagement"
@@ -1603,6 +1269,10 @@ Engagement module will be connected later.
 
 
 
+<!-- ============================
+     COMPLIANCE
+============================= -->
+
 <section
   id="compliance"
   class="page"
@@ -1619,6 +1289,10 @@ Compliance module will be connected later.
 </section>
 
 
+
+<!-- ============================
+     ALERTS
+============================= -->
 
 <section
   id="alerts"
@@ -1705,6 +1379,7 @@ const PAGE_INFO = {
 };
 
 
+
 document
   .querySelectorAll('.nav-item')
   .forEach(function(button){
@@ -1722,6 +1397,7 @@ document
     );
 
   });
+
 
 
 function openPage(page){
@@ -1744,10 +1420,17 @@ function openPage(page){
     });
 
 
-  document
-    .getElementById(page)
-    .classList
-    .add('active');
+  const pageElement =
+    document.getElementById(page);
+
+
+  if(pageElement){
+
+    pageElement
+      .classList
+      .add('active');
+
+  }
 
 
   const navButton =
@@ -1767,16 +1450,20 @@ function openPage(page){
   }
 
 
-  document
-    .getElementById('pageTitle')
-    .textContent =
-      PAGE_INFO[page][0];
+  if(PAGE_INFO[page]){
+
+    document
+      .getElementById('pageTitle')
+      .textContent =
+        PAGE_INFO[page][0];
 
 
-  document
-    .getElementById('pageSub')
-    .textContent =
-      PAGE_INFO[page][1];
+    document
+      .getElementById('pageSub')
+      .textContent =
+        PAGE_INFO[page][1];
+
+  }
 
 
   window.scrollTo(
@@ -1822,6 +1509,7 @@ function kpiCard(
 }
 
 
+
 document
   .getElementById('overviewKpis')
   .innerHTML = [
@@ -1829,7 +1517,7 @@ document
     kpiCard(
       'Recruitment',
       'LIVE',
-      'Connected to TA tracker'
+      'Connected to TA Panel'
     ),
 
     kpiCard(
@@ -1855,877 +1543,21 @@ document
 
 
 /* =========================================================
-   RECRUITMENT API
+   RECRUITMENT EMBED
 ========================================================= */
 
-const RECRUITMENT_API_URL =
+function recruitmentFrameLoaded(){
 
-'https://script.google.com/a/macros/euronics.co.in/s/AKfycbxA8vc8YBnpl1u3lbi8L-K_jHOKVXJPc3j1h1Ggs7c_M2MhpUFxFSGZFDyy88zMLTPg/exec';
-
-
-let recruitmentHeaders = [];
-
-let recruitmentRows = [];
-
-let ageFilter = 'all';
-
-const recruitmentCharts = {};
-
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function escapeHtml(value){
-
-  return String(
-    value === undefined ||
-    value === null
-      ? ''
-      : value
-  )
-
-  .replace(
-    /&/g,
-    '&amp;'
-  )
-
-  .replace(
-    /</g,
-    '&lt;'
-  )
-
-  .replace(
-    />/g,
-    '&gt;'
-  )
-
-  .replace(
-    /"/g,
-    '&quot;'
-  )
-
-  .replace(
-    /'/g,
-    '&#039;'
-  );
-
-}
-
-
-function field(
-  row,
-  names
-){
-
-  for(
-    let i = 0;
-    i < names.length;
-    i++
-  ){
-
-    const key =
-      names[i];
-
-    if(
-      Object.prototype
-        .hasOwnProperty
-        .call(
-          row,
-          key
-        )
-    ){
-
-      return String(
-        row[key] || ''
-      ).trim();
-
-    }
-
-  }
-
-  return '';
-
-}
-
-
-function normalizedRow(row){
-
-  return {
-
-    raw:row,
-
-    reqNo:
-      field(
-        row,
-        [
-          'Req. No.',
-          'Req No.',
-          'Req No'
-        ]
-      ),
-
-    reqDate:
-      field(
-        row,
-        [
-          'Req Date',
-          'Req. Date'
-        ]
-      ),
-
-    title:
-      field(
-        row,
-        [
-          'Job Title'
-        ]
-      ),
-
-    posted:
-      field(
-        row,
-        [
-          'Posted',
-          'Source of Hire',
-          'Source'
-        ]
-      ),
-
-    department:
-      field(
-        row,
-        [
-          'Department'
-        ]
-      ),
-
-    location:
-      field(
-        row,
-        [
-          'Location'
-        ]
-      ),
-
-    remarks:
-      field(
-        row,
-        [
-          'Remarks'
-        ]
-      ),
-
-    status:
-      field(
-        row,
-        [
-          'Status'
-        ]
-      ),
-
-    priority:
-      field(
-        row,
-        [
-          'Priority'
-        ]
-      ),
-
-    recruiter:
-      field(
-        row,
-        [
-          'Recruiter'
-        ]
-      ),
-
-    calls:
-      field(
-        row,
-        [
-          'Total Calls Done (Count)',
-          'Total Calls Done'
-        ]
-      ),
-
-    screened:
-      field(
-        row,
-        [
-          'Screened (Called and had a first discussion about role)',
-          'Screened'
-        ]
-      ),
-
-    nextRound:
-      field(
-        row,
-        [
-          'Next Round (Count out of Screened)',
-          'Next Round'
-        ]
-      ),
-
-    rejected:
-      field(
-        row,
-        [
-          'Rejected (Count Out of Screened)',
-          'Rejected'
-        ]
-      ),
-
-    manager:
-      field(
-        row,
-        [
-          'Hiring Manager'
-        ]
-      ),
-
-    reqType:
-      field(
-        row,
-        [
-          'Req Type\n(New Hire / Replacement)',
-          'Req Type (New Hire / Replacement)',
-          'Req Type'
-        ]
-      ),
-
-    budget:
-      field(
-        row,
-        [
-          'Budget\n(CTC Range ₹)',
-          'Budget (CTC Range ₹)',
-          'Budget'
-        ]
-      ),
-
-    experience:
-      field(
-        row,
-        [
-          'Experience\nRequired',
-          'Experience Required'
-        ]
-      ),
-
-    tat:
-      field(
-        row,
-        [
-          'Target Close Days (TAT)',
-          'Target Close Days'
-        ]
-      ),
-
-    headcount:
-      field(
-        row,
-        [
-          'Head count',
-          'Headcount'
-        ]
-      ),
-
-    replacement:
-      field(
-        row,
-        [
-          'Replacement Name',
-          ' Replacement Name '
-        ]
-      ),
-
-    shortlistDate:
-      field(
-        row,
-        [
-          'Candidate Shortlisted Date'
-        ]
-      ),
-
-    offerDate:
-      field(
-        row,
-        [
-          'Offer Date'
-        ]
-      ),
-
-    candidate:
-      field(
-        row,
-        [
-          'Candidate Name'
-        ]
-      ),
-
-    doj:
-      field(
-        row,
-        [
-          'Candidate DOJ',
-          'DOJ'
-        ]
-      ),
-
-    level:
-      field(
-        row,
-        [
-          'Position Level'
-        ]
-      )
-
-  };
-
-}
-
-
-
-function parseDate(value){
-
-  if(!value){
-
-    return null;
-
-  }
-
-
-  const text =
-    String(value)
-      .trim();
-
-
-  let date =
-    new Date(text);
-
-
-  if(
-    !isNaN(
-      date.getTime()
-    )
-  ){
-
-    return date;
-
-  }
-
-
-  const months = {
-
-    jan:0,
-
-    feb:1,
-
-    mar:2,
-
-    apr:3,
-
-    may:4,
-
-    jun:5,
-
-    june:5,
-
-    jul:6,
-
-    july:6,
-
-    aug:7,
-
-    sep:8,
-
-    sept:8,
-
-    oct:9,
-
-    nov:10,
-
-    dec:11
-
-  };
-
-
-  const clean =
-    text
-      .replace(
-        /,/g,
-        ''
-      )
-      .replace(
-        /\s+/g,
-        '-'
-      );
-
-
-  const parts =
-    clean.split('-');
-
-
-  if(
-    parts.length === 3
-  ){
-
-    const day =
-      parseInt(
-        parts[0],
-        10
-      );
-
-
-    const month =
-      months[
-        String(
-          parts[1]
-        )
-        .toLowerCase()
-      ];
-
-
-    let year =
-      parseInt(
-        parts[2],
-        10
-      );
-
-
-    if(
-      year < 100
-    ){
-
-      year += 2000;
-
-    }
-
-
-    if(
-      !isNaN(day) &&
-      month !== undefined &&
-      !isNaN(year)
-    ){
-
-      return new Date(
-        year,
-        month,
-        day
-      );
-
-    }
-
-  }
-
-
-  return null;
-
-}
-
-
-
-function ageDays(row){
-
-  const reqDate =
-    parseDate(
-      row.reqDate
-    );
-
-
-  if(!reqDate){
-
-    return null;
-
-  }
-
-
-  const today =
-    new Date();
-
-
-  today.setHours(
-    0,
-    0,
-    0,
-    0
-  );
-
-
-  reqDate.setHours(
-    0,
-    0,
-    0,
-    0
-  );
-
-
-  return Math.max(
-    0,
-
-    Math.floor(
-      (
-        today -
-        reqDate
-      )
-      /
-      86400000
-    )
-
-  );
-
-}
-
-
-
-function ageBucket(days){
-
-  if(
-    days === null
-  ){
-
-    return 'unknown';
-
-  }
-
-
-  if(
-    days <= 7
-  ){
-
-    return '0-7';
-
-  }
-
-
-  if(
-    days <= 15
-  ){
-
-    return '8-15';
-
-  }
-
-
-  if(
-    days <= 30
-  ){
-
-    return '16-30';
-
-  }
-
-
-  return '30+';
-
-}
-
-
-
-function statusLower(row){
-
-  return String(
-    row.status || ''
-  )
-  .trim()
-  .toLowerCase();
-
-}
-
-
-
-function isClosed(row){
-
-  return [
-
-    'joined',
-
-    'close',
-
-    'closed'
-
-  ].includes(
-    statusLower(row)
-  );
-
-}
-
-
-
-function isHold(row){
-
-  return (
-    statusLower(row)
-    ===
-    'hold'
-  );
-
-}
-
-
-
-function isActive(row){
-
-  return (
-
-    row.reqNo &&
-
-    !isClosed(row) &&
-
-    !isHold(row)
-
-  );
-
-}
-
-
-
-function isOfferStage(row){
-
-  return [
-
-    'offered',
-
-    'offer accepted',
-
-    'shortlisted'
-
-  ].includes(
-    statusLower(row)
-  );
-
-}
-
-
-
-function numberValue(value){
-
-  if(
-    value === '#REF!'
-  ){
-
-    return 0;
-
-  }
-
-
-  const number =
-    parseFloat(
-
-      String(
-        value || ''
-      )
-
-      .replace(
-        /[^0-9.-]/g,
-        ''
-      )
-
-    );
-
-
-  return isNaN(number)
-    ? 0
-    : number;
-
-}
-
-
-
-/* =========================================================
-   LOAD LIVE DATA
-========================================================= */
-
-async function loadRecruitmentLive(
-  forceRefresh
-){
-
-  const status =
+  const loading =
     document.getElementById(
-      'recruitmentStatus'
+      'recruitmentLoading'
     );
 
 
-  status.className =
-    'recruitment-status';
+  if(loading){
 
-
-  status.textContent =
-    'Loading live recruitment data...';
-
-
-  try{
-
-
-    const url =
-
-      forceRefresh
-
-      ? RECRUITMENT_API_URL +
-        '?refresh=' +
-        Date.now()
-
-      : RECRUITMENT_API_URL;
-
-
-    const response =
-      await fetch(
-
-        url,
-
-        {
-
-          method:'GET',
-
-          cache:'no-store',
-
-          redirect:'follow'
-
-        }
-
-      );
-
-
-    if(
-      !response.ok
-    ){
-
-      throw new Error(
-        'HTTP ' +
-        response.status
-      );
-
-    }
-
-
-    const result =
-      await response.json();
-
-
-    if(
-      result.success === false
-    ){
-
-      throw new Error(
-        result.error ||
-        'Apps Script returned an error'
-      );
-
-    }
-
-
-    let data = [];
-
-
-    if(
-      Array.isArray(result)
-    ){
-
-      data =
-        result;
-
-    }
-
-    else if(
-      Array.isArray(result.data)
-    ){
-
-      data =
-        result.data;
-
-    }
-
-    else if(
-      Array.isArray(result.rows)
-    ){
-
-      data =
-        result.rows;
-
-    }
-
-    else{
-
-      throw new Error(
-        'JSON data array not found.'
-      );
-
-    }
-
-
-    recruitmentHeaders =
-
-      Array.isArray(result.headers)
-
-      ? result.headers
-
-      : (
-          data.length
-
-          ? Object.keys(data[0])
-
-          : []
-        );
-
-
-    recruitmentRows =
-
-      data
-        .map(
-          normalizedRow
-        )
-        .filter(
-          function(row){
-
-            return row.reqNo;
-
-          }
-        );
-
-
-    status.className =
-      'recruitment-status success';
-
-
-    status.textContent =
-
-      'Live connected · ' +
-
-      recruitmentRows.length +
-
-      ' requisitions · Last refreshed ' +
-
-      new Date()
-        .toLocaleString();
-
-
-    initialiseFilters();
-
-    renderRecruitment();
-
-  }
-
-  catch(error){
-
-
-    console.error(
-      error
-    );
-
-
-    status.className =
-      'recruitment-status error';
-
-
-    status.textContent =
-
-      'Recruitment live connection failed: ' +
-
-      error.message +
-
-      '. Open the Apps Script /exec URL directly and confirm it returns JSON.';
+    loading.style.display =
+      'none';
 
   }
 
@@ -2733,2111 +1565,45 @@ async function loadRecruitmentLive(
 
 
 
-/* =========================================================
-   KPI
-========================================================= */
+function refreshRecruitmentDashboard(){
 
-function renderKpis(){
-
-  const active =
-    recruitmentRows
-      .filter(
-        isActive
-      );
-
-
-  const joined =
-    recruitmentRows
-      .filter(
-        function(row){
-
-          return (
-            statusLower(row)
-            ===
-            'joined'
-          );
-
-        }
-      );
-
-
-  const offer =
-    recruitmentRows
-      .filter(
-        isOfferStage
-      );
-
-
-  const hold =
-    recruitmentRows
-      .filter(
-        isHold
-      );
-
-
-  const critical =
-    active
-      .filter(
-        function(row){
-
-          const age =
-            ageDays(row);
-
-          return (
-            age !== null &&
-            age > 30
-          );
-
-        }
-      );
-
-
-  const totalHeadcount =
-
-    active.reduce(
-      function(sum,row){
-
-        return sum +
-          Math.max(
-            1,
-            numberValue(
-              row.headcount
-            )
-          );
-
-      },
-      0
+  const frame =
+    document.getElementById(
+      'recruitmentFrame'
     );
 
 
-  document
-    .getElementById(
-      'recruitmentKpis'
-    )
-    .innerHTML = [
-
-      kpiCard(
-        'Active Requirements',
-        active.length,
-        'Open hiring requirements'
-      ),
-
-      kpiCard(
-        'Open Headcount',
-        totalHeadcount,
-        'Required positions'
-      ),
-
-      kpiCard(
-        'Offer Stage',
-        offer.length,
-        'Shortlisted / Offered / Accepted'
-      ),
-
-      kpiCard(
-        'Joined',
-        joined.length,
-        'Recorded in tracker'
-      ),
-
-      kpiCard(
-        'On Hold',
-        hold.length,
-        'Excluded from ageing',
-        'warn'
-      ),
-
-      kpiCard(
-        '30+ Day Critical',
-        critical.length,
-        'Immediate action required',
-        'warn'
-      )
-
-    ].join('');
-
-}
-
-
-
-/* =========================================================
-   AGEING
-========================================================= */
-
-function renderAgeing(){
-
-  const count = {
-
-    '0-7':0,
-
-    '8-15':0,
-
-    '16-30':0,
-
-    '30+':0
-
-  };
-
-
-  recruitmentRows
-    .filter(
-      isActive
-    )
-    .forEach(
-      function(row){
-
-        const bucket =
-          ageBucket(
-            ageDays(row)
-          );
-
-
-        if(
-          count[bucket]
-          !== undefined
-        ){
-
-          count[bucket]++;
-
-        }
-
-      }
+  const loading =
+    document.getElementById(
+      'recruitmentLoading'
     );
 
 
-  document
-    .getElementById(
-      'age07Count'
-    )
-    .textContent =
-      count['0-7'];
-
-
-  document
-    .getElementById(
-      'age815Count'
-    )
-    .textContent =
-      count['8-15'];
-
-
-  document
-    .getElementById(
-      'age1630Count'
-    )
-    .textContent =
-      count['16-30'];
-
-
-  document
-    .getElementById(
-      'age30plusCount'
-    )
-    .textContent =
-      count['30+'];
-
-}
-
-
-
-function setAgeFilter(bucket){
-
-  ageFilter =
-
-    ageFilter === bucket
-
-    ? 'all'
-
-    : bucket;
-
-
-  [
-
-    'age07',
-
-    'age815',
-
-    'age1630',
-
-    'age30plus'
-
-  ].forEach(
-    function(id){
-
-      document
-        .getElementById(id)
-        .classList
-        .remove('selected');
-
-    }
-  );
-
-
-  const map = {
-
-    '0-7':'age07',
-
-    '8-15':'age815',
-
-    '16-30':'age1630',
-
-    '30+':'age30plus'
-
-  };
-
-
-  if(
-    ageFilter !== 'all'
-  ){
-
-    document
-      .getElementById(
-        map[ageFilter]
-      )
-      .classList
-      .add('selected');
-
-  }
-
-
-  renderTable();
-
-}
-
-
-
-/* =========================================================
-   CHART HELPERS
-========================================================= */
-
-function countBy(
-  rows,
-  property
-){
-
-  const output = {};
-
-
-  rows.forEach(
-    function(row){
-
-      const key =
-
-        String(
-          row[property] ||
-          'Not Specified'
-        )
-        .trim()
-
-        ||
-
-        'Not Specified';
-
-
-      output[key] =
-
-        (
-          output[key] ||
-          0
-        )
-
-        + 1;
-
-    }
-  );
-
-
-  return output;
-
-}
-
-
-
-function drawChart(
-  id,
-  type,
-  labels,
-  values
-){
-
-  const element =
-    document.getElementById(id);
-
-
-  if(!element){
+  if(!frame){
 
     return;
 
   }
 
 
-  if(
-    recruitmentCharts[id]
-  ){
+  if(loading){
 
-    recruitmentCharts[id]
-      .destroy();
+    loading.style.display =
+      'flex';
 
   }
 
 
-  const colors = [
+  const baseUrl =
+    'https://script.google.com/a/macros/euronics.co.in/s/AKfycbxA8vc8YBnpl1u3lbi8L-K_jHOKVXJPc3j1h1Ggs7c_M2MhpUFxFSGZFDyy88zMLTPg/exec';
 
-    '#0f5f6d',
 
-    '#147b8d',
-
-    '#3d6e99',
-
-    '#6a55b7',
-
-    '#16835b',
-
-    '#b8750a',
-
-    '#c52d4c',
-
-    '#8aa4aa',
-
-    '#4c7b85',
-
-    '#86b0b8'
-
-  ];
-
-
-  recruitmentCharts[id] =
-
-    new Chart(
-
-      element,
-
-      {
-
-        type:type,
-
-        data:{
-
-          labels:labels,
-
-          datasets:[
-
-            {
-
-              data:values,
-
-              borderWidth:1,
-
-              backgroundColor:
-
-                type === 'doughnut'
-
-                ? colors.slice(
-                    0,
-                    labels.length
-                  )
-
-                : '#147b8d'
-
-            }
-
-          ]
-
-        },
-
-
-        options:{
-
-          responsive:true,
-
-          maintainAspectRatio:false,
-
-
-          plugins:{
-
-            legend:{
-
-              display:
-                type ===
-                'doughnut',
-
-              position:'bottom',
-
-              labels:{
-
-                boxWidth:10,
-
-                font:{
-
-                  size:10
-
-                }
-
-              }
-
-            }
-
-          },
-
-
-          scales:
-
-            type === 'doughnut'
-
-            ? {}
-
-            : {
-
-                x:{
-
-                  grid:{
-
-                    display:false
-
-                  },
-
-                  ticks:{
-
-                    font:{
-
-                      size:9
-
-                    }
-
-                  }
-
-                },
-
-                y:{
-
-                  beginAtZero:true,
-
-                  ticks:{
-
-                    precision:0
-
-                  }
-
-                }
-
-              }
-
-        }
-
-      }
-
-    );
+  frame.src =
+    baseUrl +
+    '?refresh=' +
+    Date.now();
 
 }
-
-
-
-/* =========================================================
-   CHARTS
-========================================================= */
-
-function renderCharts(){
-
-  const active =
-    recruitmentRows
-      .filter(
-        isActive
-      );
-
-
-  const statusData =
-    countBy(
-      recruitmentRows,
-      'status'
-    );
-
-
-  drawChart(
-    'statusChart',
-    'doughnut',
-    Object.keys(
-      statusData
-    ),
-    Object.values(
-      statusData
-    )
-  );
-
-
-  const sourceData =
-    Object.entries(
-      countBy(
-        recruitmentRows,
-        'posted'
-      )
-    )
-    .sort(
-      function(a,b){
-
-        return b[1]-a[1];
-
-      }
-    )
-    .slice(
-      0,
-      10
-    );
-
-
-  drawChart(
-    'sourceChart',
-    'bar',
-    sourceData.map(
-      function(x){
-
-        return x[0];
-
-      }
-    ),
-    sourceData.map(
-      function(x){
-
-        return x[1];
-
-      }
-    )
-  );
-
-
-  const recruiterData =
-    Object.entries(
-      countBy(
-        active,
-        'recruiter'
-      )
-    )
-    .sort(
-      function(a,b){
-
-        return b[1]-a[1];
-
-      }
-    );
-
-
-  drawChart(
-    'recruiterChart',
-    'bar',
-    recruiterData.map(
-      function(x){
-
-        return x[0];
-
-      }
-    ),
-    recruiterData.map(
-      function(x){
-
-        return x[1];
-
-      }
-    )
-  );
-
-
-  const departmentData =
-    Object.entries(
-      countBy(
-        active,
-        'department'
-      )
-    )
-    .sort(
-      function(a,b){
-
-        return b[1]-a[1];
-
-      }
-    )
-    .slice(
-      0,
-      12
-    );
-
-
-  drawChart(
-    'departmentChart',
-    'bar',
-    departmentData.map(
-      function(x){
-
-        return x[0];
-
-      }
-    ),
-    departmentData.map(
-      function(x){
-
-        return x[1];
-
-      }
-    )
-  );
-
-
-  const priorityData =
-    countBy(
-      active,
-      'priority'
-    );
-
-
-  drawChart(
-    'priorityChart',
-    'bar',
-    Object.keys(
-      priorityData
-    ),
-    Object.values(
-      priorityData
-    )
-  );
-
-
-  const typeData =
-    countBy(
-      recruitmentRows,
-      'reqType'
-    );
-
-
-  drawChart(
-    'typeChart',
-    'doughnut',
-    Object.keys(
-      typeData
-    ),
-    Object.values(
-      typeData
-    )
-  );
-
-}
-
-
-
-/* =========================================================
-   FUNNEL
-========================================================= */
-
-function renderFunnel(){
-
-  const calls =
-
-    recruitmentRows.reduce(
-      function(sum,row){
-
-        return sum +
-          numberValue(
-            row.calls
-          );
-
-      },
-      0
-    );
-
-
-  const screened =
-
-    recruitmentRows.reduce(
-      function(sum,row){
-
-        return sum +
-          numberValue(
-            row.screened
-          );
-
-      },
-      0
-    );
-
-
-  const nextRound =
-
-    recruitmentRows.reduce(
-      function(sum,row){
-
-        return sum +
-          numberValue(
-            row.nextRound
-          );
-
-      },
-      0
-    );
-
-
-  const offerStage =
-
-    recruitmentRows
-      .filter(
-        isOfferStage
-      )
-      .length;
-
-
-  const joined =
-
-    recruitmentRows
-      .filter(
-        function(row){
-
-          return (
-            statusLower(row)
-            ===
-            'joined'
-          );
-
-        }
-      )
-      .length;
-
-
-  const stages = [
-
-    [
-      'Calls',
-      calls
-    ],
-
-    [
-      'Screened',
-      screened
-    ],
-
-    [
-      'Next Round',
-      nextRound
-    ],
-
-    [
-      'Offer Stage',
-      offerStage
-    ],
-
-    [
-      'Joined',
-      joined
-    ]
-
-  ];
-
-
-  document
-    .getElementById(
-      'recruitmentFunnel'
-    )
-    .innerHTML =
-
-      stages
-        .map(
-          function(stage){
-
-            return `
-
-              <div class="funnel-box">
-
-                <div class="funnel-number">
-
-                  ${stage[1]}
-
-                </div>
-
-                <div class="funnel-label">
-
-                  ${stage[0]}
-
-                </div>
-
-              </div>
-
-            `;
-
-          }
-        )
-        .join('');
-
-}
-
-
-
-/* =========================================================
-   CRITICAL ROLES
-========================================================= */
-
-function renderCritical(){
-
-  const rows =
-
-    recruitmentRows
-
-      .filter(
-        isActive
-      )
-
-      .map(
-        function(row){
-
-          return {
-
-            row:row,
-
-            age:
-              ageDays(row)
-
-          };
-
-        }
-      )
-
-      .filter(
-        function(item){
-
-          return (
-
-            item.age !== null &&
-
-            item.age > 30
-
-          );
-
-        }
-      )
-
-      .sort(
-        function(a,b){
-
-          return b.age-a.age;
-
-        }
-      )
-
-      .slice(
-        0,
-        15
-      );
-
-
-  const element =
-    document.getElementById(
-      'criticalRoles'
-    );
-
-
-  if(
-    !rows.length
-  ){
-
-    element.innerHTML =
-
-      '<div class="empty-state">No 30+ day active roles.</div>';
-
-    return;
-
-  }
-
-
-  element.innerHTML =
-
-    rows
-      .map(
-        function(item){
-
-          const row =
-            item.row;
-
-
-          return `
-
-            <div class="recruitment-list-row">
-
-              <div>
-
-                <div class="role-name">
-
-                  ${escapeHtml(
-                    row.title
-                  )}
-
-                </div>
-
-                <div class="role-meta">
-
-                  ${escapeHtml(
-                    row.department
-                  )}
-
-                  ·
-
-                  ${escapeHtml(
-                    row.location
-                  )}
-
-                  ·
-
-                  ${escapeHtml(
-                    row.recruiter
-                  )}
-
-                  ·
-
-                  ${escapeHtml(
-                    row.priority
-                  )}
-
-                </div>
-
-              </div>
-
-              <span class="age-badge critical">
-
-                ${item.age}
-                days
-
-              </span>
-
-            </div>
-
-          `;
-
-        }
-      )
-      .join('');
-
-}
-
-
-
-/* =========================================================
-   UPCOMING DOJ
-========================================================= */
-
-function renderDoj(){
-
-  const today =
-    new Date();
-
-
-  today.setHours(
-    0,
-    0,
-    0,
-    0
-  );
-
-
-  const rows =
-
-    recruitmentRows
-
-      .map(
-        function(row){
-
-          return {
-
-            row:row,
-
-            doj:
-              parseDate(
-                row.doj
-              )
-
-          };
-
-        }
-      )
-
-      .filter(
-        function(item){
-
-          return (
-
-            item.doj &&
-
-            item.doj >= today
-
-          );
-
-        }
-      )
-
-      .sort(
-        function(a,b){
-
-          return (
-            a.doj -
-            b.doj
-          );
-
-        }
-      )
-
-      .slice(
-        0,
-        15
-      );
-
-
-  const element =
-    document.getElementById(
-      'upcomingDoj'
-    );
-
-
-  if(
-    !rows.length
-  ){
-
-    element.innerHTML =
-
-      '<div class="empty-state">No future DOJ found.</div>';
-
-    return;
-
-  }
-
-
-  element.innerHTML =
-
-    rows
-      .map(
-        function(item){
-
-          const row =
-            item.row;
-
-
-          return `
-
-            <div class="recruitment-list-row">
-
-              <div>
-
-                <div class="role-name">
-
-                  ${escapeHtml(
-                    row.candidate ||
-                    row.title
-                  )}
-
-                </div>
-
-                <div class="role-meta">
-
-                  ${escapeHtml(
-                    row.title
-                  )}
-
-                  ·
-
-                  ${escapeHtml(
-                    row.department
-                  )}
-
-                </div>
-
-              </div>
-
-              <span class="age-badge fresh">
-
-                ${escapeHtml(
-                  row.doj
-                )}
-
-              </span>
-
-            </div>
-
-          `;
-
-        }
-      )
-      .join('');
-
-}
-
-
-
-/* =========================================================
-   RECRUITER PERFORMANCE
-========================================================= */
-
-function renderRecruiterPerformance(){
-
-  const recruiters =
-
-    [
-      ...new Set(
-
-        recruitmentRows
-
-          .map(
-            function(row){
-
-              return row.recruiter;
-
-            }
-          )
-
-          .filter(Boolean)
-
-      )
-    ];
-
-
-  const result =
-
-    recruiters
-      .map(
-        function(name){
-
-          const all =
-
-            recruitmentRows
-              .filter(
-                function(row){
-
-                  return (
-                    row.recruiter
-                    ===
-                    name
-                  );
-
-                }
-              );
-
-
-          const active =
-            all.filter(
-              isActive
-            );
-
-
-          const offer =
-            all.filter(
-              isOfferStage
-            );
-
-
-          const joined =
-            all.filter(
-              function(row){
-
-                return (
-                  statusLower(row)
-                  ===
-                  'joined'
-                );
-
-              }
-            );
-
-
-          const critical =
-            active.filter(
-              function(row){
-
-                const age =
-                  ageDays(row);
-
-                return (
-                  age !== null &&
-                  age > 30
-                );
-
-              }
-            );
-
-
-          const ages =
-
-            active
-
-              .map(
-                ageDays
-              )
-
-              .filter(
-                function(age){
-
-                  return age !== null;
-
-                }
-              );
-
-
-          const avg =
-
-            ages.length
-
-            ? Math.round(
-
-                ages.reduce(
-                  function(a,b){
-
-                    return a+b;
-
-                  },
-                  0
-                )
-
-                /
-
-                ages.length
-
-              )
-
-            : 0;
-
-
-          return {
-
-            name:name,
-
-            active:
-              active.length,
-
-            offer:
-              offer.length,
-
-            joined:
-              joined.length,
-
-            critical:
-              critical.length,
-
-            avg:
-              avg
-
-          };
-
-        }
-      )
-
-      .sort(
-        function(a,b){
-
-          return (
-            b.active -
-            a.active
-          );
-
-        }
-      );
-
-
-  document
-    .getElementById(
-      'recruiterPerformance'
-    )
-    .innerHTML =
-
-      result
-        .map(
-          function(row){
-
-            return `
-
-              <tr>
-
-                <td>
-
-                  <strong>
-
-                    ${escapeHtml(
-                      row.name
-                    )}
-
-                  </strong>
-
-                </td>
-
-                <td>
-                  ${row.active}
-                </td>
-
-                <td>
-                  ${row.offer}
-                </td>
-
-                <td>
-                  ${row.joined}
-                </td>
-
-                <td>
-                  ${row.critical}
-                </td>
-
-                <td>
-                  ${row.avg}
-                  days
-                </td>
-
-              </tr>
-
-            `;
-
-          }
-        )
-        .join('');
-
-}
-
-
-
-/* =========================================================
-   FILTER SETUP
-========================================================= */
-
-function populateSelect(
-  id,
-  values,
-  defaultText
-){
-
-  const select =
-    document.getElementById(id);
-
-
-  select.innerHTML =
-
-    '<option value="all">' +
-
-    defaultText +
-
-    '</option>' +
-
-    values
-
-      .map(
-        function(value){
-
-          return (
-
-            '<option value="' +
-
-            escapeHtml(value) +
-
-            '">' +
-
-            escapeHtml(value) +
-
-            '</option>'
-
-          );
-
-        }
-      )
-
-      .join('');
-
-}
-
-
-
-function initialiseFilters(){
-
-  populateSelect(
-
-    'statusFilter',
-
-    [
-      ...new Set(
-
-        recruitmentRows
-
-          .map(
-            function(row){
-
-              return row.status;
-
-            }
-          )
-
-          .filter(Boolean)
-
-      )
-    ].sort(),
-
-    'All Status'
-
-  );
-
-
-  populateSelect(
-
-    'recruiterFilter',
-
-    [
-      ...new Set(
-
-        recruitmentRows
-
-          .map(
-            function(row){
-
-              return row.recruiter;
-
-            }
-          )
-
-          .filter(Boolean)
-
-      )
-    ].sort(),
-
-    'All Recruiters'
-
-  );
-
-
-  populateSelect(
-
-    'departmentFilter',
-
-    [
-      ...new Set(
-
-        recruitmentRows
-
-          .map(
-            function(row){
-
-              return row.department;
-
-            }
-          )
-
-          .filter(Boolean)
-
-      )
-    ].sort(),
-
-    'All Departments'
-
-  );
-
-
-  populateSelect(
-
-    'typeFilter',
-
-    [
-      ...new Set(
-
-        recruitmentRows
-
-          .map(
-            function(row){
-
-              return row.reqType;
-
-            }
-          )
-
-          .filter(Boolean)
-
-      )
-    ].sort(),
-
-    'All Requirement Types'
-
-  );
-
-}
-
-
-
-/* =========================================================
-   FILTER RECORDS
-========================================================= */
-
-function filteredRows(){
-
-  const search =
-
-    document
-      .getElementById(
-        'recruitmentSearch'
-      )
-      .value
-      .toLowerCase();
-
-
-  const status =
-
-    document
-      .getElementById(
-        'statusFilter'
-      )
-      .value;
-
-
-  const recruiter =
-
-    document
-      .getElementById(
-        'recruiterFilter'
-      )
-      .value;
-
-
-  const department =
-
-    document
-      .getElementById(
-        'departmentFilter'
-      )
-      .value;
-
-
-  const priority =
-
-    document
-      .getElementById(
-        'priorityFilter'
-      )
-      .value;
-
-
-  const type =
-
-    document
-      .getElementById(
-        'typeFilter'
-      )
-      .value;
-
-
-  return recruitmentRows
-
-    .filter(
-      function(row){
-
-
-        const text = [
-
-          row.reqNo,
-
-          row.title,
-
-          row.department,
-
-          row.location,
-
-          row.recruiter,
-
-          row.manager,
-
-          row.status,
-
-          row.candidate,
-
-          row.remarks,
-
-          row.posted,
-
-          row.reqType
-
-        ]
-
-        .join(' ')
-
-        .toLowerCase();
-
-
-        const rowAge =
-          ageBucket(
-            ageDays(row)
-          );
-
-
-        return (
-
-          (
-            !search ||
-            text.includes(search)
-          )
-
-          &&
-
-          (
-            status === 'all' ||
-            row.status === status
-          )
-
-          &&
-
-          (
-            recruiter === 'all' ||
-            row.recruiter === recruiter
-          )
-
-          &&
-
-          (
-            department === 'all' ||
-            row.department === department
-          )
-
-          &&
-
-          (
-            priority === 'all' ||
-            row.priority === priority
-          )
-
-          &&
-
-          (
-            type === 'all' ||
-            row.reqType === type
-          )
-
-          &&
-
-          (
-            ageFilter === 'all' ||
-
-            (
-              isActive(row) &&
-              rowAge === ageFilter
-            )
-          )
-
-        );
-
-      }
-    );
-
-}
-
-
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-function tableAgeClass(age){
-
-  const bucket =
-    ageBucket(age);
-
-
-  if(
-    bucket === '0-7'
-  ){
-
-    return 'fresh';
-
-  }
-
-
-  if(
-    bucket === '8-15'
-  ){
-
-    return 'watch';
-
-  }
-
-
-  if(
-    bucket === '16-30'
-  ){
-
-    return 'ageing';
-
-  }
-
-
-  return 'critical';
-
-}
-
-
-
-function renderTable(){
-
-  const rows =
-
-    filteredRows()
-
-      .sort(
-        function(a,b){
-
-          const dateA =
-            parseDate(
-              a.reqDate
-            );
-
-
-          const dateB =
-            parseDate(
-              b.reqDate
-            );
-
-
-          return (
-
-            (
-              dateB
-              ? dateB.getTime()
-              : 0
-            )
-
-            -
-
-            (
-              dateA
-              ? dateA.getTime()
-              : 0
-            )
-
-          );
-
-        }
-      );
-
-
-  document
-    .getElementById(
-      'visibleCount'
-    )
-    .textContent =
-      rows.length;
-
-
-  const headers =
-
-    [
-      'Age (Days)',
-      ...recruitmentHeaders
-    ];
-
-
-  document
-    .getElementById(
-      'requisitionTableHead'
-    )
-    .innerHTML =
-
-      '<tr>' +
-
-      headers
-
-        .map(
-          function(header){
-
-            return (
-
-              '<th>' +
-
-              escapeHtml(
-                String(header)
-                  .replace(
-                    /\n/g,
-                    ' '
-                  )
-              )
-
-              +
-
-              '</th>'
-
-            );
-
-          }
-        )
-
-        .join('')
-
-      +
-
-      '</tr>';
-
-
-  document
-    .getElementById(
-      'requisitionTableBody'
-    )
-    .innerHTML =
-
-      rows
-
-        .map(
-          function(row){
-
-
-            const age =
-              ageDays(row);
-
-
-            const raw =
-              row.raw;
-
-
-            let cells = '';
-
-
-            recruitmentHeaders
-              .forEach(
-                function(header){
-
-
-                  let value =
-                    raw[header];
-
-
-                  if(
-                    value === undefined ||
-                    value === null ||
-                    value === ''
-                  ){
-
-                    value = '-';
-
-                  }
-
-
-                  const wrap =
-
-                    [
-
-                      'Job Title',
-
-                      'Remarks',
-
-                      'Candidate pool',
-
-                      'Candidate pool ',
-
-                      'JD Link',
-
-                      'JD Link ',
-
-                      'Budget\n(CTC Range ₹)',
-
-                      'Experience\nRequired'
-
-                    ]
-
-                    .includes(header)
-
-                    ? 'wrap'
-
-                    : '';
-
-
-                  cells +=
-
-                    '<td class="' +
-                    wrap +
-                    '">' +
-
-                    escapeHtml(
-                      value
-                    )
-
-                    +
-
-                    '</td>';
-
-                }
-              );
-
-
-            return `
-
-              <tr>
-
-                <td>
-
-                  <span class="age-badge ${tableAgeClass(age)}">
-
-                    ${
-                      age === null
-                      ? '-'
-                      : age + 'd'
-                    }
-
-                  </span>
-
-                </td>
-
-                ${cells}
-
-              </tr>
-
-            `;
-
-          }
-        )
-
-        .join('');
-
-}
-
-
-
-/* =========================================================
-   RESET FILTERS
-========================================================= */
-
-function resetRecruitmentFilters(){
-
-  ageFilter = 'all';
-
-
-  [
-
-    'age07',
-
-    'age815',
-
-    'age1630',
-
-    'age30plus'
-
-  ].forEach(
-    function(id){
-
-      document
-        .getElementById(id)
-        .classList
-        .remove('selected');
-
-    }
-  );
-
-
-  document
-    .getElementById(
-      'recruitmentSearch'
-    )
-    .value = '';
-
-
-  document
-    .getElementById(
-      'statusFilter'
-    )
-    .value = 'all';
-
-
-  document
-    .getElementById(
-      'recruiterFilter'
-    )
-    .value = 'all';
-
-
-  document
-    .getElementById(
-      'departmentFilter'
-    )
-    .value = 'all';
-
-
-  document
-    .getElementById(
-      'priorityFilter'
-    )
-    .value = 'all';
-
-
-  document
-    .getElementById(
-      'typeFilter'
-    )
-    .value = 'all';
-
-
-  renderTable();
-
-}
-
-
-
-/* =========================================================
-   RENDER EVERYTHING
-========================================================= */
-
-function renderRecruitment(){
-
-  renderKpis();
-
-  renderAgeing();
-
-  renderCharts();
-
-  renderFunnel();
-
-  renderCritical();
-
-  renderDoj();
-
-  renderRecruiterPerformance();
-
-  renderTable();
-
-}
-
-
-
-/* =========================================================
-   FILTER EVENTS
-========================================================= */
-
-document
-  .getElementById(
-    'recruitmentSearch'
-  )
-  .addEventListener(
-    'input',
-    renderTable
-  );
-
-
-[
-
-  'statusFilter',
-
-  'recruiterFilter',
-
-  'departmentFilter',
-
-  'priorityFilter',
-
-  'typeFilter'
-
-]
-
-.forEach(
-  function(id){
-
-    document
-      .getElementById(id)
-      .addEventListener(
-        'change',
-        renderTable
-      );
-
-  }
-);
-
-
-
-/* =========================================================
-   AUTO LOAD
-========================================================= */
-
-loadRecruitmentLive(false);
 
 
 </script>
