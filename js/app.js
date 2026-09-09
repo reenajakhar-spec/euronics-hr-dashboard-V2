@@ -1,152 +1,86 @@
-/* =========================================================
-   EURONICS HR COMMAND CENTRE
-   COMPLETE app.js
-   Recruitment = LIVE
-   Other dashboards = existing HR_DATA / dummy data
-========================================================= */
-
-
-/* =========================================================
-   PAGE TITLES
-========================================================= */
-
 const pageTitles = {
-
-  overview: [
-    'Executive Overview',
-    'CEO & CHRO command view'
-  ],
-
-  employees: [
-    'Employee CRM',
-    'Searchable employee 360° operating view'
-  ],
-
-  recruitment: [
-    'Recruitment Command Centre',
-    'Live Talent Acquisition analytics'
-  ],
-
-  attendance: [
-    'Attendance & Leave',
-    'Attendance health and regularisation'
-  ],
-
-  performance: [
-    'Performance Management',
-    'Green / Yellow / Red / PIP view'
-  ],
-
-  payroll: [
-    'Payroll & Compensation',
-    'Cost and compensation health'
-  ],
-
-  learning: [
-    'L&D / EuroVersity',
-    'Training and certification'
-  ],
-
-  engagement: [
-    'Engagement & Culture',
-    'Sentiment and recognition'
-  ],
-
-  compliance: [
-    'Compliance & Statutory',
-    'Statutory readiness'
-  ],
-
-  alerts: [
-    'Alerts & Action Centre',
-    'Ownership, due dates and follow-up'
-  ]
-
+  overview: ['Executive Overview', 'CEO & CHRO command view'],
+  employees: ['Employee CRM', 'Searchable employee 360° operating view'],
+  recruitment: ['Recruitment Pipeline', 'Requisition-to-joining funnel'],
+  attendance: ['Attendance & Leave', 'Attendance health and regularisation'],
+  performance: ['Performance Management', 'Green / Yellow / Red / PIP view'],
+  payroll: ['Payroll & Compensation', 'Cost and compensation health'],
+  learning: ['L&D / EuroVersity', 'Training and certification'],
+  engagement: ['Engagement & Culture', 'Sentiment and recognition'],
+  compliance: ['Compliance & Statutory', 'Statutory readiness'],
+  alerts: ['Alerts & Action Centre', 'Ownership, due dates and follow-up']
 };
-
-
-/* =========================================================
-   SAFE DOM HELPERS
-========================================================= */
-
-function getEl(id) {
-  return document.getElementById(id);
-}
-
-
-function setHTML(id, html) {
-
-  const el = getEl(id);
-
-  if (el) {
-    el.innerHTML = html;
-  }
-
-}
-
-
-function setText(id, value) {
-
-  const el = getEl(id);
-
-  if (el) {
-    el.textContent = value;
-  }
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
 
 function navigate(page) {
 
   document
     .querySelectorAll('.page')
-    .forEach(p => p.classList.remove('active'));
-
+    .forEach(
+      p => p.classList.remove('active')
+    );
 
   document
     .querySelectorAll('.nav-item')
-    .forEach(n => n.classList.remove('active'));
-
+    .forEach(
+      n => n.classList.remove('active')
+    );
 
   const pageEl =
-    getEl(page);
-
+    document.getElementById(page);
 
   if (pageEl) {
     pageEl.classList.add('active');
   }
-
 
   const navBtn =
     document.querySelector(
       `.nav-item[data-page="${page}"]`
     );
 
-
   if (navBtn) {
     navBtn.classList.add('active');
   }
 
+  const topbar =
+    document.querySelector('.topbar');
 
-  if (pageTitles[page]) {
+  if (page === 'recruitment') {
 
-    setText(
-      'pageTitle',
-      pageTitles[page][0]
+    document.body.classList.add(
+      'recruitment-mode'
     );
 
+    if (topbar) {
+      topbar.style.display = 'none';
+    }
 
-    setText(
-      'pageSub',
-      pageTitles[page][1]
+  } else {
+
+    document.body.classList.remove(
+      'recruitment-mode'
     );
+
+    if (topbar) {
+      topbar.style.display = 'flex';
+    }
+
+    if (
+      pageTitles[page] &&
+      document.getElementById('pageTitle')
+    ) {
+
+      document
+        .getElementById('pageTitle')
+        .textContent =
+          pageTitles[page][0];
+
+      document
+        .getElementById('pageSub')
+        .textContent =
+          pageTitles[page][1];
+    }
 
   }
-
 
   window.scrollTo({
     top: 0,
@@ -156,464 +90,194 @@ function navigate(page) {
 }
 
 
-document
-  .querySelectorAll('.nav-item')
-  .forEach(btn => {
-
-    btn.addEventListener(
-      'click',
-      () => navigate(btn.dataset.page)
-    );
-
-  });
-
-
-document
-  .querySelectorAll('[data-page-jump]')
-  .forEach(btn => {
-
-    btn.addEventListener(
-      'click',
-      () => navigate(btn.dataset.pageJump)
-    );
-
-  });
-
-
-/* =========================================================
-   KPI HELPER
-========================================================= */
-
-function kpi(
-  label,
-  value,
-  sub = '',
-  cls = ''
-) {
-
+function kpi(label, value, sub = '', cls = '') {
   return `
-
     <div class="kpi-card ${cls}">
-
-      <div class="label">
-        ${label}
-      </div>
-
-      <div class="value">
-        ${value}
-      </div>
-
-      <div
-        class="sub ${
-          sub.includes('▲')
-            ? 'good'
-            : sub.includes('▼')
-              ? 'bad'
-              : ''
-        }"
-      >
+      <div class="label">${label}</div>
+      <div class="value">${value}</div>
+      <div class="sub ${sub.includes('▲') ? 'good' : sub.includes('▼') ? 'bad' : ''}">
         ${sub}
       </div>
-
     </div>
-
   `;
-
 }
 
 
-/* =========================================================
+/* =========================
    OVERVIEW
-========================================================= */
+========================= */
 
-if (getEl('overviewKpis')) {
-
-  setHTML(
-    'overviewKpis',
-
-    [
-
-      kpi(
-        'Total Headcount',
-        '612',
-        '▲ +6 vs June'
-      ),
-
-      kpi(
-        'Attendance Rate',
-        '93.4%',
-        'Jul MTD avg'
-      ),
-
-      kpi(
-        'Open Positions',
-        '18',
-        'Recruitment connected live',
-        'warn'
-      ),
-
-      kpi(
-        'Attrition (Rolling 12M)',
-        '14.2%',
-        'Sales 18.4% · Non-Sales 9.7%'
-      ),
-
-      kpi(
-        'PIP Cases',
-        '4',
-        '2 Sales · 1 Plant · 1 Corp'
-      ),
-
-      kpi(
-        'eNPS Score',
-        '+32',
-        '▲ +4 vs last survey',
-        'highlight'
-      )
-
-    ].join('')
-
-  );
-
-}
+document.getElementById('overviewKpis').innerHTML = [
+  kpi('Total Headcount', '612', '▲ +6 vs June'),
+  kpi('Attendance Rate', '93.4%', 'Jul MTD avg'),
+  kpi('Open Positions', '18', '3 aged >8 weeks', 'warn'),
+  kpi(
+    'Attrition (Rolling 12M)',
+    '14.2%',
+    'Sales 18.4% · Non-Sales 9.7%'
+  ),
+  kpi('PIP Cases', '4', '2 Sales · 1 Plant · 1 Corp'),
+  kpi('eNPS Score', '+32', '▲ +4 vs last survey', 'highlight')
+].join('');
 
 
-if (
-  typeof makeLineChart === 'function'
-) {
-
-  makeLineChart(
-    'headcountChart',
-    [
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug'
-    ],
-    [
-      605,
-      606,
-      606,
-      612,
-      618
-    ],
-    'Headcount'
-  );
+makeLineChart(
+  'headcountChart',
+  ['Apr', 'May', 'Jun', 'Jul', 'Aug'],
+  [605, 606, 606, 612, 618],
+  'Headcount'
+);
 
 
-  makeLineChart(
-    'attritionChart',
-    [
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug'
-    ],
-    [
-      15.4,
-      15.1,
-      14.8,
-      14.2,
-      13.9
-    ],
-    'Attrition %'
-  );
-
-}
+makeLineChart(
+  'attritionChart',
+  ['Apr', 'May', 'Jun', 'Jul', 'Aug'],
+  [15.4, 15.1, 14.8, 14.2, 13.9],
+  'Attrition %'
+);
 
 
 const departments = [
-
-  [
-    'Production',
-    89.1,
-    81,
-    'red'
-  ],
-
-  [
-    'Sales & BD',
-    96.2,
-    74,
-    'amber'
-  ],
-
-  [
-    'Quality',
-    94.8,
-    85,
-    'green'
-  ],
-
-  [
-    'Supply Chain',
-    95.5,
-    79,
-    'green'
-  ],
-
-  [
-    'Engineering/NPD',
-    97.1,
-    88,
-    'green'
-  ]
-
+  ['Production', 89.1, 81, 'red'],
+  ['Sales & BD', 96.2, 74, 'amber'],
+  ['Quality', 94.8, 85, 'green'],
+  ['Supply Chain', 95.5, 79, 'green'],
+  ['Engineering/NPD', 97.1, 88, 'green']
 ];
 
 
-if (getEl('departmentHealth')) {
+document.getElementById('departmentHealth').innerHTML =
+  departments.map(d => `
+    <div class="health-row">
 
-  setHTML(
+      <div class="health-main">
 
-    'departmentHealth',
+        <div class="health-dot ${d[3]}"></div>
 
-    departments
-      .map(d => `
-
-        <div class="health-row">
-
-          <div class="health-main">
-
-            <div
-              class="health-dot ${d[3]}"
-            ></div>
-
-            <div>
-
-              <div class="health-name">
-                ${d[0]}
-              </div>
-
-              <div class="health-meta">
-                Attendance ${d[1]}%
-                ·
-                Avg KRA ${d[2]}%
-              </div>
-
-            </div>
-
+        <div>
+          <div class="health-name">
+            ${d[0]}
           </div>
 
-          <div class="health-score">
-            ${d[2]}%
+          <div class="health-meta">
+            Attendance ${d[1]}% · Avg KRA ${d[2]}%
           </div>
-
         </div>
 
-      `)
-      .join('')
+      </div>
 
-  );
+      <div class="health-score">
+        ${d[2]}%
+      </div>
 
-}
+    </div>
+  `).join('');
 
-
-/* =========================================================
-   ALERT CARD
-========================================================= */
 
 function alertCard(a) {
-
-  const priorityClass =
-    String(a.priority || '')
-      .toLowerCase();
-
-
-  const statusClass =
-    String(a.status || '')
-      .toLowerCase()
-      .replaceAll(' ', '');
-
+  const cls = a.priority.toLowerCase();
 
   return `
-
     <div class="alert-card">
 
       <div class="alert-left">
 
-        <span
-          class="priority-pill
-          priority-${priorityClass}"
-        >
+        <span class="priority-pill priority-${cls}">
           ${a.priority}
         </span>
 
         <div>
-
           <div class="alert-title">
             ${a.action}
           </div>
 
           <div class="alert-meta">
-            ${a.owner}
-            ·
-            Due ${a.due}
+            ${a.owner} · Due ${a.due}
           </div>
-
         </div>
 
       </div>
 
-      <span
-        class="status-pill
-        status-${statusClass}"
-      >
+      <span class="status-pill status-${a.status.toLowerCase().replaceAll(' ', '')}">
         ${a.status}
       </span>
 
     </div>
-
   `;
-
 }
 
 
-if (
-  typeof HR_DATA !== 'undefined' &&
-  HR_DATA.alerts &&
-  getEl('priorityAlerts')
-) {
-
-  setHTML(
-
-    'priorityAlerts',
-
-    HR_DATA.alerts
-      .slice(0, 4)
-      .map(alertCard)
-      .join('')
-
-  );
-
-}
+document.getElementById('priorityAlerts').innerHTML =
+  HR_DATA.alerts
+    .slice(0, 4)
+    .map(alertCard)
+    .join('');
 
 
-/* =========================================================
+/* =========================
    EMPLOYEE CRM
-========================================================= */
+========================= */
 
 function renderEmployees() {
 
-  if (
-    typeof HR_DATA === 'undefined' ||
-    !HR_DATA.employees
-  ) {
-    return;
-  }
-
-
-  const employeeSearch =
-    getEl('employeeSearch');
-
-
-  const globalSearch =
-    getEl('globalSearch');
-
-
   const q =
-    employeeSearch
-      ? employeeSearch.value.toLowerCase()
-      : '';
-
+    document.getElementById('employeeSearch')
+      .value
+      .toLowerCase();
 
   const globalQ =
-    globalSearch
-      ? globalSearch.value.toLowerCase()
-      : '';
-
+    document.getElementById('globalSearch')
+      .value
+      .toLowerCase();
 
   const loc =
-    getEl('filterLocation')
-      ?.value || 'all';
-
+    document.getElementById('filterLocation')
+      .value;
 
   const dept =
-    getEl('filterDepartment')
-      ?.value || 'all';
-
+    document.getElementById('filterDepartment')
+      .value;
 
   const manager =
-    getEl('filterManager')
-      ?.value || 'all';
-
+    document.getElementById('filterManager')
+      .value;
 
   const status =
-    getEl('filterStatus')
-      ?.value || 'all';
+    document.getElementById('filterStatus')
+      .value;
 
 
-  const rows =
-    HR_DATA.employees.filter(e => {
+  const rows = HR_DATA.employees.filter(e => {
 
-      const text =
-        `${e.name}
-         ${e.role}
-         ${e.department}
-         ${e.manager}
-         ${e.location}`
-          .toLowerCase();
+    const text =
+      `${e.name} ${e.role} ${e.department} ${e.manager} ${e.location}`
+        .toLowerCase();
 
 
-      return (
+    return (
 
-        (
-          !q ||
-          text.includes(q)
-        )
+      (!q || text.includes(q)) &&
 
-        &&
+      (!globalQ || text.includes(globalQ)) &&
 
-        (
-          !globalQ ||
-          text.includes(globalQ)
-        )
+      (loc === 'all' || e.location === loc) &&
 
-        &&
+      (dept === 'all' || e.department === dept) &&
 
-        (
-          loc === 'all' ||
-          e.location === loc
-        )
+      (manager === 'all' || e.manager === manager) &&
 
-        &&
+      (status === 'all' || e.status === status)
 
-        (
-          dept === 'all' ||
-          e.department === dept
-        )
+    );
 
-        &&
-
-        (
-          manager === 'all' ||
-          e.manager === manager
-        )
-
-        &&
-
-        (
-          status === 'all' ||
-          e.status === status
-        )
-
-      );
-
-    });
+  });
 
 
-  setText(
-    'employeeCount',
-    rows.length
-  );
+  document.getElementById('employeeCount').textContent =
+    rows.length;
 
 
-  setHTML(
-
-    'employeeTableBody',
-
+  document.getElementById('employeeTableBody').innerHTML =
     rows.map(e => `
 
       <tr>
@@ -630,36 +294,40 @@ function renderEmployees() {
 
         </td>
 
+
         <td>
           ${e.department}
         </td>
+
 
         <td>
           ${e.manager}
         </td>
 
+
         <td>
           ${e.location}
         </td>
+
 
         <td>
           ${e.attendance}%
         </td>
 
+
         <td>
           ${e.kra}%
         </td>
 
+
         <td>
 
-          <span
-            class="status-pill
-            status-${String(e.status).toLowerCase()}"
-          >
+          <span class="status-pill status-${e.status.toLowerCase()}">
             ${e.status}
           </span>
 
         </td>
+
 
         <td>
 
@@ -674,22 +342,22 @@ function renderEmployees() {
 
       </tr>
 
-    `).join('')
-
-  );
+    `).join('');
 
 }
 
 
-getEl('employeeSearch')
-  ?.addEventListener(
+document
+  .getElementById('employeeSearch')
+  .addEventListener(
     'input',
     renderEmployees
   );
 
 
-getEl('globalSearch')
-  ?.addEventListener(
+document
+  .getElementById('globalSearch')
+  .addEventListener(
     'input',
     renderEmployees
   );
@@ -700,11 +368,11 @@ getEl('globalSearch')
   'filterDepartment',
   'filterManager',
   'filterStatus'
-]
-.forEach(id => {
+].forEach(id => {
 
-  getEl(id)
-    ?.addEventListener(
+  document
+    .getElementById(id)
+    .addEventListener(
       'change',
       renderEmployees
     );
@@ -712,8 +380,9 @@ getEl('globalSearch')
 });
 
 
-getEl('resetFilters')
-  ?.addEventListener(
+document
+  .getElementById('resetFilters')
+  .addEventListener(
     'click',
     () => {
 
@@ -722,27 +391,23 @@ getEl('resetFilters')
         'filterDepartment',
         'filterManager',
         'filterStatus'
-      ]
-      .forEach(id => {
+      ].forEach(id => {
 
-        const el =
-          getEl(id);
-
-        if (el) {
-          el.value = 'all';
-        }
+        document
+          .getElementById(id)
+          .value = 'all';
 
       });
 
 
-      if (getEl('globalSearch')) {
-        getEl('globalSearch').value = '';
-      }
+      document
+        .getElementById('globalSearch')
+        .value = '';
 
 
-      if (getEl('employeeSearch')) {
-        getEl('employeeSearch').value = '';
-      }
+      document
+        .getElementById('employeeSearch')
+        .value = '';
 
 
       renderEmployees();
@@ -754,14 +419,112 @@ getEl('resetFilters')
 renderEmployees();
 
 
-/* =========================================================
-   EMPLOYEE 360
-========================================================= */
+/* =========================
+   EMPLOYEE 360 DRAWER
+========================= */
 
-function profileCard(
-  label,
-  value
-) {
+function openEmployee(id) {
+
+  const e =
+    HR_DATA.employees.find(
+      x => x.id === id
+    );
+
+
+  if (!e) return;
+
+
+  document
+    .getElementById('drawerName')
+    .textContent = e.name;
+
+
+  document
+    .getElementById('drawerRole')
+    .textContent =
+      `${e.role} · ${e.department}`;
+
+
+  document
+    .getElementById('drawerBody')
+    .innerHTML = `
+
+      <div class="profile-grid">
+
+        ${profileCard('Manager', e.manager)}
+
+        ${profileCard('Location', e.location)}
+
+        ${profileCard('Joining Date', e.joining)}
+
+        ${profileCard('Tenure', e.tenure)}
+
+        ${profileCard('Attendance', e.attendance + '%')}
+
+        ${profileCard('KRA Score', e.kra + '%')}
+
+        ${profileCard('Status', e.status)}
+
+        ${profileCard('Band', e.band)}
+
+        ${profileCard('Leave Balance', e.leave)}
+
+        ${profileCard('Training', e.training)}
+
+        ${profileCard('Recognition', e.recognition)}
+
+      </div>
+
+
+      <div class="profile-section">
+
+        <h4>
+          Employee Timeline
+        </h4>
+
+
+        ${e.timeline.map(t => {
+
+          const split =
+            t.split(' · ');
+
+
+          return `
+
+            <div class="timeline-item">
+
+              <strong>
+                ${split[0]}
+              </strong>
+
+              ${split[1] || ''}
+
+            </div>
+
+          `;
+
+        }).join('')}
+
+      </div>
+
+    `;
+
+
+  document
+    .getElementById('employeeDrawer')
+    .classList
+    .add('open');
+
+
+  document
+    .getElementById('drawerOverlay')
+    .classList
+    .add('open');
+
+}
+
+
+function profileCard(label, value) {
 
   return `
 
@@ -782,268 +545,82 @@ function profileCard(
 }
 
 
-function openEmployee(id) {
-
-  if (
-    typeof HR_DATA === 'undefined' ||
-    !HR_DATA.employees
-  ) {
-    return;
-  }
-
-
-  const e =
-    HR_DATA.employees.find(
-      x => x.id === id
-    );
-
-
-  if (!e) {
-    return;
-  }
-
-
-  setText(
-    'drawerName',
-    e.name
-  );
-
-
-  setText(
-    'drawerRole',
-    `${e.role} · ${e.department}`
-  );
-
-
-  setHTML(
-
-    'drawerBody',
-
-    `
-
-      <div class="profile-grid">
-
-        ${profileCard(
-          'Manager',
-          e.manager
-        )}
-
-        ${profileCard(
-          'Location',
-          e.location
-        )}
-
-        ${profileCard(
-          'Joining Date',
-          e.joining
-        )}
-
-        ${profileCard(
-          'Tenure',
-          e.tenure
-        )}
-
-        ${profileCard(
-          'Attendance',
-          e.attendance + '%'
-        )}
-
-        ${profileCard(
-          'KRA Score',
-          e.kra + '%'
-        )}
-
-        ${profileCard(
-          'Status',
-          e.status
-        )}
-
-        ${profileCard(
-          'Band',
-          e.band
-        )}
-
-        ${profileCard(
-          'Leave Balance',
-          e.leave
-        )}
-
-        ${profileCard(
-          'Training',
-          e.training
-        )}
-
-        ${profileCard(
-          'Recognition',
-          e.recognition
-        )}
-
-      </div>
-
-
-      <div class="profile-section">
-
-        <h4>
-          Employee Timeline
-        </h4>
-
-        ${
-          (e.timeline || [])
-            .map(t => {
-
-              const split =
-                t.split(' · ');
-
-              return `
-
-                <div class="timeline-item">
-
-                  <strong>
-                    ${split[0]}
-                  </strong>
-
-                  ${split[1] || ''}
-
-                </div>
-
-              `;
-
-            })
-            .join('')
-        }
-
-      </div>
-
-    `
-
-  );
-
-
-  getEl('employeeDrawer')
-    ?.classList
-    .add('open');
-
-
-  getEl('drawerOverlay')
-    ?.classList
-    .add('open');
-
-}
-
-
 function closeDrawer() {
 
-  getEl('employeeDrawer')
-    ?.classList
+  document
+    .getElementById('employeeDrawer')
+    .classList
     .remove('open');
 
 
-  getEl('drawerOverlay')
-    ?.classList
+  document
+    .getElementById('drawerOverlay')
+    .classList
     .remove('open');
 
 }
 
 
-getEl('drawerClose')
-  ?.addEventListener(
+document
+  .getElementById('drawerClose')
+  .addEventListener(
     'click',
     closeDrawer
   );
 
 
-getEl('drawerOverlay')
-  ?.addEventListener(
+document
+  .getElementById('drawerOverlay')
+  .addEventListener(
     'click',
     closeDrawer
   );
 
 
-/* =========================================================
-   LIVE RECRUITMENT
-========================================================= */
+/* =========================
+   RECRUITMENT
+========================= */
+
+/* =====================================================
+   LIVE RECRUITMENT DASHBOARD
+===================================================== */
 
 const RECRUITMENT_API_URL =
   'https://script.google.com/a/macros/euronics.co.in/s/AKfycbxA8vc8YBnpl1u3lbi8L-K_jHOKVXJPc3j1h1Ggs7c_M2MhpUFxFSGZFDyy88zMLTPg/exec';
 
-
 let recruitmentHeaders = [];
-
 let recruitmentRawRows = [];
-
 let recruitmentData = [];
-
-let recruitmentAgeFilter =
-  'all';
-
+let recruitmentAgeFilter = 'all';
 
 const recruitmentCharts = {};
 
 
-/* =========================================================
-   RECRUITMENT HELPERS
-========================================================= */
-
 function recruitmentEscapeHtml(value) {
-
-  return String(
-    value ?? ''
-  )
-    .replace(
-      /&/g,
-      '&amp;'
-    )
-    .replace(
-      /</g,
-      '&lt;'
-    )
-    .replace(
-      />/g,
-      '&gt;'
-    )
-    .replace(
-      /"/g,
-      '&quot;'
-    )
-    .replace(
-      /'/g,
-      '&#039;'
-    );
-
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 
-function recruitmentField(
-  row,
-  possibleKeys
-) {
+function recruitmentField(row, possibleKeys) {
 
-  for (
-    const key of possibleKeys
-  ) {
+  for (const key of possibleKeys) {
 
     if (
-      Object.prototype
-        .hasOwnProperty
-        .call(row, key)
-
-      &&
-
-      row[key] !== null
-
-      &&
-
+      Object.prototype.hasOwnProperty.call(row, key) &&
+      row[key] !== null &&
       row[key] !== undefined
     ) {
 
-      return String(
-        row[key]
-      ).trim();
+      return String(row[key]).trim();
 
     }
 
   }
-
 
   return '';
 
@@ -1057,32 +634,18 @@ function normalizeReqType(value) {
       .trim()
       .toLowerCase();
 
-
-  if (
-    v.includes('replacement')
-  ) {
+  if (v.includes('replacement')) {
     return 'Replacement';
   }
 
-
-  if (
-    v.includes('new hire')
-  ) {
+  if (v.includes('new hire')) {
     return 'New Hire';
   }
 
-
-  return String(
-    value || ''
-  ).trim();
+  return String(value || '').trim();
 
 }
 
-
-/* =========================================================
-   IMPORTANT:
-   THESE FIELD NAMES MATCH YOUR WORKING JSON API
-========================================================= */
 
 function normalizeRecruitmentRow(row) {
 
@@ -1090,12 +653,10 @@ function normalizeRecruitmentRow(row) {
 
     raw: row,
 
-
     reqNo:
       recruitmentField(
         row,
         [
-          'reqId',
           'Req. No.',
           'Req No.',
           'Req No',
@@ -1103,309 +664,242 @@ function normalizeRecruitmentRow(row) {
         ]
       ),
 
-
     reqDate:
       recruitmentField(
         row,
         [
-          'reqDate',
           'Req Date',
-          'Req. Date'
+          'Req. Date',
+          'reqDate'
         ]
       ),
-
 
     jobTitle:
       recruitmentField(
         row,
         [
-          'jobTitle',
-          'Job Title'
+          'Job Title',
+          'jobTitle'
         ]
       ),
-
 
     posted:
       recruitmentField(
         row,
         [
-          'sourceOfHire',
           'Source of Hire',
-          'posted',
           'Posted',
           'Source'
         ]
       ),
 
-
     department:
       recruitmentField(
         row,
         [
-          'department',
-          'Department'
+          'Department',
+          'department'
         ]
       ),
-
 
     location:
       recruitmentField(
         row,
         [
-          'location',
-          'Location'
+          'Location',
+          'location'
         ]
       ),
-
 
     remarks:
       recruitmentField(
         row,
         [
-          'remarks',
-          'Remarks'
+          'Remarks',
+          'remarks'
         ]
       ),
-
 
     status:
       recruitmentField(
         row,
         [
-          'status',
-          'Status'
+          'Status',
+          'status'
         ]
       ),
-
 
     priority:
       recruitmentField(
         row,
         [
-          'priority',
-          'Priority'
+          'Priority',
+          'priority'
         ]
       ),
-
 
     recruiter:
       recruitmentField(
         row,
         [
-          'recruiter',
-          'Recruiter'
+          'Recruiter',
+          'recruiter'
         ]
       ),
-
 
     calls:
       recruitmentField(
         row,
         [
-          'totalCalls',
-          'calls',
           'Total Calls Done (Count)',
           'Total Calls Done',
           'Calls'
         ]
       ),
 
-
     screened:
       recruitmentField(
         row,
         [
-          'screened',
           'Screened (Called and had a first discussion about role)',
           'Screened'
         ]
       ),
 
-
     nextRound:
       recruitmentField(
         row,
         [
-          'nextRound',
           'Next Round (Count out of Screened)',
           'Next Round'
         ]
       ),
 
-
     rejected:
       recruitmentField(
         row,
         [
-          'rejected',
           'Rejected (Count Out of Screened)',
           'Rejected'
         ]
       ),
 
-
     hiringManager:
       recruitmentField(
         row,
         [
-          'hiringManager',
           'Hiring Manager',
           'HiringManager'
         ]
       ),
 
-
     reqType:
       normalizeReqType(
-
         recruitmentField(
           row,
           [
-            'reqType',
             'Req Type\n(New Hire / Replacement)',
             'Req Type (New Hire / Replacement)',
             'Req Type'
           ]
         )
-
       ),
-
 
     budget:
       recruitmentField(
         row,
         [
-          'budget',
           'Budget\n(CTC Range ₹)',
           'Budget (CTC Range ₹)',
           'Budget'
         ]
       ),
 
-
     experience:
       recruitmentField(
         row,
         [
-          'experience',
           'Experience\nRequired',
           'Experience Required',
           'Experience'
         ]
       ),
 
-
     tat:
       recruitmentField(
         row,
         [
-          'tatDays',
           'Target Close Days (TAT)',
           'Target Close Days',
           'TAT'
         ]
       ),
 
-
     positionType:
       recruitmentField(
         row,
         [
-          'positionType',
           'Position Type'
         ]
       ),
-
 
     headCount:
       recruitmentField(
         row,
         [
-          'headcount',
           'Head count',
           'Headcount'
         ]
       ),
 
-
     replacementName:
       recruitmentField(
         row,
         [
-          'replacementName',
           ' Replacement Name ',
           'Replacement Name'
         ]
       ),
 
-
     candidateShortlistedDate:
       recruitmentField(
         row,
         [
-          'shortlistedDate',
           'Candidate Shortlisted Date',
           'Shortlisted Date'
         ]
       ),
 
-
     offerDate:
       recruitmentField(
         row,
         [
-          'offerDate',
           'Offer Date'
         ]
       ),
-
 
     candidateName:
       recruitmentField(
         row,
         [
-          'candidateName',
           'Candidate Name'
         ]
       ),
-
 
     candidateDoj:
       recruitmentField(
         row,
         [
-          'candidateDOJ',
-          'candidateDoj',
           'Candidate DOJ',
           'DOJ'
         ]
       ),
 
-
     positionLevel:
       recruitmentField(
         row,
         [
-          'positionLevel',
           'Position Level'
-        ]
-      ),
-
-
-    apiAgeDays:
-      recruitmentField(
-        row,
-        [
-          'ageDays'
-        ]
-      ),
-
-
-    timeToHireDays:
-      recruitmentField(
-        row,
-        [
-          'timeToHireDays'
         ]
       )
 
@@ -1414,83 +908,52 @@ function normalizeRecruitmentRow(row) {
 }
 
 
-/* =========================================================
-   DATE / AGE
-========================================================= */
-
 function parseRecruitmentDate(value) {
 
   if (!value) {
     return null;
   }
 
-
   const raw =
     String(value).trim();
-
 
   const direct =
     new Date(raw);
 
-
-  if (
-    !isNaN(
-      direct.getTime()
-    )
-  ) {
-
+  if (!isNaN(direct.getTime())) {
     return direct;
-
   }
 
-
   const months = {
-
-    jan: 0,
-    feb: 1,
-    mar: 2,
-    apr: 3,
-    may: 4,
-    jun: 5,
-    june: 5,
-    jul: 6,
-    july: 6,
-    aug: 7,
-    sep: 8,
-    sept: 8,
-    oct: 9,
-    nov: 10,
-    dec: 11
-
+    jan:0,
+    feb:1,
+    mar:2,
+    apr:3,
+    may:4,
+    jun:5,
+    june:5,
+    jul:6,
+    july:6,
+    aug:7,
+    sep:8,
+    sept:8,
+    oct:9,
+    nov:10,
+    dec:11
   };
-
 
   const cleaned =
     raw
-      .replace(
-        /,/g,
-        ''
-      )
-      .replace(
-        /\s+/g,
-        '-'
-      );
-
+      .replace(/,/g, '')
+      .replace(/\s+/g, '-');
 
   const parts =
     cleaned.split('-');
 
-
-  if (
-    parts.length === 3
-  ) {
+  if (parts.length === 3) {
 
     const day =
-      parseInt(
-        parts[0],
-        10
-      );
-
+      parseInt(parts[0], 10);
 
     const month =
       months[
@@ -1498,23 +961,12 @@ function parseRecruitmentDate(value) {
           .toLowerCase()
       ];
 
-
     let year =
-      parseInt(
-        parts[2],
-        10
-      );
+      parseInt(parts[2], 10);
 
-
-    if (
-      year < 100
-    ) {
-
-      year +=
-        2000;
-
+    if (year < 100) {
+      year += 2000;
     }
-
 
     if (
       !isNaN(day) &&
@@ -1532,7 +984,6 @@ function parseRecruitmentDate(value) {
 
   }
 
-
   return null;
 
 }
@@ -1540,36 +991,17 @@ function parseRecruitmentDate(value) {
 
 function recruitmentAgeDays(row) {
 
-  const apiAge =
-    Number(
-      row.apiAgeDays
-    );
-
-
-  if (
-    !isNaN(apiAge) &&
-    row.apiAgeDays !== ''
-  ) {
-
-    return apiAge;
-
-  }
-
-
   const d =
     parseRecruitmentDate(
       row.reqDate
     );
 
-
   if (!d) {
     return null;
   }
 
-
   const today =
     new Date();
-
 
   today.setHours(
     0,
@@ -1578,7 +1010,6 @@ function recruitmentAgeDays(row) {
     0
   );
 
-
   d.setHours(
     0,
     0,
@@ -1586,20 +1017,12 @@ function recruitmentAgeDays(row) {
     0
   );
 
-
   return Math.max(
-
     0,
-
     Math.floor(
-      (
-        today -
-        d
-      )
-      /
+      (today - d) /
       86400000
     )
-
   );
 
 }
@@ -1611,49 +1034,33 @@ function recruitmentAgeBucket(days) {
     days === null ||
     days === undefined
   ) {
-
     return 'unknown';
-
   }
 
-
-  if (
-    days <= 7
-  ) {
+  if (days <= 7) {
     return '0-7';
   }
 
-
-  if (
-    days <= 15
-  ) {
+  if (days <= 15) {
     return '8-15';
   }
 
-
-  if (
-    days <= 30
-  ) {
+  if (days <= 30) {
     return '16-30';
   }
-
 
   return '30+';
 
 }
 
 
-/* =========================================================
-   STATUS RULES
-========================================================= */
-
 function recruitmentNormalizedStatus(row) {
 
   return String(
     row.status || ''
   )
-    .toLowerCase()
-    .trim();
+  .toLowerCase()
+  .trim();
 
 }
 
@@ -1661,13 +1068,9 @@ function recruitmentNormalizedStatus(row) {
 function isRecruitmentClosed(row) {
 
   return [
-
     'joined',
-
     'close',
-
     'closed'
-
   ].includes(
     recruitmentNormalizedStatus(row)
   );
@@ -1689,17 +1092,9 @@ function isRecruitmentHold(row) {
 function isRecruitmentActive(row) {
 
   return (
-
-    row.reqNo
-
-    &&
-
-    !isRecruitmentClosed(row)
-
-    &&
-
+    row.reqNo &&
+    !isRecruitmentClosed(row) &&
     !isRecruitmentHold(row)
-
   );
 
 }
@@ -1708,13 +1103,9 @@ function isRecruitmentActive(row) {
 function isRecruitmentOfferStage(row) {
 
   return [
-
     'shortlisted',
-
     'offered',
-
     'offer accepted'
-
   ].includes(
     recruitmentNormalizedStatus(row)
   );
@@ -1726,18 +1117,12 @@ function numericRecruitmentValue(value) {
 
   const n =
     parseFloat(
-
-      String(
-        value || ''
-      )
-
-      .replace(
-        /[^0-9.-]/g,
-        ''
-      )
-
+      String(value || '')
+        .replace(
+          /[^0-9.-]/g,
+          ''
+        )
     );
-
 
   return isNaN(n)
     ? 0
@@ -1746,164 +1131,44 @@ function numericRecruitmentValue(value) {
 }
 
 
-/* =========================================================
-   JSONP LIVE LOADER
-   NO FETCH()
-========================================================= */
-
-function loadRecruitmentLive(
-  forceRefresh = false
-) {
+function loadRecruitmentLive(forceRefresh = false) {
 
   const statusEl =
-    getEl(
+    document.getElementById(
       'recruitmentStatus'
     );
 
-
-  if (!statusEl) {
-    return;
-  }
-
+  if (!statusEl) return;
 
   statusEl.className =
     'recruitment-status';
-
 
   statusEl.textContent =
     'Loading live recruitment data...';
 
 
-  const previous =
-    getEl(
+  const oldScript =
+    document.getElementById(
       'recruitmentJsonpScript'
     );
 
-
-  if (previous) {
-
-    previous.remove();
-
+  if (oldScript) {
+    oldScript.remove();
   }
 
 
-  const callbackName =
-    'euronicsRecruitmentCallback_' +
-    Date.now();
-
-
-  let completed =
-    false;
-
-
-  const cleanup =
-    function() {
-
-      const script =
-        getEl(
-          'recruitmentJsonpScript'
-        );
-
-
-      if (script) {
-
-        script.remove();
-
-      }
-
-
-      try {
-
-        delete window[
-          callbackName
-        ];
-
-      }
-
-      catch (e) {
-
-        window[
-          callbackName
-        ] = undefined;
-
-      }
-
-    };
-
-
-  const timeout =
-    setTimeout(
-
-      function() {
-
-        if (completed) {
-          return;
-        }
-
-
-        completed =
-          true;
-
-
-        cleanup();
-
-
-        statusEl.className =
-          'recruitment-status error';
-
-
-        statusEl.textContent =
-          'Recruitment API timed out. Click Refresh Live Data.';
-
-      },
-
-      20000
-
-    );
-
-
-  window[
-    callbackName
-  ] =
+  window.receiveRecruitmentData =
     function(result) {
 
-      if (completed) {
-        return;
-      }
-
-
-      completed =
-        true;
-
-
-      clearTimeout(
-        timeout
-      );
-
-
       try {
 
-        console.log(
-          'Recruitment API response:',
-          result
-        );
-
-
-        if (!result) {
-
-          throw new Error(
-            'Empty response received from Recruitment API.'
-          );
-
-        }
-
-
         if (
+          !result ||
           result.success === false
         ) {
 
           throw new Error(
-            result.error ||
+            result?.error ||
             'Recruitment API returned an error.'
           );
 
@@ -1912,57 +1177,28 @@ function loadRecruitmentLive(
 
         let rows = [];
 
-
         if (
           Array.isArray(result)
         ) {
-
-          rows =
-            result;
-
+          rows = result;
         }
-
 
         else if (
-          Array.isArray(
-            result.data
-          )
+          Array.isArray(result.data)
         ) {
-
-          rows =
-            result.data;
-
+          rows = result.data;
         }
-
 
         else if (
-          Array.isArray(
-            result.rows
-          )
+          Array.isArray(result.rows)
         ) {
-
-          rows =
-            result.rows;
-
+          rows = result.rows;
         }
-
-
-        else if (
-          Array.isArray(
-            result.requisitions
-          )
-        ) {
-
-          rows =
-            result.requisitions;
-
-        }
-
 
         else {
 
           throw new Error(
-            'No recruitment data array found in API response.'
+            'Recruitment API data array not found.'
           );
 
         }
@@ -1970,60 +1206,33 @@ function loadRecruitmentLive(
 
         recruitmentRawRows =
           rows.filter(
-            row =>
-              row &&
-              typeof row ===
-              'object'
+            r =>
+              r &&
+              Object.keys(r).length
           );
 
 
         recruitmentHeaders =
-
-          Array.isArray(
-            result.headers
-          )
-
-          &&
-
+          Array.isArray(result.headers) &&
           result.headers.length
-
-          ?
-
-          result.headers
-
-          :
-
-          (
-            recruitmentRawRows.length
-
-            ?
-
-            Object.keys(
-              recruitmentRawRows[0]
-            )
-
-            :
-
-            []
-          );
+            ? result.headers
+            : (
+                recruitmentRawRows[0]
+                  ? Object.keys(
+                      recruitmentRawRows[0]
+                    )
+                  : []
+              );
 
 
         recruitmentData =
           recruitmentRawRows
-
             .map(
               normalizeRecruitmentRow
             )
-
             .filter(
-              row => !!row.reqNo
+              r => r.reqNo
             );
-
-
-        console.log(
-          'Recruitment rows loaded:',
-          recruitmentData.length
-        );
 
 
         statusEl.className =
@@ -2034,23 +1243,19 @@ function loadRecruitmentLive(
           'Live connected · ' +
           recruitmentData.length +
           ' requisitions · Updated ' +
-          new Date()
-            .toLocaleString();
+          new Date().toLocaleString();
 
 
         initialiseRecruitmentFilters();
 
-
         renderRecruitmentDashboard();
 
-      }
 
-
-      catch (error) {
+      } catch (err) {
 
         console.error(
-          'Recruitment processing error:',
-          error
+          'Recruitment JSONP Error:',
+          err
         );
 
 
@@ -2060,14 +1265,7 @@ function loadRecruitmentLive(
 
         statusEl.textContent =
           'Recruitment data error: ' +
-          error.message;
-
-      }
-
-
-      finally {
-
-        cleanup();
+          err.message;
 
       }
 
@@ -2084,84 +1282,33 @@ function loadRecruitmentLive(
     'recruitmentJsonpScript';
 
 
-  script.async =
-    true;
-
-
   script.src =
-
-    RECRUITMENT_API_URL
-
-    +
-
-    '?api=recruitment'
-
-    +
-
-    '&callback='
-
-    +
-
-    encodeURIComponent(
-      callbackName
-    )
-
-    +
-
-    '&_='
-
-    +
-
+    RECRUITMENT_API_URL +
+    '?api=recruitment' +
+    '&callback=receiveRecruitmentData' +
+    '&t=' +
     Date.now();
-
-
-  console.log(
-    'Recruitment JSONP URL:',
-    script.src
-  );
 
 
   script.onerror =
     function() {
-
-      if (completed) {
-        return;
-      }
-
-
-      completed =
-        true;
-
-
-      clearTimeout(
-        timeout
-      );
-
-
-      cleanup();
-
 
       statusEl.className =
         'recruitment-status error';
 
 
       statusEl.textContent =
-        'Recruitment JSONP API could not load.';
+        'Recruitment connection failed. JSONP request could not load.';
 
     };
 
 
-  document.body
-    .appendChild(
-      script
-    );
+  document.body.appendChild(
+    script
+  );
 
 }
 
-
-/* =========================================================
-   RECRUITMENT FILTER DROPDOWNS
-========================================================= */
 
 function setRecruitmentSelect(
   id,
@@ -2170,46 +1317,29 @@ function setRecruitmentSelect(
 ) {
 
   const el =
-    getEl(id);
-
+    document.getElementById(id);
 
   if (!el) {
     return;
   }
 
-
   const current =
     el.value;
 
-
   el.innerHTML =
-
-    `<option value="all">
-      ${allLabel}
-    </option>`
-
-    +
-
+    `<option value="all">${allLabel}</option>` +
     values
-      .map(v => `
-
-        <option
-          value="${recruitmentEscapeHtml(v)}"
-        >
-          ${recruitmentEscapeHtml(v)}
-        </option>
-
-      `)
+      .map(
+        v =>
+          `<option value="${recruitmentEscapeHtml(v)}">${recruitmentEscapeHtml(v)}</option>`
+      )
       .join('');
-
 
   if (
     values.includes(current)
   ) {
-
     el.value =
       current;
-
   }
 
 }
@@ -2221,45 +1351,45 @@ function initialiseRecruitmentFilters() {
     [
       ...new Set(
         recruitmentData
-          .map(r => r.status)
+          .map(
+            r => r.status
+          )
           .filter(Boolean)
       )
-    ]
-    .sort();
-
+    ].sort();
 
   const recruiters =
     [
       ...new Set(
         recruitmentData
-          .map(r => r.recruiter)
+          .map(
+            r => r.recruiter
+          )
           .filter(Boolean)
       )
-    ]
-    .sort();
-
+    ].sort();
 
   const departments =
     [
       ...new Set(
         recruitmentData
-          .map(r => r.department)
+          .map(
+            r => r.department
+          )
           .filter(Boolean)
       )
-    ]
-    .sort();
-
+    ].sort();
 
   const types =
     [
       ...new Set(
         recruitmentData
-          .map(r => r.reqType)
+          .map(
+            r => r.reqType
+          )
           .filter(Boolean)
       )
-    ]
-    .sort();
-
+    ].sort();
 
   setRecruitmentSelect(
     'recruitmentStatusFilter',
@@ -2267,20 +1397,17 @@ function initialiseRecruitmentFilters() {
     'All Status'
   );
 
-
   setRecruitmentSelect(
     'recruitmentRecruiterFilter',
     recruiters,
     'All Recruiters'
   );
 
-
   setRecruitmentSelect(
     'recruitmentDepartmentFilter',
     departments,
     'All Departments'
   );
-
 
   setRecruitmentSelect(
     'recruitmentTypeFilter',
@@ -2291,142 +1418,128 @@ function initialiseRecruitmentFilters() {
 }
 
 
-/* =========================================================
-   RECRUITMENT AGE FILTER
-========================================================= */
-
 function setRecruitmentAgeFilter(bucket) {
 
   recruitmentAgeFilter =
-
     recruitmentAgeFilter === bucket
-
-    ?
-
-    'all'
-
-    :
-
-    bucket;
-
+      ? 'all'
+      : bucket;
 
   [
     'ageCard0_7',
     'ageCard8_15',
     'ageCard16_30',
     'ageCard30Plus'
-  ]
-  .forEach(id => {
-
-    getEl(id)
-      ?.classList
-      .remove('selected');
-
-  });
-
+  ].forEach(
+    id =>
+      document
+        .getElementById(id)
+        ?.classList
+        .remove('selected')
+  );
 
   const map = {
-
-    '0-7':
-      'ageCard0_7',
-
-    '8-15':
-      'ageCard8_15',
-
-    '16-30':
-      'ageCard16_30',
-
-    '30+':
-      'ageCard30Plus'
-
+    '0-7':'ageCard0_7',
+    '8-15':'ageCard8_15',
+    '16-30':'ageCard16_30',
+    '30+':'ageCard30Plus'
   };
 
-
   if (
-    recruitmentAgeFilter !==
-    'all'
+    recruitmentAgeFilter !== 'all'
   ) {
 
-    getEl(
-      map[
-        recruitmentAgeFilter
-      ]
-    )
+    document
+      .getElementById(
+        map[
+          recruitmentAgeFilter
+        ]
+      )
       ?.classList
       .add('selected');
 
   }
 
-
   renderRecruitmentTable();
 
 }
 
-
-/* =========================================================
-   RESET RECRUITMENT FILTERS
-========================================================= */
 
 function clearRecruitmentFilters() {
 
   recruitmentAgeFilter =
     'all';
 
-
   [
     'ageCard0_7',
     'ageCard8_15',
     'ageCard16_30',
     'ageCard30Plus'
-  ]
-  .forEach(id => {
+  ].forEach(
+    id =>
+      document
+        .getElementById(id)
+        ?.classList
+        .remove('selected')
+  );
 
-    getEl(id)
-      ?.classList
-      .remove('selected');
-
-  });
-
-
-  const search =
-    getEl(
-      'recruitmentSearch'
-    );
-
-
-  if (search) {
-    search.value = '';
-  }
-
-
-  [
+  const ids = [
+    'recruitmentSearch',
     'recruitmentStatusFilter',
     'recruitmentRecruiterFilter',
     'recruitmentDepartmentFilter',
     'recruitmentPriorityFilter',
     'recruitmentTypeFilter'
-  ]
-  .forEach(id => {
+  ];
 
-    const el =
-      getEl(id);
+  ids.forEach(
+    id => {
 
+      const el =
+        document.getElementById(id);
 
-    if (el) {
-      el.value = 'all';
+      if (!el) {
+        return;
+      }
+
+      if (
+        id ===
+        'recruitmentSearch'
+      ) {
+        el.value = '';
+      }
+      else {
+        el.value = 'all';
+      }
+
     }
-
-  });
-
+  );
 
   renderRecruitmentTable();
 
 }
 
 
-/* =========================================================
-   RECRUITMENT KPIS
-========================================================= */
+function renderRecruitmentDashboard() {
+
+  renderRecruitmentKpis();
+
+  renderRecruitmentAgeing();
+
+  renderRecruitmentCharts();
+
+  renderRecruitmentFunnel();
+
+  renderCriticalRecruitmentRoles();
+
+  renderUpcomingDoj();
+
+  renderRecruiterPerformance();
+
+  renderRecruitmentTable();
+
+}
+
 
 function renderRecruitmentKpis() {
 
@@ -2435,7 +1548,6 @@ function renderRecruitmentKpis() {
       .filter(
         isRecruitmentActive
       );
-
 
   const joined =
     recruitmentData
@@ -2446,13 +1558,11 @@ function renderRecruitmentKpis() {
           'joined'
       );
 
-
   const offerStage =
     recruitmentData
       .filter(
         isRecruitmentOfferStage
       );
-
 
   const hold =
     recruitmentData
@@ -2460,31 +1570,29 @@ function renderRecruitmentKpis() {
         isRecruitmentHold
       );
 
-
   const critical =
-    active.filter(r => {
+    active.filter(
+      r => {
 
-      const age =
-        recruitmentAgeDays(r);
+        const age =
+          recruitmentAgeDays(r);
 
+        return (
+          age !== null &&
+          age > 30
+        );
 
-      return (
-        age !== null &&
-        age > 30
-      );
-
-    });
-
+      }
+    );
 
   const openHeadcount =
     active.reduce(
-      (sum, r) => {
+      (sum,r) => {
 
         const hc =
           numericRecruitmentValue(
             r.headCount
           );
-
 
         return sum +
           (
@@ -2497,133 +1605,115 @@ function renderRecruitmentKpis() {
       0
     );
 
+  const target =
+    document.getElementById(
+      'recruitmentLiveKpis'
+    );
 
-  setHTML(
+  if (!target) {
+    return;
+  }
 
-    'recruitmentLiveKpis',
+  target.innerHTML = [
 
-    [
+    kpi(
+      'Active Requirements',
+      active.length,
+      'Excludes Hold / Joined / Close'
+    ),
 
-      kpi(
-        'Active Requirements',
-        active.length,
-        'Excludes Hold / Joined / Close'
-      ),
+    kpi(
+      'Open Headcount',
+      openHeadcount,
+      'Required positions'
+    ),
 
-      kpi(
-        'Open Headcount',
-        openHeadcount,
-        'Required positions'
-      ),
+    kpi(
+      'Offer Stage',
+      offerStage.length,
+      'Shortlisted / Offered / Accepted'
+    ),
 
-      kpi(
-        'Offer Stage',
-        offerStage.length,
-        'Shortlisted / Offered / Accepted'
-      ),
+    kpi(
+      'Joined',
+      joined.length,
+      'Recorded in live tracker'
+    ),
 
-      kpi(
-        'Joined',
-        joined.length,
-        'Recorded in live tracker'
-      ),
+    kpi(
+      'On Hold',
+      hold.length,
+      'Tracked separately',
+      'warn'
+    ),
 
-      kpi(
-        'On Hold',
-        hold.length,
-        'Tracked separately',
-        'warn'
-      ),
+    kpi(
+      '30+ Day Critical',
+      critical.length,
+      'Immediate attention',
+      'warn'
+    )
 
-      kpi(
-        '30+ Day Critical',
-        critical.length,
-        'Immediate attention',
-        'warn'
-      )
-
-    ].join('')
-
-  );
+  ].join('');
 
 }
 
-
-/* =========================================================
-   AGEING CARDS
-========================================================= */
 
 function renderRecruitmentAgeing() {
 
   const active =
-    recruitmentData
-      .filter(
-        isRecruitmentActive
-      );
-
+    recruitmentData.filter(
+      isRecruitmentActive
+    );
 
   const counts = {
-
-    '0-7': 0,
-
-    '8-15': 0,
-
-    '16-30': 0,
-
-    '30+': 0
-
+    '0-7':0,
+    '8-15':0,
+    '16-30':0,
+    '30+':0
   };
 
+  active.forEach(
+    r => {
 
-  active.forEach(r => {
+      const bucket =
+        recruitmentAgeBucket(
+          recruitmentAgeDays(r)
+        );
 
-    const bucket =
-      recruitmentAgeBucket(
-        recruitmentAgeDays(r)
-      );
-
-
-    if (
-      counts[bucket] !==
-      undefined
-    ) {
-
-      counts[bucket]++;
+      if (
+        counts[bucket] !==
+        undefined
+      ) {
+        counts[bucket]++;
+      }
 
     }
-
-  });
-
-
-  setText(
-    'age7Count',
-    counts['0-7']
   );
 
+  const fields = {
+    age7Count:counts['0-7'],
+    age15Count:counts['8-15'],
+    age30Count:counts['16-30'],
+    age30PlusCount:counts['30+']
+  };
 
-  setText(
-    'age15Count',
-    counts['8-15']
-  );
+  Object.entries(fields)
+    .forEach(
+      ([id,value]) => {
 
+        const el =
+          document.getElementById(id);
 
-  setText(
-    'age30Count',
-    counts['16-30']
-  );
+        if (el) {
+          el.textContent = value;
+        }
 
-
-  setText(
-    'age30PlusCount',
-    counts['30+']
-  );
+      }
+    );
 
 }
 
-
-/* =========================================================
-   RECRUITMENT CHART HELPERS
-========================================================= */
 
 function countByRecruitmentField(
   rows,
@@ -2632,30 +1722,27 @@ function countByRecruitmentField(
 
   const map = {};
 
+  rows.forEach(
+    r => {
 
-  rows.forEach(r => {
+      const key =
+        String(
+          r[field] ||
+          'Not Specified'
+        )
+        .trim()
+        ||
+        'Not Specified';
 
-    const key =
-      String(
-        r[field] ||
-        'Not Specified'
-      )
-      .trim()
+      map[key] =
+        (
+          map[key] ||
+          0
+        )
+        + 1;
 
-      ||
-
-      'Not Specified';
-
-
-    map[key] =
-      (
-        map[key] ||
-        0
-      )
-      + 1;
-
-  });
-
+    }
+  );
 
   return map;
 
@@ -2670,19 +1757,11 @@ function buildRecruitmentChart(
 ) {
 
   const canvas =
-    getEl(id);
+    document.getElementById(id);
 
-
-  if (
-    !canvas ||
-    typeof Chart ===
-    'undefined'
-  ) {
-
+  if (!canvas) {
     return;
-
   }
-
 
   if (
     recruitmentCharts[id]
@@ -2693,165 +1772,90 @@ function buildRecruitmentChart(
 
   }
 
-
   const palette = [
-
     '#0f5f6d',
-
     '#147b8d',
-
     '#3d6e99',
-
     '#6a55b7',
-
     '#16835b',
-
     '#b8750a',
-
     '#c52d4c',
-
     '#8aa4aa',
-
     '#4c7b85',
-
     '#86b0b8'
-
   ];
-
 
   recruitmentCharts[id] =
     new Chart(
-
       canvas,
-
       {
-
         type,
 
-
-        data: {
-
+        data:{
           labels,
 
-
-          datasets: [
-
+          datasets:[
             {
-
               data,
-
-              borderWidth:
-                1,
-
+              borderWidth:1,
 
               backgroundColor:
-
                 type ===
                 'doughnut'
-
-                ?
-
-                labels.map(
-                  (_, index) =>
-                    palette[
-                      index %
-                      palette.length
-                    ]
-                )
-
-                :
-
-                '#147b8d'
-
+                  ? palette.slice(
+                      0,
+                      labels.length
+                    )
+                  : '#147b8d'
             }
-
           ]
-
         },
 
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
 
-        options: {
-
-          responsive:
-            true,
-
-
-          maintainAspectRatio:
-            false,
-
-
-          plugins: {
-
-            legend: {
-
+          plugins:{
+            legend:{
               display:
                 type ===
                 'doughnut',
 
               position:
                 'bottom'
-
             }
-
           },
 
-
           scales:
+            type === 'doughnut'
+              ? {}
+              : {
+                  x:{
+                    grid:{
+                      display:false
+                    }
+                  },
 
-            type ===
-            'doughnut'
-
-            ?
-
-            {}
-
-            :
-
-            {
-
-              x: {
-
-                grid: {
-                  display: false
+                  y:{
+                    beginAtZero:true,
+                    ticks:{
+                      precision:0
+                    }
+                  }
                 }
-
-              },
-
-
-              y: {
-
-                beginAtZero:
-                  true,
-
-                ticks: {
-                  precision: 0
-                }
-
-              }
-
-            }
-
         }
-
       }
-
     );
 
 }
 
 
-/* =========================================================
-   RECRUITMENT CHARTS
-========================================================= */
-
 function renderRecruitmentCharts() {
 
   const active =
-    recruitmentData
-      .filter(
-        isRecruitmentActive
-      );
-
+    recruitmentData.filter(
+      isRecruitmentActive
+    );
 
   const statusMap =
     countByRecruitmentField(
@@ -2859,123 +1863,92 @@ function renderRecruitmentCharts() {
       'status'
     );
 
-
   buildRecruitmentChart(
-
     'recruitmentStatusChart',
-
     'doughnut',
-
     Object.keys(statusMap),
-
     Object.values(statusMap)
-
   );
-
 
   const sourceEntries =
     Object.entries(
-
       countByRecruitmentField(
         recruitmentData,
         'posted'
       )
-
     )
     .sort(
-      (a, b) =>
-        b[1] - a[1]
+      (a,b) =>
+        b[1] -
+        a[1]
     )
     .slice(
       0,
       10
     );
 
-
   buildRecruitmentChart(
-
     'recruitmentSourceChart',
-
     'bar',
-
     sourceEntries.map(
       x => x[0]
     ),
-
     sourceEntries.map(
       x => x[1]
     )
-
   );
-
 
   const recruiterEntries =
     Object.entries(
-
       countByRecruitmentField(
         active,
         'recruiter'
       )
-
     )
     .sort(
-      (a, b) =>
-        b[1] - a[1]
+      (a,b) =>
+        b[1] -
+        a[1]
     );
 
-
   buildRecruitmentChart(
-
     'recruiterWorkloadChart',
-
     'bar',
-
     recruiterEntries.map(
       x => x[0]
     ),
-
     recruiterEntries.map(
       x => x[1]
     )
-
   );
-
 
   const departmentEntries =
     Object.entries(
-
       countByRecruitmentField(
         active,
         'department'
       )
-
     )
     .sort(
-      (a, b) =>
-        b[1] - a[1]
+      (a,b) =>
+        b[1] -
+        a[1]
     )
     .slice(
       0,
       12
     );
 
-
   buildRecruitmentChart(
-
     'recruitmentDepartmentChart',
-
     'bar',
-
     departmentEntries.map(
       x => x[0]
     ),
-
     departmentEntries.map(
       x => x[1]
     )
-
   );
-
 
   const priorityMap =
     countByRecruitmentField(
@@ -2983,19 +1956,12 @@ function renderRecruitmentCharts() {
       'priority'
     );
 
-
   buildRecruitmentChart(
-
     'recruitmentPriorityChart',
-
     'bar',
-
     Object.keys(priorityMap),
-
     Object.values(priorityMap)
-
   );
-
 
   const typeMap =
     countByRecruitmentField(
@@ -3003,69 +1969,47 @@ function renderRecruitmentCharts() {
       'reqType'
     );
 
-
   buildRecruitmentChart(
-
     'recruitmentTypeChart',
-
     'doughnut',
-
     Object.keys(typeMap),
-
     Object.values(typeMap)
-
   );
 
 }
 
 
-/* =========================================================
-   RECRUITMENT FUNNEL
-========================================================= */
-
 function renderRecruitmentFunnel() {
 
   const calls =
     recruitmentData.reduce(
-      (
-        sum,
-        row
-      ) =>
-        sum +
+      (s,r) =>
+        s +
         numericRecruitmentValue(
-          row.calls
+          r.calls
         ),
       0
     );
-
 
   const screened =
     recruitmentData.reduce(
-      (
-        sum,
-        row
-      ) =>
-        sum +
+      (s,r) =>
+        s +
         numericRecruitmentValue(
-          row.screened
+          r.screened
         ),
       0
     );
-
 
   const nextRound =
     recruitmentData.reduce(
-      (
-        sum,
-        row
-      ) =>
-        sum +
+      (s,r) =>
+        s +
         numericRecruitmentValue(
-          row.nextRound
+          r.nextRound
         ),
       0
     );
-
 
   const offerStage =
     recruitmentData
@@ -3073,7 +2017,6 @@ function renderRecruitmentFunnel() {
         isRecruitmentOfferStage
       )
       .length;
-
 
   const joined =
     recruitmentData
@@ -3085,204 +2028,143 @@ function renderRecruitmentFunnel() {
       )
       .length;
 
-
   const stages = [
-
-    [
-      'Calls',
-      calls
-    ],
-
-    [
-      'Screened',
-      screened
-    ],
-
-    [
-      'Next Round',
-      nextRound
-    ],
-
-    [
-      'Offer Stage',
-      offerStage
-    ],
-
-    [
-      'Joined',
-      joined
-    ]
-
+    ['Calls',calls],
+    ['Screened',screened],
+    ['Next Round',nextRound],
+    ['Offer Stage',offerStage],
+    ['Joined',joined]
   ];
 
+  const target =
+    document.getElementById(
+      'recruitmentFunnel'
+    );
 
-  setHTML(
+  if (!target) {
+    return;
+  }
 
-    'recruitmentFunnel',
+  target.innerHTML =
+    stages.map(
+      x => `
 
-    stages.map(stage => `
+        <div class="funnel-box">
 
-      <div class="funnel-box">
+          <div class="funnel-number">
+            ${x[1]}
+          </div>
 
-        <div class="funnel-number">
-          ${stage[1]}
+          <div class="funnel-label">
+            ${x[0]}
+          </div>
+
         </div>
 
-        <div class="funnel-label">
-          ${stage[0]}
-        </div>
-
-      </div>
-
-    `).join('')
-
-  );
+      `
+    ).join('');
 
 }
 
-
-/* =========================================================
-   CRITICAL ROLES
-========================================================= */
 
 function renderCriticalRecruitmentRoles() {
 
   const rows =
     recruitmentData
-
       .filter(
         isRecruitmentActive
       )
-
-      .map(r => ({
-
-        ...r,
-
-        age:
-          recruitmentAgeDays(r)
-
-      }))
-
+      .map(
+        r => ({
+          ...r,
+          age:
+            recruitmentAgeDays(r)
+        })
+      )
       .filter(
         r =>
           r.age !== null &&
           r.age > 30
       )
-
       .sort(
-        (a, b) =>
-          b.age - a.age
+        (a,b) =>
+          b.age -
+          a.age
       )
-
       .slice(
         0,
         15
       );
 
-
   const el =
-    getEl(
+    document.getElementById(
       'criticalRecruitmentRoles'
     );
-
 
   if (!el) {
     return;
   }
 
-
   if (!rows.length) {
 
     el.innerHTML =
-      `
-      <div class="empty-state">
-        No 30+ day active requisitions.
-      </div>
-      `;
+      `<div class="empty-state">No 30+ day active requisitions.</div>`;
 
     return;
 
   }
 
-
   el.innerHTML =
-    rows.map(r => `
+    rows.map(
+      r => `
 
-      <div class="recruitment-list-row">
+        <div class="recruitment-list-row">
 
-        <div>
+          <div>
 
-          <div class="recruitment-role-name">
-
-            ${
-              recruitmentEscapeHtml(
+            <div class="recruitment-role-name">
+              ${recruitmentEscapeHtml(
                 r.jobTitle ||
                 r.reqNo
-              )
-            }
+              )}
+            </div>
+
+            <div class="recruitment-role-meta">
+
+              ${recruitmentEscapeHtml(r.department)}
+
+              ·
+
+              ${recruitmentEscapeHtml(r.location)}
+
+              ·
+
+              ${recruitmentEscapeHtml(r.recruiter)}
+
+              ·
+
+              ${recruitmentEscapeHtml(r.priority)}
+
+            </div>
 
           </div>
 
-          <div class="recruitment-role-meta">
-
-            ${
-              recruitmentEscapeHtml(
-                r.department
-              )
-            }
-
-            ·
-
-            ${
-              recruitmentEscapeHtml(
-                r.location
-              )
-            }
-
-            ·
-
-            ${
-              recruitmentEscapeHtml(
-                r.recruiter
-              )
-            }
-
-            ·
-
-            ${
-              recruitmentEscapeHtml(
-                r.priority
-              )
-            }
-
-          </div>
+          <span class="age-badge critical">
+            ${r.age} days
+          </span>
 
         </div>
 
-        <span
-          class="age-badge critical"
-        >
-
-          ${r.age} days
-
-        </span>
-
-      </div>
-
-    `).join('');
+      `
+    ).join('');
 
 }
 
-
-/* =========================================================
-   UPCOMING DOJ
-========================================================= */
 
 function renderUpcomingDoj() {
 
   const today =
     new Date();
-
 
   today.setHours(
     0,
@@ -3291,124 +2173,95 @@ function renderUpcomingDoj() {
     0
   );
 
-
   const rows =
     recruitmentData
+      .map(
+        r => ({
+          ...r,
 
-      .map(r => ({
-
-        ...r,
-
-        dojDate:
-          parseRecruitmentDate(
-            r.candidateDoj
-          )
-
-      }))
-
+          dojDate:
+            parseRecruitmentDate(
+              r.candidateDoj
+            )
+        })
+      )
       .filter(
         r =>
           r.dojDate &&
           r.dojDate >= today
       )
-
       .sort(
-        (a, b) =>
+        (a,b) =>
           a.dojDate -
           b.dojDate
       )
-
       .slice(
         0,
         15
       );
 
-
   const el =
-    getEl(
+    document.getElementById(
       'upcomingDojList'
     );
-
 
   if (!el) {
     return;
   }
 
-
   if (!rows.length) {
 
     el.innerHTML =
-      `
-      <div class="empty-state">
-        No future DOJ found.
-      </div>
-      `;
+      `<div class="empty-state">No future DOJ found.</div>`;
 
     return;
 
   }
 
-
   el.innerHTML =
-    rows.map(r => `
+    rows.map(
+      r => `
 
-      <div class="recruitment-list-row">
+        <div class="recruitment-list-row">
 
-        <div>
+          <div>
 
-          <div class="recruitment-role-name">
+            <div class="recruitment-role-name">
 
-            ${
-              recruitmentEscapeHtml(
+              ${recruitmentEscapeHtml(
                 r.candidateName ||
                 r.jobTitle
-              )
-            }
+              )}
+
+            </div>
+
+            <div class="recruitment-role-meta">
+
+              ${recruitmentEscapeHtml(r.jobTitle)}
+
+              ·
+
+              ${recruitmentEscapeHtml(r.department)}
+
+            </div>
 
           </div>
 
-          <div class="recruitment-role-meta">
+          <span class="age-badge fresh">
 
-            ${
-              recruitmentEscapeHtml(
-                r.jobTitle
-              )
-            }
+            ${recruitmentEscapeHtml(
+              r.candidateDoj
+            )}
 
-            ·
-
-            ${
-              recruitmentEscapeHtml(
-                r.department
-              )
-            }
-
-          </div>
+          </span>
 
         </div>
 
-        <span
-          class="age-badge fresh"
-        >
-
-          ${
-            recruitmentEscapeHtml(
-              r.candidateDoj
-            )
-          }
-
-        </span>
-
-      </div>
-
-    `).join('');
+      `
+    ).join('');
 
 }
 
-
-/* =========================================================
-   RECRUITER PERFORMANCE
-========================================================= */
 
 function renderRecruiterPerformance() {
 
@@ -3416,288 +2269,237 @@ function renderRecruiterPerformance() {
     [
       ...new Set(
         recruitmentData
-          .map(r => r.recruiter)
+          .map(
+            r => r.recruiter
+          )
           .filter(Boolean)
       )
     ]
     .sort();
 
-
   const rows =
-    recruiters.map(name => {
+    recruiters
+      .map(
+        name => {
 
-      const all =
-        recruitmentData
-          .filter(
-            r =>
-              r.recruiter === name
-          );
+          const all =
+            recruitmentData
+              .filter(
+                r =>
+                  r.recruiter ===
+                  name
+              );
 
+          const active =
+            all.filter(
+              isRecruitmentActive
+            );
 
-      const active =
-        all.filter(
-          isRecruitmentActive
-        );
+          const offer =
+            all.filter(
+              isRecruitmentOfferStage
+            );
 
+          const joined =
+            all.filter(
+              r =>
+                recruitmentNormalizedStatus(r)
+                ===
+                'joined'
+            );
 
-      const offer =
-        all.filter(
-          isRecruitmentOfferStage
-        );
+          const critical =
+            active.filter(
+              r => {
 
+                const age =
+                  recruitmentAgeDays(r);
 
-      const joined =
-        all.filter(
-          r =>
-            recruitmentNormalizedStatus(r)
-            ===
-            'joined'
-        );
+                return (
+                  age !== null &&
+                  age > 30
+                );
 
+              }
+            );
 
-      const critical =
-        active.filter(r => {
+          const ages =
+            active
+              .map(
+                recruitmentAgeDays
+              )
+              .filter(
+                age =>
+                  age !== null
+              );
 
-          const age =
-            recruitmentAgeDays(r);
-
-
-          return (
-            age !== null &&
-            age > 30
-          );
-
-        });
-
-
-      const ages =
-        active
-          .map(
-            recruitmentAgeDays
-          )
-          .filter(
-            age =>
-              age !== null
-          );
-
-
-      const avg =
-        ages.length
-
-          ?
-
-          Math.round(
-
-            ages.reduce(
-              (
-                a,
-                b
-              ) =>
-                a + b,
-              0
-            )
-
-            /
-
+          const avg =
             ages.length
+              ? Math.round(
+                  ages.reduce(
+                    (a,b) =>
+                      a+b,
+                    0
+                  )
+                  /
+                  ages.length
+                )
+              : 0;
 
-          )
+          return {
+            name,
+            active:
+              active.length,
+            offer:
+              offer.length,
+            joined:
+              joined.length,
+            critical:
+              critical.length,
+            avg
+          };
 
-          :
+        }
+      )
+      .sort(
+        (a,b) =>
+          b.active -
+          a.active
+      );
 
-          0;
-
-
-      return {
-
-        name,
-
-        active:
-          active.length,
-
-        offer:
-          offer.length,
-
-        joined:
-          joined.length,
-
-        critical:
-          critical.length,
-
-        avg
-
-      };
-
-    })
-    .sort(
-      (a, b) =>
-        b.active -
-        a.active
+  const target =
+    document.getElementById(
+      'recruiterPerformanceBody'
     );
 
+  if (!target) {
+    return;
+  }
 
-  setHTML(
+  target.innerHTML =
+    rows.map(
+      r => `
 
-    'recruiterPerformanceBody',
+        <tr>
 
-    rows.map(r => `
+          <td>
+            <strong>
+              ${recruitmentEscapeHtml(r.name)}
+            </strong>
+          </td>
 
-      <tr>
+          <td>
+            ${r.active}
+          </td>
 
-        <td>
-          <strong>
-            ${
-              recruitmentEscapeHtml(
-                r.name
-              )
-            }
-          </strong>
-        </td>
+          <td>
+            ${r.offer}
+          </td>
 
-        <td>
-          ${r.active}
-        </td>
+          <td>
+            ${r.joined}
+          </td>
 
-        <td>
-          ${r.offer}
-        </td>
+          <td>
+            ${r.critical}
+          </td>
 
-        <td>
-          ${r.joined}
-        </td>
+          <td>
+            ${r.avg} days
+          </td>
 
-        <td>
-          ${r.critical}
-        </td>
+        </tr>
 
-        <td>
-          ${r.avg} days
-        </td>
-
-      </tr>
-
-    `).join('')
-
-  );
+      `
+    ).join('');
 
 }
 
 
-/* =========================================================
-   TABLE FILTERING
-========================================================= */
-
 function filteredRecruitmentRows() {
 
   const search =
-    getEl(
-      'recruitmentSearch'
-    )
+    document
+      .getElementById(
+        'recruitmentSearch'
+      )
       ?.value
       .toLowerCase()
-
-    ||
-
-    '';
-
+      ||
+      '';
 
   const status =
-    getEl(
-      'recruitmentStatusFilter'
-    )
+    document
+      .getElementById(
+        'recruitmentStatusFilter'
+      )
       ?.value
-
-    ||
-
-    'all';
-
+      ||
+      'all';
 
   const recruiter =
-    getEl(
-      'recruitmentRecruiterFilter'
-    )
+    document
+      .getElementById(
+        'recruitmentRecruiterFilter'
+      )
       ?.value
-
-    ||
-
-    'all';
-
+      ||
+      'all';
 
   const department =
-    getEl(
-      'recruitmentDepartmentFilter'
-    )
+    document
+      .getElementById(
+        'recruitmentDepartmentFilter'
+      )
       ?.value
-
-    ||
-
-    'all';
-
+      ||
+      'all';
 
   const priority =
-    getEl(
-      'recruitmentPriorityFilter'
-    )
+    document
+      .getElementById(
+        'recruitmentPriorityFilter'
+      )
       ?.value
-
-    ||
-
-    'all';
-
+      ||
+      'all';
 
   const type =
-    getEl(
-      'recruitmentTypeFilter'
-    )
+    document
+      .getElementById(
+        'recruitmentTypeFilter'
+      )
       ?.value
+      ||
+      'all';
 
-    ||
-
-    'all';
-
-
-  return recruitmentData
-    .filter(r => {
+  return recruitmentData.filter(
+    r => {
 
       const age =
         recruitmentAgeDays(r);
 
-
-      const bucket =
-        recruitmentAgeBucket(
-          age
-        );
-
+      const ageBucket =
+        recruitmentAgeBucket(age);
 
       const haystack =
         [
 
           r.reqNo,
-
           r.jobTitle,
-
           r.department,
-
           r.location,
-
           r.recruiter,
-
           r.hiringManager,
-
           r.status,
-
           r.candidateName,
-
           r.remarks,
-
           r.posted,
-
           r.reqType
 
         ]
         .join(' ')
         .toLowerCase();
-
 
       return (
 
@@ -3744,39 +2546,26 @@ function filteredRecruitmentRows() {
         &&
 
         (
-          recruitmentAgeFilter ===
-          'all'
-
-          ||
+          recruitmentAgeFilter === 'all' ||
 
           (
-            isRecruitmentActive(r)
-
-            &&
-
-            bucket ===
-            recruitmentAgeFilter
+            isRecruitmentActive(r) &&
+            ageBucket === recruitmentAgeFilter
           )
         )
 
       );
 
-    });
+    }
+  );
 
 }
 
 
-/* =========================================================
-   AGE BADGE CLASS
-========================================================= */
-
 function recruitmentAgeClass(days) {
 
   const bucket =
-    recruitmentAgeBucket(
-      days
-    );
-
+    recruitmentAgeBucket(days);
 
   if (
     bucket === '0-7'
@@ -3784,13 +2573,11 @@ function recruitmentAgeClass(days) {
     return 'fresh';
   }
 
-
   if (
     bucket === '8-15'
   ) {
     return 'watch';
   }
-
 
   if (
     bucket === '16-30'
@@ -3798,73 +2585,56 @@ function recruitmentAgeClass(days) {
     return 'ageing';
   }
 
-
   return 'critical';
 
 }
 
 
-/* =========================================================
-   LIVE REQUISITION TABLE
-========================================================= */
-
 function renderRecruitmentTable() {
 
   const rows =
     filteredRecruitmentRows()
-
       .sort(
-        (a, b) => {
+        (a,b) => {
 
           const da =
             parseRecruitmentDate(
               a.reqDate
             );
 
-
           const db =
             parseRecruitmentDate(
               b.reqDate
             );
 
-
           return (
-
-            (
-              db?.getTime() ||
-              0
-            )
-
+            (db?.getTime() || 0)
             -
-
-            (
-              da?.getTime() ||
-              0
-            )
-
+            (da?.getTime() || 0)
           );
 
         }
       );
 
+  const countTarget =
+    document.getElementById(
+      'recruitmentVisibleCount'
+    );
 
-  setText(
-    'recruitmentVisibleCount',
-    rows.length
-  );
-
+  if (countTarget) {
+    countTarget.textContent =
+      rows.length;
+  }
 
   const head =
-    getEl(
+    document.getElementById(
       'recruitmentLiveTableHead'
     );
 
-
   const body =
-    getEl(
+    document.getElementById(
       'recruitmentLiveTableBody'
     );
-
 
   if (
     !head ||
@@ -3873,180 +2643,110 @@ function renderRecruitmentTable() {
     return;
   }
 
-
-  const headers = [
-
-    'Age (Days)',
-
-    ...recruitmentHeaders
-
-  ];
-
+  const headers =
+    [
+      'Age (Days)',
+      ...recruitmentHeaders
+    ];
 
   head.innerHTML =
-    `
-
-    <tr>
-
-      ${
-        headers.map(h => `
-
-          <th>
-
-            ${
-              recruitmentEscapeHtml(
-
-                String(h)
-                  .replace(
-                    /\n/g,
-                    ' '
-                  )
-
+    `<tr>${
+      headers.map(
+        h =>
+          `<th>${recruitmentEscapeHtml(
+            String(h)
+              .replace(
+                /\n/g,
+                ' '
               )
-            }
-
-          </th>
-
-        `)
-        .join('')
-      }
-
-    </tr>
-
-    `;
-
+          )}</th>`
+      )
+      .join('')
+    }</tr>`;
 
   body.innerHTML =
-    rows.map(r => {
+    rows.map(
+      r => {
 
-      const age =
-        recruitmentAgeDays(r);
+        const age =
+          recruitmentAgeDays(r);
 
+        const raw =
+          r.raw ||
+          {};
 
-      const raw =
-        r.raw || {};
+        const cells =
+          recruitmentHeaders
+            .map(
+              header => {
 
+                const value =
+                  raw[header] === undefined ||
+                  raw[header] === null ||
+                  raw[header] === ''
+                    ? '-'
+                    : raw[header];
 
-      const cells =
-        recruitmentHeaders
-          .map(header => {
+                const wrap =
+                  [
+                    'Job Title',
+                    'Remarks',
+                    'Candidate pool',
+                    'Candidate pool ',
+                    'JD Link',
+                    'JD Link ',
+                    'Budget\n(CTC Range ₹)',
+                    'Experience\nRequired'
+                  ].includes(header)
+                    ? 'wrap'
+                    : '';
 
-            let value =
-              raw[header];
+                return `
 
+                  <td class="${wrap}">
 
-            if (
-              value === undefined ||
-              value === null ||
-              value === ''
-            ) {
+                    ${recruitmentEscapeHtml(
+                      value
+                    )}
 
-              value = '-';
+                  </td>
 
-            }
+                `;
 
+              }
+            )
+            .join('');
 
-            const wrap =
-              [
+        return `
 
-                'jobTitle',
+          <tr>
 
-                'Job Title',
+            <td>
 
-                'remarks',
-
-                'Remarks',
-
-                'candidatePool',
-
-                'Candidate pool',
-
-                'Candidate pool ',
-
-                'jdLink',
-
-                'JD Link',
-
-                'JD Link ',
-
-                'budget',
-
-                'experience'
-
-              ]
-              .includes(header)
-
-              ?
-
-              'wrap'
-
-              :
-
-              '';
-
-
-            return `
-
-              <td
-                class="${wrap}"
-              >
+              <span class="age-badge ${recruitmentAgeClass(age)}">
 
                 ${
-                  recruitmentEscapeHtml(
-                    value
-                  )
+                  age === null
+                    ? '-'
+                    : age + 'd'
                 }
 
-              </td>
+              </span>
 
-            `;
+            </td>
 
-          })
-          .join('');
+            ${cells}
 
+          </tr>
 
-      return `
+        `;
 
-        <tr>
-
-          <td>
-
-            <span
-              class="age-badge
-              ${recruitmentAgeClass(age)}"
-            >
-
-              ${
-                age === null
-
-                ?
-
-                '-'
-
-                :
-
-                age + 'd'
-              }
-
-            </span>
-
-          </td>
-
-          ${cells}
-
-        </tr>
-
-      `;
-
-    })
+      }
+    )
     .join('');
 
 }
 
-
-/* =========================================================
-   RECRUITMENT FILTER EVENTS
-========================================================= */
 
 [
   'recruitmentSearch',
@@ -4056,868 +2756,562 @@ function renderRecruitmentTable() {
   'recruitmentPriorityFilter',
   'recruitmentTypeFilter'
 ]
-.forEach(id => {
+.forEach(
+  id => {
 
-  const el =
-    getEl(id);
+    const el =
+      document.getElementById(id);
 
+    if (!el) {
+      return;
+    }
 
-  if (!el) {
-    return;
+    el.addEventListener(
+      id === 'recruitmentSearch'
+        ? 'input'
+        : 'change',
+
+      renderRecruitmentTable
+    );
+
   }
+);
 
-
-  el.addEventListener(
-
-    id ===
-    'recruitmentSearch'
-
-    ?
-
-    'input'
-
-    :
-
-    'change',
-
-    renderRecruitmentTable
-
-  );
-
-});
-
-
-/* =========================================================
-   RENDER RECRUITMENT
-========================================================= */
-
-function renderRecruitmentDashboard() {
-
-  renderRecruitmentKpis();
-
-  renderRecruitmentAgeing();
-
-  renderRecruitmentCharts();
-
-  renderRecruitmentFunnel();
-
-  renderCriticalRecruitmentRoles();
-
-  renderUpcomingDoj();
-
-  renderRecruiterPerformance();
-
-  renderRecruitmentTable();
-
-}
-
-
-/* =========================================================
-   START LIVE RECRUITMENT
-========================================================= */
 
 loadRecruitmentLive(false);
 
-
-/* =========================================================
+/* =========================
    ATTENDANCE
-========================================================= */
+========================= */
 
-if (
-  getEl(
-    'attendanceKpis'
+document.getElementById('attendanceKpis').innerHTML = [
+
+  kpi(
+    'Overall Attendance',
+    '93.4%',
+    'Jul MTD'
+  ),
+
+  kpi(
+    'Plant Absenteeism',
+    '11.2%',
+    'Mon/Fri pattern',
+    'warn'
+  ),
+
+  kpi(
+    'Pending Leave Approvals',
+    '18',
+    'Awaiting manager action'
+  ),
+
+  kpi(
+    'Regularisation',
+    '98',
+    '▼ 14.8% MoM'
   )
-) {
 
-  setHTML(
-
-    'attendanceKpis',
-
-    [
-
-      kpi(
-        'Overall Attendance',
-        '93.4%',
-        'Jul MTD'
-      ),
-
-      kpi(
-        'Plant Absenteeism',
-        '11.2%',
-        'Mon/Fri pattern',
-        'warn'
-      ),
-
-      kpi(
-        'Pending Leave Approvals',
-        '18',
-        'Awaiting manager action'
-      ),
-
-      kpi(
-        'Regularisation',
-        '98',
-        '▼ 14.8% MoM'
-      )
-
-    ].join('')
-
-  );
-
-}
+].join('');
 
 
-if (
-  typeof makeLineChart ===
-  'function'
-) {
-
-  makeLineChart(
-
-    'attendanceChart',
-
-    [
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug'
-    ],
-
-    [
-      93.0,
-      93.1,
-      93.2,
-      93.4,
-      93.6
-    ],
-
-    'Attendance %'
-
-  );
-
-}
+makeLineChart(
+  'attendanceChart',
+  ['Apr', 'May', 'Jun', 'Jul', 'Aug'],
+  [93.0, 93.1, 93.2, 93.4, 93.6],
+  'Attendance %'
+);
 
 
-if (
-  getEl(
-    'attendanceIssues'
+document.getElementById('attendanceIssues').innerHTML = [
+
+  [
+    'Plant absenteeism',
+    '11.2%',
+    'red'
+  ],
+
+  [
+    'Late arrivals',
+    '142 MTD',
+    'amber'
+  ],
+
+  [
+    'Regularisation requests',
+    '98',
+    'amber'
+  ],
+
+  [
+    'Pending leave approvals',
+    '18',
+    'amber'
+  ]
+
+].map(i => `
+
+  <div class="issue-row">
+
+    <div>
+
+      <div class="health-name">
+        ${i[0]}
+      </div>
+
+      <div class="health-meta">
+        ${i[1]}
+      </div>
+
+    </div>
+
+
+    <span
+      class="status-pill
+      status-${i[2] === 'red' ? 'red' : 'yellow'}"
+    >
+
+      ${i[2] === 'red' ? 'Critical' : 'Watch'}
+
+    </span>
+
+  </div>
+
+`).join('');
+
+
+/* =========================
+   PERFORMANCE
+========================= */
+
+document.getElementById('performanceKpis').innerHTML = [
+
+  kpi(
+    'Avg KRA Score',
+    '78%',
+    'Company-wide'
+  ),
+
+  kpi(
+    'Green',
+    '71%',
+    'Healthy workforce'
+  ),
+
+  kpi(
+    'Yellow',
+    '18%',
+    'Coaching required',
+    'warn'
+  ),
+
+  kpi(
+    'Red / PIP',
+    '11%',
+    'Immediate action'
   )
-) {
 
-  setHTML(
+].join('');
 
-    'attendanceIssues',
 
-    [
+document.getElementById('performanceMatrix').innerHTML = `
 
-      [
-        'Plant absenteeism',
-        '11.2%',
-        'red'
-      ],
+  <div class="matrix-row matrix-head">
 
-      [
-        'Late arrivals',
-        '142 MTD',
-        'amber'
-      ],
+    <div>Employee</div>
+    <div>Attendance</div>
+    <div>KRA</div>
+    <div>Status</div>
+    <div>Manager</div>
 
-      [
-        'Regularisation requests',
-        '98',
-        'amber'
-      ],
+  </div>
 
-      [
-        'Pending leave approvals',
-        '18',
-        'amber'
-      ]
 
-    ]
-    .map(i => `
+  ${HR_DATA.employees
+    .slice(0, 8)
+    .map(e => `
 
-      <div class="issue-row">
+      <div class="matrix-row">
+
+        <div class="matrix-name">
+          ${e.name}
+        </div>
+
+        <div>
+          ${e.attendance}%
+        </div>
+
+        <div>
+          ${e.kra}%
+        </div>
 
         <div>
 
-          <div class="health-name">
-            ${i[0]}
-          </div>
-
-          <div class="health-meta">
-            ${i[1]}
-          </div>
+          <span
+            class="status-pill
+            status-${e.status.toLowerCase()}"
+          >
+            ${e.status}
+          </span>
 
         </div>
 
-        <span
-          class="status-pill
-          status-${
-            i[2] === 'red'
-              ? 'red'
-              : 'yellow'
-          }"
-        >
-
-          ${
-            i[2] === 'red'
-              ? 'Critical'
-              : 'Watch'
-          }
-
-        </span>
+        <div>
+          ${e.manager}
+        </div>
 
       </div>
 
     `)
-    .join('')
+    .join('')}
 
-  );
-
-}
+`;
 
 
-/* =========================================================
-   PERFORMANCE
-========================================================= */
+/* =========================
+   PAYROLL
+========================= */
 
-if (
-  getEl(
-    'performanceKpis'
+document.getElementById('payrollKpis').innerHTML = [
+
+  kpi(
+    'Payroll Cost',
+    '₹1.42 Cr/mo',
+    'Excl Directors'
+  ),
+
+  kpi(
+    'OT Cost',
+    '₹4.8 L',
+    '▲ 6% vs Jun',
+    'warn'
+  ),
+
+  kpi(
+    'Comp Ratio',
+    '0.96',
+    'Vs band midpoint'
+  ),
+
+  kpi(
+    'Increment Budget',
+    '68%',
+    'FY26-27 utilised'
   )
-) {
 
-  setHTML(
-
-    'performanceKpis',
-
-    [
-
-      kpi(
-        'Avg KRA Score',
-        '78%',
-        'Company-wide'
-      ),
-
-      kpi(
-        'Green',
-        '71%',
-        'Healthy workforce'
-      ),
-
-      kpi(
-        'Yellow',
-        '18%',
-        'Coaching required',
-        'warn'
-      ),
-
-      kpi(
-        'Red / PIP',
-        '11%',
-        'Immediate action'
-      )
-
-    ].join('')
-
-  );
-
-}
+].join('');
 
 
-if (
-  typeof HR_DATA !==
-  'undefined'
+makeLineChart(
+  'payrollChart',
+  ['Apr', 'May', 'Jun', 'Jul', 'Aug'],
+  [1.34, 1.36, 1.39, 1.42, 1.44],
+  'Payroll ₹Cr'
+);
 
-  &&
 
-  HR_DATA.employees
+/* =========================
+   L&D
+========================= */
 
-  &&
+document.getElementById('learningKpis').innerHTML = [
 
-  getEl(
-    'performanceMatrix'
+  kpi(
+    'Training Coverage',
+    '74%',
+    'Eligible workforce'
+  ),
+
+  kpi(
+    'Sales Training',
+    '118 h',
+    'July'
+  ),
+
+  kpi(
+    'Dojo Sessions',
+    '6',
+    'This month'
+  ),
+
+  kpi(
+    'Certifications',
+    '22',
+    'BIS + product certs'
   )
-) {
 
-  setHTML(
+].join('');
 
-    'performanceMatrix',
 
-    `
+document.getElementById('learningTable').innerHTML = [
 
-      <div
-        class="matrix-row
-        matrix-head"
-      >
+  [
+    'Sales Product Training',
+    '46 employees',
+    '92% complete'
+  ],
 
-        <div>
-          Employee
-        </div>
+  [
+    'Leadership Essentials',
+    '18 managers',
+    '78% complete'
+  ],
 
-        <div>
-          Attendance
-        </div>
+  [
+    'Plant Safety',
+    '212 employees',
+    '96% complete'
+  ],
 
-        <div>
-          KRA
-        </div>
+  [
+    'BIS / Compliance',
+    '39 employees',
+    '81% complete'
+  ]
 
-        <div>
-          Status
-        </div>
+].map(r => `
 
-        <div>
-          Manager
-        </div>
+  <div class="learning-row">
 
+    <div>
+
+      <div class="health-name">
+        ${r[0]}
       </div>
 
+      <div class="health-meta">
+        ${r[1]}
+      </div>
 
-      ${
-        HR_DATA.employees
-          .slice(0, 8)
-          .map(e => `
+    </div>
 
-            <div class="matrix-row">
+    <strong>
+      ${r[2]}
+    </strong>
 
-              <div class="matrix-name">
-                ${e.name}
-              </div>
+  </div>
 
-              <div>
-                ${e.attendance}%
-              </div>
-
-              <div>
-                ${e.kra}%
-              </div>
-
-              <div>
-
-                <span
-                  class="status-pill
-                  status-${
-                    String(
-                      e.status
-                    ).toLowerCase()
-                  }"
-                >
-                  ${e.status}
-                </span>
-
-              </div>
-
-              <div>
-                ${e.manager}
-              </div>
-
-            </div>
-
-          `)
-          .join('')
-      }
-
-    `
-
-  );
-
-}
+`).join('');
 
 
-/* =========================================================
-   PAYROLL
-========================================================= */
+/* =========================
+   ENGAGEMENT
+========================= */
 
-if (
-  getEl(
-    'payrollKpis'
+document.getElementById('engagementKpis').innerHTML = [
+
+  kpi(
+    'eNPS',
+    '+32',
+    '▲ +4 vs last survey'
+  ),
+
+  kpi(
+    'Survey Participation',
+    '87%',
+    'Latest pulse'
+  ),
+
+  kpi(
+    'R&R Nominations',
+    '14',
+    'Across 6 categories'
+  ),
+
+  kpi(
+    'Town Hall Attendance',
+    '96%',
+    'Last quarter'
   )
-) {
 
-  setHTML(
-
-    'payrollKpis',
-
-    [
-
-      kpi(
-        'Payroll Cost',
-        '₹1.42 Cr/mo',
-        'Excl Directors'
-      ),
-
-      kpi(
-        'OT Cost',
-        '₹4.8 L',
-        '▲ 6% vs Jun',
-        'warn'
-      ),
-
-      kpi(
-        'Comp Ratio',
-        '0.96',
-        'Vs band midpoint'
-      ),
-
-      kpi(
-        'Increment Budget',
-        '68%',
-        'FY26-27 utilised'
-      )
-
-    ].join('')
-
-  );
-
-}
+].join('');
 
 
-if (
-  typeof makeLineChart ===
-  'function'
-) {
-
-  makeLineChart(
-
-    'payrollChart',
-
-    [
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug'
-    ],
-
-    [
-      1.34,
-      1.36,
-      1.39,
-      1.42,
-      1.44
-    ],
-
-    'Payroll ₹Cr'
-
-  );
-
-}
+makeLineChart(
+  'engagementChart',
+  [
+    'Q3 FY25',
+    'Q4 FY25',
+    'Q1 FY26',
+    'Q2 FY26'
+  ],
+  [21, 26, 28, 32],
+  'eNPS'
+);
 
 
-/* =========================================================
-   L&D
-========================================================= */
+/* =========================
+   COMPLIANCE
+========================= */
 
-if (
-  getEl(
-    'learningKpis'
+document.getElementById('complianceKpis').innerHTML = [
+
+  kpi(
+    'PF Compliance',
+    '100%',
+    'On-time filing'
+  ),
+
+  kpi(
+    'ESI Compliance',
+    '100%',
+    'On-time filing'
+  ),
+
+  kpi(
+    'POSH Cases',
+    '0',
+    'No pending cases'
+  ),
+
+  kpi(
+    'Audit Pending',
+    '1',
+    'Factories Act · Aug',
+    'warn'
   )
-) {
 
-  setHTML(
-
-    'learningKpis',
-
-    [
-
-      kpi(
-        'Training Coverage',
-        '74%',
-        'Eligible workforce'
-      ),
-
-      kpi(
-        'Sales Training',
-        '118 h',
-        'July'
-      ),
-
-      kpi(
-        'Dojo Sessions',
-        '6',
-        'This month'
-      ),
-
-      kpi(
-        'Certifications',
-        '22',
-        'BIS + product certs'
-      )
-
-    ].join('')
-
-  );
-
-}
+].join('');
 
 
-if (
-  getEl(
-    'learningTable'
-  )
-) {
+document.getElementById('complianceList').innerHTML = [
 
-  setHTML(
+  [
+    'PF Filing',
+    'Compliant',
+    'Green'
+  ],
 
-    'learningTable',
+  [
+    'ESI Filing',
+    'Compliant',
+    'Green'
+  ],
 
-    [
+  [
+    'POSH Committee',
+    'Compliant',
+    'Green'
+  ],
 
-      [
-        'Sales Product Training',
-        '46 employees',
-        '92% complete'
-      ],
+  [
+    'Factories Act Audit',
+    'Scheduled — August',
+    'Yellow'
+  ]
 
-      [
-        'Leadership Essentials',
-        '18 managers',
-        '78% complete'
-      ],
+].map(r => `
 
-      [
-        'Plant Safety',
-        '212 employees',
-        '96% complete'
-      ],
+  <div class="compliance-row">
 
-      [
-        'BIS / Compliance',
-        '39 employees',
-        '81% complete'
-      ]
+    <div>
 
-    ]
-    .map(r => `
+      <div class="health-name">
+        ${r[0]}
+      </div>
 
-      <div class="learning-row">
+      <div class="health-meta">
+        ${r[1]}
+      </div>
 
-        <div>
+    </div>
 
-          <div class="health-name">
-            ${r[0]}
-          </div>
+    <span
+      class="status-pill
+      status-${r[2].toLowerCase()}"
+    >
+      ${r[2]}
+    </span>
 
-          <div class="health-meta">
-            ${r[1]}
-          </div>
+  </div>
 
-        </div>
+`).join('');
+
+
+/* =========================
+   ALERT CENTRE
+========================= */
+
+document.getElementById('alertTableBody').innerHTML =
+
+  HR_DATA.alerts.map(a => `
+
+    <tr>
+
+      <td>
+
+        <span
+          class="priority-pill
+          priority-${a.priority.toLowerCase()}"
+        >
+          ${a.priority}
+        </span>
+
+      </td>
+
+
+      <td>
 
         <strong>
-          ${r[2]}
+          ${a.action}
         </strong>
 
-      </div>
-
-    `)
-    .join('')
-
-  );
-
-}
+      </td>
 
 
-/* =========================================================
-   ENGAGEMENT
-========================================================= */
-
-if (
-  getEl(
-    'engagementKpis'
-  )
-) {
-
-  setHTML(
-
-    'engagementKpis',
-
-    [
-
-      kpi(
-        'eNPS',
-        '+32',
-        '▲ +4 vs last survey'
-      ),
-
-      kpi(
-        'Survey Participation',
-        '87%',
-        'Latest pulse'
-      ),
-
-      kpi(
-        'R&R Nominations',
-        '14',
-        'Across 6 categories'
-      ),
-
-      kpi(
-        'Town Hall Attendance',
-        '96%',
-        'Last quarter'
-      )
-
-    ].join('')
-
-  );
-
-}
+      <td>
+        ${a.owner}
+      </td>
 
 
-if (
-  typeof makeLineChart ===
-  'function'
-) {
-
-  makeLineChart(
-
-    'engagementChart',
-
-    [
-      'Q3 FY25',
-      'Q4 FY25',
-      'Q1 FY26',
-      'Q2 FY26'
-    ],
-
-    [
-      21,
-      26,
-      28,
-      32
-    ],
-
-    'eNPS'
-
-  );
-
-}
+      <td>
+        ${a.due}
+      </td>
 
 
-/* =========================================================
-   COMPLIANCE
-========================================================= */
-
-if (
-  getEl(
-    'complianceKpis'
-  )
-) {
-
-  setHTML(
-
-    'complianceKpis',
-
-    [
-
-      kpi(
-        'PF Compliance',
-        '100%',
-        'On-time filing'
-      ),
-
-      kpi(
-        'ESI Compliance',
-        '100%',
-        'On-time filing'
-      ),
-
-      kpi(
-        'POSH Cases',
-        '0',
-        'No pending cases'
-      ),
-
-      kpi(
-        'Audit Pending',
-        '1',
-        'Factories Act · Aug',
-        'warn'
-      )
-
-    ].join('')
-
-  );
-
-}
-
-
-if (
-  getEl(
-    'complianceList'
-  )
-) {
-
-  setHTML(
-
-    'complianceList',
-
-    [
-
-      [
-        'PF Filing',
-        'Compliant',
-        'Green'
-      ],
-
-      [
-        'ESI Filing',
-        'Compliant',
-        'Green'
-      ],
-
-      [
-        'POSH Committee',
-        'Compliant',
-        'Green'
-      ],
-
-      [
-        'Factories Act Audit',
-        'Scheduled — August',
-        'Yellow'
-      ]
-
-    ]
-    .map(r => `
-
-      <div class="compliance-row">
-
-        <div>
-
-          <div class="health-name">
-            ${r[0]}
-          </div>
-
-          <div class="health-meta">
-            ${r[1]}
-          </div>
-
-        </div>
+      <td>
 
         <span
           class="status-pill
-          status-${
-            r[2].toLowerCase()
-          }"
+          status-${a.status
+            .toLowerCase()
+            .replaceAll(' ', '')}"
         >
-          ${r[2]}
+          ${a.status}
         </span>
 
-      </div>
+      </td>
 
-    `)
-    .join('')
 
+      <td>
+
+        <button class="view-btn">
+          Open
+        </button>
+
+      </td>
+
+    </tr>
+
+  `).join('');
+
+  function toggleSidebar() {
+
+  document.body.classList.toggle(
+    'sidebar-collapsed'
   );
 
 }
 
 
-/* =========================================================
-   ALERT CENTRE
-========================================================= */
+function recruitmentFrameLoaded() {
 
-if (
-  typeof HR_DATA !==
-  'undefined'
+  const loading =
+    document.getElementById(
+      'recruitmentLoading'
+    );
 
-  &&
-
-  HR_DATA.alerts
-
-  &&
-
-  getEl(
-    'alertTableBody'
-  )
-) {
-
-  setHTML(
-
-    'alertTableBody',
-
-    HR_DATA.alerts
-      .map(a => `
-
-        <tr>
-
-          <td>
-
-            <span
-              class="priority-pill
-              priority-${
-                String(
-                  a.priority
-                )
-                .toLowerCase()
-              }"
-            >
-              ${a.priority}
-            </span>
-
-          </td>
-
-          <td>
-
-            <strong>
-              ${a.action}
-            </strong>
-
-          </td>
-
-          <td>
-            ${a.owner}
-          </td>
-
-          <td>
-            ${a.due}
-          </td>
-
-          <td>
-
-            <span
-              class="status-pill
-              status-${
-                String(
-                  a.status
-                )
-                .toLowerCase()
-                .replaceAll(
-                  ' ',
-                  ''
-                )
-              }"
-            >
-              ${a.status}
-            </span>
-
-          </td>
-
-          <td>
-
-            <button
-              class="view-btn"
-            >
-              Open
-            </button>
-
-          </td>
-
-        </tr>
-
-      `)
-      .join('')
-
-  );
+  if (loading) {
+    loading.style.display = 'none';
+  }
 
 }
-
-
-/* =========================================================
-   END
-========================================================= */
