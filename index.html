@@ -631,6 +631,504 @@ button{
 }
 
 
+
+/* ================================
+   RECRUITMENT CONNECTION STATUS
+================================ */
+
+.recruitment-status{
+
+  margin-bottom:14px;
+
+  padding:
+    11px 14px;
+
+  border-radius:9px;
+
+  background:#eef6f7;
+
+  color:#4f6f76;
+
+  font-size:11px;
+
+  font-weight:600;
+
+}
+
+
+.recruitment-status.success{
+
+  background:#eaf7f1;
+
+  color:var(--green);
+
+}
+
+
+.recruitment-status.error{
+
+  background:#fdecef;
+
+  color:var(--red);
+
+}
+
+
+
+/* ================================
+   AGEING
+================================ */
+
+.ageing-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:14px;
+
+}
+
+
+.age-card{
+
+  border:
+    1px solid var(--border);
+
+  border-radius:12px;
+
+  background:#fff;
+
+  padding:16px;
+
+  text-align:left;
+
+}
+
+
+.age-card:hover{
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:var(--shadow);
+
+}
+
+
+.age-card.selected{
+
+  outline:
+    2px solid var(--teal);
+
+}
+
+
+.age-green{
+
+  border-left:
+    4px solid var(--green);
+
+}
+
+
+.age-blue{
+
+  border-left:
+    4px solid var(--blue);
+
+}
+
+
+.age-amber{
+
+  border-left:
+    4px solid var(--amber);
+
+}
+
+
+.age-red{
+
+  border-left:
+    4px solid var(--red);
+
+}
+
+
+.age-label{
+
+  display:block;
+
+  font-size:10px;
+
+  font-weight:800;
+
+  text-transform:uppercase;
+
+}
+
+
+.age-card strong{
+
+  display:block;
+
+  margin-top:8px;
+
+  font-size:28px;
+
+}
+
+
+.age-card small{
+
+  display:block;
+
+  margin-top:4px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+}
+
+
+
+/* ================================
+   FUNNEL
+================================ */
+
+.funnel-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,1fr);
+
+  gap:12px;
+
+}
+
+
+.funnel-box{
+
+  padding:15px;
+
+  text-align:center;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:11px;
+
+  background:#f5f9fa;
+
+}
+
+
+.funnel-number{
+
+  color:var(--teal);
+
+  font-size:25px;
+
+  font-weight:800;
+
+}
+
+
+.funnel-label{
+
+  margin-top:5px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  font-weight:700;
+
+}
+
+
+
+/* ================================
+   FILTERS
+================================ */
+
+.recruitment-filter-row{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:center;
+
+  gap:10px;
+
+}
+
+
+.recruitment-filter-row input,
+.recruitment-filter-row select{
+
+  padding:
+    9px 10px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:8px;
+
+  background:#fff;
+
+  font-size:11px;
+
+}
+
+
+.recruitment-filter-row input{
+
+  min-width:280px;
+
+}
+
+
+
+/* ================================
+   TABLE
+================================ */
+
+.table-scroll{
+
+  width:100%;
+
+  overflow:auto;
+
+}
+
+
+.crm-table{
+
+  width:100%;
+
+  border-collapse:collapse;
+
+  font-size:11px;
+
+}
+
+
+.crm-table th{
+
+  padding:
+    10px;
+
+  text-align:left;
+
+  background:#f2f5fb;
+
+  color:#35535b;
+
+  font-size:9px;
+
+  font-weight:800;
+
+  text-transform:uppercase;
+
+  letter-spacing:.4px;
+
+  white-space:nowrap;
+
+}
+
+
+.crm-table td{
+
+  padding:
+    10px;
+
+  border-bottom:
+    1px solid var(--border);
+
+  vertical-align:top;
+
+}
+
+
+.recruitment-table{
+
+  min-width:4400px;
+
+}
+
+
+.recruitment-table td{
+
+  white-space:nowrap;
+
+}
+
+
+.recruitment-table td.wrap{
+
+  min-width:220px;
+
+  white-space:normal;
+
+}
+
+
+
+/* ================================
+   BADGES
+================================ */
+
+.age-badge,
+.status-badge,
+.priority-badge{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  padding:
+    4px 7px;
+
+  border-radius:999px;
+
+  font-size:9px;
+
+  font-weight:800;
+
+  white-space:nowrap;
+
+}
+
+
+.age-badge.fresh{
+
+  background:#e9f7f0;
+
+  color:var(--green);
+
+}
+
+
+.age-badge.watch{
+
+  background:#eef6ff;
+
+  color:var(--blue);
+
+}
+
+
+.age-badge.ageing{
+
+  background:#fff1d8;
+
+  color:#a56400;
+
+}
+
+
+.age-badge.critical{
+
+  background:#fde9ee;
+
+  color:var(--red);
+
+}
+
+
+.status-open{
+
+  background:#eef6ff;
+
+  color:var(--blue);
+
+}
+
+
+.status-joined{
+
+  background:#e9f7f0;
+
+  color:var(--green);
+
+}
+
+
+.status-hold{
+
+  background:#fff1d8;
+
+  color:var(--amber);
+
+}
+
+
+.status-offer{
+
+  background:#f1edff;
+
+  color:var(--violet);
+
+}
+
+
+
+/* ================================
+   LISTS
+================================ */
+
+.recruitment-list-row{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-start;
+
+  gap:14px;
+
+  padding:
+    11px 0;
+
+  border-bottom:
+    1px solid var(--border);
+
+}
+
+
+.recruitment-list-row:last-child{
+
+  border-bottom:0;
+
+}
+
+
+.role-name{
+
+  font-size:11px;
+
+  font-weight:700;
+
+}
+
+
+.role-meta{
+
+  margin-top:4px;
+
+  color:var(--muted);
+
+  font-size:9.5px;
+
+}
+
+
 .empty-state{
 
   padding:20px;
@@ -652,7 +1150,9 @@ button{
 @media(max-width:1100px){
 
   .grid-2{
+
     grid-template-columns:1fr;
+
   }
 
 }
@@ -661,187 +1161,193 @@ button{
 @media(max-width:760px){
 
   .sidebar{
+
     display:none;
+
   }
 
   .main{
+
     margin-left:0;
+
     width:100%;
+
   }
 
   .page{
+
     padding:
       18px 16px;
+
   }
 
   .topbar{
+
     padding:
       0 16px;
+
+  }
+
+  .ageing-grid,
+  .funnel-grid{
+
+    grid-template-columns:
+      1fr 1fr;
+
   }
 
 }
+
 
 
 /* =========================================================
-   RECRUITMENT APPS SCRIPT EMBED
+   TARGETED UPDATE: COLLAPSIBLE SIDEBAR + RECRUITMENT EMBED
+   All existing dashboard styles above remain unchanged.
 ========================================================= */
 
-.recruitment-page{
-  padding:0 !important;
-  background:#f4f7f8;
+.sidebar,
+.main{
+  transition:width .25s ease, margin-left .25s ease;
 }
 
-
-.recruitment-embed-header{
-  min-height:76px;
-
+.sidebar-toggle-row{
   display:flex;
+  justify-content:flex-end;
+  margin-bottom:12px;
+}
 
+.sidebar-toggle{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:10px;
+  background:rgba(255,255,255,.10);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
   align-items:center;
-
-  justify-content:space-between;
-
-  gap:15px;
-
-  padding:
-    18px 30px;
-
-  background:#ffffff;
-
-  border-bottom:
-    1px solid var(--border);
+  gap:5px;
+  cursor:pointer;
+  flex:0 0 auto;
 }
 
-
-.recruitment-embed-header h2{
-  margin:0;
-
-  font-size:20px;
-
-  color:var(--navy);
+.sidebar-toggle:hover{
+  background:rgba(255,255,255,.18);
 }
 
-
-.recruitment-embed-header p{
-  margin:
-    5px 0 0;
-
-  color:var(--muted);
-
-  font-size:11.5px;
+.sidebar-toggle span{
+  display:block;
+  width:20px;
+  height:2px;
+  border-radius:4px;
+  background:#fff;
 }
 
+body.sidebar-collapsed .sidebar{
+  width:76px;
+  padding-left:12px;
+  padding-right:12px;
+}
 
-.recruitment-embed-container{
-  position:relative;
+body.sidebar-collapsed .main{
+  margin-left:76px;
+  width:calc(100% - 76px);
+}
 
+body.sidebar-collapsed .sidebar-toggle-row{
+  justify-content:center;
+}
+
+body.sidebar-collapsed .brand{
+  justify-content:center;
+  padding-left:0;
+  padding-right:0;
+}
+
+body.sidebar-collapsed .brand-text{
+  display:none;
+}
+
+body.sidebar-collapsed .nav,
+body.sidebar-collapsed .sidebar-footer{
+  display:none;
+}
+
+/* Recruitment: only embedded Euronics TA Panel should remain visible */
+body.recruitment-mode .topbar{
+  display:none !important;
+}
+
+#recruitment.recruitment-page{
+  padding:0 !important;
+  background:#fff;
+}
+
+.recruitment-embed-card{
   width:100%;
-
-  height:
-    calc(100vh - 152px);
-
-  min-height:850px;
-
-  background:#ffffff;
-
+  min-height:100vh;
+  background:#fff;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
   overflow:hidden;
 }
 
-
 .recruitment-iframe{
   display:block;
-
   width:100%;
-
-  height:100%;
-
-  min-height:850px;
-
+  height:100vh;
+  min-height:1000px;
   border:0;
-
   margin:0;
-
   padding:0;
-
-  background:#ffffff;
+  background:#fff;
 }
-
-
-.recruitment-iframe-loading{
-  position:absolute;
-
-  inset:0;
-
-  z-index:5;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:14px;
-
-  background:#f4f7f8;
-
-  color:var(--teal);
-
-  font-size:13px;
-
-  font-weight:700;
-}
-
-
-.recruitment-loader{
-  width:34px;
-
-  height:34px;
-
-  border-radius:50%;
-
-  border:
-    4px solid #d9e8eb;
-
-  border-top-color:
-    var(--teal);
-
-  animation:
-    recruitmentSpin .8s linear infinite;
-}
-
-
-@keyframes recruitmentSpin{
-
-  to{
-    transform:
-      rotate(360deg);
-  }
-
-}
-
 
 @media(max-width:760px){
-
-  .recruitment-embed-header{
-    padding:
-      15px 16px;
+  .sidebar{
+    display:flex !important;
+    width:260px !important;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+    z-index:100;
   }
 
-
-  .recruitment-embed-container{
-    height:
-      calc(100vh - 145px);
-
-    min-height:900px;
+  body.mobile-menu-open .sidebar{
+    transform:translateX(0);
   }
 
-
-  .recruitment-iframe{
-    min-height:900px;
+  body.sidebar-collapsed .sidebar{
+    width:260px !important;
   }
 
+  .main,
+  body.sidebar-collapsed .main{
+    margin-left:0 !important;
+    width:100% !important;
+  }
+
+  .mobile-menu-fab{
+    display:flex !important;
+  }
+}
+
+.mobile-menu-fab{
+  display:none;
+  position:fixed;
+  left:12px;
+  top:12px;
+  z-index:90;
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:10px;
+  background:#0f3f49;
+  color:#fff;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
 }
 
 </style>
@@ -849,7 +1355,7 @@ button{
 </head>
 
 
-<body>
+<body class="sidebar-collapsed">
 
 
 <div class="app-shell">
@@ -861,6 +1367,22 @@ button{
 
 <aside class="sidebar">
 
+<div class="sidebar-toggle-row">
+  <button
+    id="sidebarToggle"
+    class="sidebar-toggle"
+    type="button"
+    onclick="toggleSidebar()"
+    aria-label="Toggle navigation"
+    title="Menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</div>
+
+
 
 <div class="brand">
 
@@ -868,7 +1390,7 @@ button{
 E
 </div>
 
-<div>
+<div class="brand-text">
 
 <div class="brand-name">
 EURONICS
@@ -1105,7 +1627,11 @@ Employee data will be connected in the next phase.
 
 
 <!-- ==========================================================
-     RECRUITMENT - LIVE APPS SCRIPT DASHBOARD
+     RECRUITMENT
+=========================================================== -->
+
+<!-- ==========================================================
+     RECRUITMENT
 =========================================================== -->
 
 <section
@@ -1113,46 +1639,21 @@ Employee data will be connected in the next phase.
   class="page recruitment-page"
 >
 
-  <div class="recruitment-embed-header">
-
-    <div>
-      <h2>Recruitment Command Centre</h2>
-      <p>
-        Live Euronics Talent Acquisition System
-      </p>
-    </div>
-
-    <button
-      class="btn btn-light"
-      onclick="refreshRecruitmentDashboard()"
-    >
-      Refresh Dashboard
-    </button>
-
-  </div>
-
-
   <div class="recruitment-embed-container">
 
     <div
       id="recruitmentLoading"
       class="recruitment-iframe-loading"
     >
-
       <div class="recruitment-loader"></div>
-
-      <div>
-        Loading Recruitment Command Centre...
-      </div>
-
+      <div>Loading Euronics TA Panel...</div>
     </div>
-
 
     <iframe
       id="recruitmentFrame"
       class="recruitment-iframe"
       src="https://script.google.com/a/macros/euronics.co.in/s/AKfycbxA8vc8YBnpl1u3lbi8L-K_jHOKVXJPc3j1h1Ggs7c_M2MhpUFxFSGZFDyy88zMLTPg/exec"
-      title="Euronics Recruitment Command Centre"
+      title="Euronics TA Panel"
       loading="eager"
       allowfullscreen
       onload="recruitmentFrameLoaded()"
@@ -1163,10 +1664,7 @@ Employee data will be connected in the next phase.
 </section>
 
 
-
-<!-- ============================
-     ATTENDANCE
-============================= -->
+<!-- OTHER MODULES -->
 
 <section
   id="attendance"
@@ -1185,10 +1683,6 @@ Attendance module will be connected later.
 
 
 
-<!-- ============================
-     PERFORMANCE
-============================= -->
-
 <section
   id="performance"
   class="page"
@@ -1205,10 +1699,6 @@ Performance module will be connected later.
 </section>
 
 
-
-<!-- ============================
-     PAYROLL
-============================= -->
 
 <section
   id="payroll"
@@ -1227,10 +1717,6 @@ Payroll module will be connected later.
 
 
 
-<!-- ============================
-     LEARNING
-============================= -->
-
 <section
   id="learning"
   class="page"
@@ -1247,10 +1733,6 @@ L&D module will be connected later.
 </section>
 
 
-
-<!-- ============================
-     ENGAGEMENT
-============================= -->
 
 <section
   id="engagement"
@@ -1269,10 +1751,6 @@ Engagement module will be connected later.
 
 
 
-<!-- ============================
-     COMPLIANCE
-============================= -->
-
 <section
   id="compliance"
   class="page"
@@ -1289,10 +1767,6 @@ Compliance module will be connected later.
 </section>
 
 
-
-<!-- ============================
-     ALERTS
-============================= -->
 
 <section
   id="alerts"
@@ -1379,7 +1853,6 @@ const PAGE_INFO = {
 };
 
 
-
 document
   .querySelectorAll('.nav-item')
   .forEach(function(button){
@@ -1399,39 +1872,26 @@ document
   });
 
 
-
 function openPage(page){
 
   document
     .querySelectorAll('.page')
     .forEach(function(el){
-
       el.classList.remove('active');
-
     });
-
 
   document
     .querySelectorAll('.nav-item')
     .forEach(function(el){
-
       el.classList.remove('active');
-
     });
-
 
   const pageElement =
     document.getElementById(page);
 
-
   if(pageElement){
-
-    pageElement
-      .classList
-      .add('active');
-
+    pageElement.classList.add('active');
   }
-
 
   const navButton =
     document.querySelector(
@@ -1440,37 +1900,34 @@ function openPage(page){
       '"]'
     );
 
-
   if(navButton){
-
-    navButton
-      .classList
-      .add('active');
-
+    navButton.classList.add('active');
   }
 
-
   if(PAGE_INFO[page]){
-
     document
       .getElementById('pageTitle')
       .textContent =
         PAGE_INFO[page][0];
 
-
     document
       .getElementById('pageSub')
       .textContent =
         PAGE_INFO[page][1];
-
   }
 
-
-  window.scrollTo(
-    0,
-    0
+  document.body.classList.toggle(
+    'recruitment-mode',
+    page === 'recruitment'
   );
 
+  if(window.innerWidth <= 760){
+    document.body.classList.remove('mobile-menu-open');
+  }else{
+    document.body.classList.add('sidebar-collapsed');
+  }
+
+  window.scrollTo(0,0);
 }
 
 
@@ -1509,7 +1966,6 @@ function kpiCard(
 }
 
 
-
 document
   .getElementById('overviewKpis')
   .innerHTML = [
@@ -1517,7 +1973,7 @@ document
     kpiCard(
       'Recruitment',
       'LIVE',
-      'Connected to TA Panel'
+      'Connected to TA tracker'
     ),
 
     kpiCard(
@@ -1543,68 +1999,42 @@ document
 
 
 /* =========================================================
-   RECRUITMENT EMBED
+   RECRUITMENT EMBED + SIDEBAR TOGGLE
 ========================================================= */
 
-function recruitmentFrameLoaded(){
-
-  const loading =
-    document.getElementById(
-      'recruitmentLoading'
-    );
-
-
-  if(loading){
-
-    loading.style.display =
-      'none';
-
+function toggleSidebar(){
+  if(window.innerWidth <= 760){
+    document.body.classList.toggle('mobile-menu-open');
+    return;
   }
 
+  document.body.classList.toggle('sidebar-collapsed');
 }
 
-
+function recruitmentFrameLoaded(){
+  /* The embedded TA Panel is already live. */
+}
 
 function refreshRecruitmentDashboard(){
-
-  const frame =
-    document.getElementById(
-      'recruitmentFrame'
-    );
-
-
-  const loading =
-    document.getElementById(
-      'recruitmentLoading'
-    );
-
-
-  if(!frame){
-
-    return;
-
-  }
-
-
-  if(loading){
-
-    loading.style.display =
-      'flex';
-
-  }
-
-
-  const baseUrl =
-    'https://script.google.com/a/macros/euronics.co.in/s/AKfycbxA8vc8YBnpl1u3lbi8L-K_jHOKVXJPc3j1h1Ggs7c_M2MhpUFxFSGZFDyy88zMLTPg/exec';
-
+  const frame = document.getElementById('recruitmentFrame');
+  if(!frame) return;
 
   frame.src =
-    baseUrl +
-    '?refresh=' +
+    'https://script.google.com/a/macros/euronics.co.in/s/AKfycbxA8vc8YBnpl1u3lbi8L-K_jHOKVXJPc3j1h1Ggs7c_M2MhpUFxFSGZFDyy88zMLTPg/exec?refresh=' +
     Date.now();
-
 }
 
+(function createMobileMenuButton(){
+  if(document.querySelector('.mobile-menu-fab')) return;
+
+  const btn = document.createElement('button');
+  btn.className = 'mobile-menu-fab';
+  btn.type = 'button';
+  btn.setAttribute('aria-label','Open navigation');
+  btn.innerHTML = '&#9776;';
+  btn.addEventListener('click',toggleSidebar);
+  document.body.appendChild(btn);
+})();
 
 </script>
 
