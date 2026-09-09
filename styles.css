@@ -708,7 +708,23 @@ button{
   font-weight:700;
   margin-top:6px;
 }
+.recruitment-embed-card{
+  width:100%;
+  background:#fff;
+  border:1px solid #dfe8eb;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(18,73,84,.08);
+}
 
+.recruitment-iframe{
+  display:block;
+  width:100%;
+  height:calc(100vh - 160px);
+  min-height:900px;
+  border:0;
+  background:#fff;
+}
 
 /* =========================
    PERFORMANCE MATRIX
@@ -943,33 +959,4 @@ button{
     flex-direction:column;
   }
 
-}
-/* =====================================================
-   RECRUITMENT LIVE APPS SCRIPT EMBED
-===================================================== */
-
-.recruitment-embed-card{
-  width:100%;
-  background:#ffffff;
-  border:1px solid #dfe8eb;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 8px 28px rgba(15,75,86,0.08);
-}
-
-.recruitment-iframe{
-  display:block;
-  width:100%;
-  height:calc(100vh - 145px);
-  min-height:950px;
-  border:0;
-  margin:0;
-  padding:0;
-  background:#ffffff;
-}
-
-@media (max-width:900px){
-  .recruitment-iframe{
-    min-height:1100px;
-  }
 }
