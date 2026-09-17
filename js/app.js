@@ -11,6 +11,30 @@ const pageTitles = {
   alerts: ['Alerts & Action Centre', 'Ownership, due dates and follow-up']
 };
 
+/* =========================================================
+   DOM COMPATIBILITY SAFETY
+   Keeps the full app.js running even when a page section is
+   not present in the current index.html build. Real elements
+   are always returned when they exist.
+========================================================= */
+
+const __nativeGetElementById = document.getElementById.bind(document);
+const __missingElements = Object.create(null);
+
+document.getElementById = function(id) {
+  const real = __nativeGetElementById(id);
+  if (real) return real;
+
+  if (!__missingElements[id]) {
+    const dummy = document.createElement('div');
+    dummy.id = '__missing__' + id;
+    dummy.value = '';
+    __missingElements[id] = dummy;
+  }
+
+  return __missingElements[id];
+};
+
 function navigate(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -816,134 +840,2376 @@ makeLineChart(
 );
 
 
-/* =========================
-   L&D
-========================= */
+/* =========================================================
+   L&D / EUROVERSITY - LIVE PROFESSIONAL DASHBOARD
+========================================================= */
 
-document.getElementById('learningKpis').innerHTML = [
+const LND_API_URL =
+  'https://script.google.com/macros/s/AKfycbxqmkCfNuLBmohAKGlFR9W8R8rdqXqlJkHn5kt0xLio3n37J2JhGndSyhIJ2Mu3gqMw3Q/exec';
 
-  kpi(
-    'Training Coverage',
-    '74%',
-    'Eligible workforce'
-  ),
 
-  kpi(
-    'Sales Training',
-    '118 h',
-    'July'
-  ),
+let lndRows = [];
+let lndLoaded = false;
+let lndGroupFilter = 'all';
 
-  kpi(
-    'Dojo Sessions',
-    '6',
-    'This month'
-  ),
+const LND_CHARTS = {};
 
-  kpi(
-    'Certifications',
-    '22',
-    'BIS + product certs'
+
+const LND_COLORS = {
+
+  teal: '#17616E',
+
+  tealDeep: '#0F444E',
+
+  green: '#70AD47',
+
+  amber: '#FFC000',
+
+  navy: '#1F3864',
+
+  light: '#EEF1F4',
+
+  muted: '#5B6472'
+
+};
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function lndClean(value){
+
+  return String(
+    value === undefined ||
+    value === null
+      ? ''
+      : value
+  ).trim();
+
+}
+
+
+function lndNumber(value){
+
+  const cleaned =
+    lndClean(value)
+      .replace(/,/g,'')
+      .replace(/%/g,'');
+
+  const num =
+    parseFloat(cleaned);
+
+  return Number.isFinite(num)
+    ? num
+    : null;
+
+}
+
+
+function lndEscape(value){
+
+  return lndClean(value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+function lndDate(value){
+
+  let text =
+    lndClean(value);
+
+  if(!text){
+    return null;
+  }
+
+  text =
+    text
+      .replace(
+        /(\d+)(st|nd|rd|th)/gi,
+        '$1'
+      )
+      .replace(/\s+/g,' ')
+      .trim();
+
+  if(!/\b\d{4}\b/.test(text)){
+    text += ' 2026';
+  }
+
+  const d =
+    new Date(text);
+
+  return Number.isNaN(
+    d.getTime()
   )
+    ? null
+    : d;
 
-].join('');
-
-
-document.getElementById('learningTable').innerHTML = [
-
-  [
-    'Sales Product Training',
-    '46 employees',
-    '92% complete'
-  ],
-
-  [
-    'Leadership Essentials',
-    '18 managers',
-    '78% complete'
-  ],
-
-  [
-    'Plant Safety',
-    '212 employees',
-    '96% complete'
-  ],
-
-  [
-    'BIS / Compliance',
-    '39 employees',
-    '81% complete'
-  ]
-
-].map(r => `
-
-  <div class="learning-row">
-
-    <div>
-
-      <div class="health-name">
-        ${r[0]}
-      </div>
-
-      <div class="health-meta">
-        ${r[1]}
-      </div>
-
-    </div>
-
-    <strong>
-      ${r[2]}
-    </strong>
-
-  </div>
-
-`).join('');
+}
 
 
-/* =========================
-   ENGAGEMENT
-========================= */
+function lndIsPresent(row){
 
-document.getElementById('engagementKpis').innerHTML = [
+  return (
+    lndClean(
+      row.Attendance
+    ).toLowerCase()
+    ===
+    'present'
+  );
 
-  kpi(
-    'eNPS',
-    '+32',
-    '▲ +4 vs last survey'
-  ),
-
-  kpi(
-    'Survey Participation',
-    '87%',
-    'Latest pulse'
-  ),
-
-  kpi(
-    'R&R Nominations',
-    '14',
-    'Across 6 categories'
-  ),
-
-  kpi(
-    'Town Hall Attendance',
-    '96%',
-    'Last quarter'
-  )
-
-].join('');
+}
 
 
-makeLineChart(
-  'engagementChart',
-  [
-    'Q3 FY25',
-    'Q4 FY25',
-    'Q1 FY26',
-    'Q2 FY26'
-  ],
-  [21, 26, 28, 32],
-  'eNPS'
+function lndIsActive(row){
+
+  return (
+    lndClean(
+      row.Status
+    ).toLowerCase()
+    !==
+    'not active'
+  );
+
+}
+
+
+function lndEmployeeKey(row){
+
+  return (
+    lndClean(row['Employee ID']) ||
+    lndClean(row['Employee ID 2']) ||
+    lndClean(row.Attendees).toLowerCase()
+  );
+
+}
+
+
+function lndAverage(values){
+
+  const valid =
+    values.filter(
+      value =>
+        value !== null &&
+        Number.isFinite(value)
+    );
+
+  if(!valid.length){
+    return null;
+  }
+
+  return (
+    valid.reduce(
+      (sum,value) =>
+        sum + value,
+      0
+    )
+    /
+    valid.length
+  );
+
+}
+
+
+function lndUnique(values){
+
+  return [
+    ...new Set(
+      values
+        .map(lndClean)
+        .filter(Boolean)
+    )
+  ];
+
+}
+
+
+function destroyLndChart(id){
+
+  if(
+    LND_CHARTS[id]
+  ){
+
+    LND_CHARTS[id].destroy();
+
+    delete LND_CHARTS[id];
+
+  }
+
+}
+
+
+/* =========================================================
+   LIVE FETCH
+========================================================= */
+
+let lndRequestTimer = null;
+
+function setLndStatus(text, type = '') {
+  const status = __nativeGetElementById('learningLiveStatus');
+  if (!status) return;
+
+  status.textContent = text;
+  status.classList.remove('live', 'error');
+  if (type) status.classList.add(type);
+}
+
+function loadLndLive(force = false) {
+  if (lndLoaded && !force) {
+    renderLndDashboard();
+    return;
+  }
+
+  setLndStatus('Connecting...');
+
+  const recordCount = __nativeGetElementById('lndHeaderRecordCount');
+  if (recordCount) recordCount.textContent = '-';
+
+  const previous = __nativeGetElementById('lndJsonpScript');
+  if (previous) previous.remove();
+
+  if (lndRequestTimer) clearTimeout(lndRequestTimer);
+
+  window.receiveLndData = function(payload) {
+    console.log('L&D JSONP response:', payload);
+
+    if (lndRequestTimer) clearTimeout(lndRequestTimer);
+
+    try {
+      if (!payload || payload.ok !== true) {
+        throw new Error((payload && payload.error) || 'L&D API returned an invalid response');
+      }
+
+      if (!Array.isArray(payload.rows)) {
+        throw new Error('rows[] missing from L&D response');
+      }
+
+      lndRows = payload.rows;
+      lndLoaded = true;
+
+      if (recordCount) {
+        recordCount.textContent = payload.rowCount ?? lndRows.length;
+      }
+
+      setLndStatus('● Live', 'live');
+      initialiseLndFilters();
+      renderLndDashboard();
+
+      console.log('L&D dashboard loaded successfully:', lndRows.length, 'records');
+    } catch (error) {
+      console.error('L&D response processing failed:', error);
+      setLndStatus('Data Error', 'error');
+    }
+  };
+
+  const script = document.createElement('script');
+  script.id = 'lndJsonpScript';
+
+  const separator = LND_API_URL.includes('?') ? '&' : '?';
+  script.src =
+    LND_API_URL +
+    separator +
+    'callback=receiveLndData' +
+    '&_=' +
+    Date.now();
+
+  script.async = true;
+
+  script.onload = function() {
+    console.log('L&D JSONP script loaded:', script.src);
+  };
+
+  script.onerror = function(event) {
+    console.error('Unable to load L&D JSONP endpoint:', event, script.src);
+    if (lndRequestTimer) clearTimeout(lndRequestTimer);
+    setLndStatus('Connection Failed', 'error');
+  };
+
+  document.head.appendChild(script);
+
+  lndRequestTimer = setTimeout(function() {
+    if (!lndLoaded) {
+      console.error('L&D request timeout. URL:', script.src);
+      setLndStatus('Connection Timeout', 'error');
+    }
+  }, 15000);
+}
+
+
+/* =========================================================
+   FILTER SETUP
+========================================================= */
+
+function populateLndSelect(
+  id,
+  values,
+  firstLabel
+){
+
+  const el =
+    document.getElementById(id);
+
+
+  if(!el){
+    return;
+  }
+
+
+  el.innerHTML =
+
+    '<option value="all">' +
+    firstLabel +
+    '</option>' +
+
+    lndUnique(values)
+      .sort(
+        (a,b) =>
+          a.localeCompare(b)
+      )
+      .map(
+        value =>
+
+          '<option value="' +
+          lndEscape(value) +
+          '">' +
+
+          lndEscape(value) +
+
+          '</option>'
+
+      )
+      .join('');
+
+}
+
+
+function initialiseLndFilters(){
+
+  populateLndSelect(
+    'lndRegion',
+    lndRows.map(
+      row => row.Region
+    ),
+    'Region: All'
+  );
+
+
+  populateLndSelect(
+    'lndBranch',
+    lndRows.map(
+      row =>
+        row['Branch Name']
+    ),
+    'Branch: All'
+  );
+
+
+  populateLndSelect(
+    'lndMode',
+    lndRows.map(
+      row => row.Mode
+    ),
+    'Mode: All'
+  );
+
+
+  populateLndSelect(
+    'lndTopic',
+    lndRows.map(
+      row =>
+        row['Training Topic']
+    ),
+    'All Training Topics'
+  );
+
+}
+
+
+function setLndGroupFilter(
+  group,
+  button
+){
+
+  lndGroupFilter =
+    group;
+
+
+  document
+    .querySelectorAll(
+      '.lnd-chip'
+    )
+    .forEach(
+      el =>
+        el.classList.remove(
+          'active'
+        )
+    );
+
+
+  button.classList.add(
+    'active'
+  );
+
+
+  renderLndDashboard();
+
+}
+
+
+/* =========================================================
+   FILTER DATA
+========================================================= */
+
+function getFilteredLndRows(){
+
+  const search =
+    lndClean(
+      document.getElementById(
+        'lndSearch'
+      )?.value
+    ).toLowerCase();
+
+
+  const region =
+    document.getElementById(
+      'lndRegion'
+    )?.value ||
+    'all';
+
+
+  const branch =
+    document.getElementById(
+      'lndBranch'
+    )?.value ||
+    'all';
+
+
+  const mode =
+    document.getElementById(
+      'lndMode'
+    )?.value ||
+    'all';
+
+
+  const topic =
+    document.getElementById(
+      'lndTopic'
+    )?.value ||
+    'all';
+
+
+  const attendance =
+    document.getElementById(
+      'lndAttendance'
+    )?.value ||
+    'all';
+
+
+  return lndRows.filter(
+    row => {
+
+      const group =
+        lndClean(
+          row.Group
+        );
+
+
+      const text =
+        [
+
+          row.Attendees,
+
+          row[
+            'Training Topic'
+          ],
+
+          row[
+            'Branch Name'
+          ],
+
+          row.Region,
+
+          row.L1,
+
+          row.L2
+
+        ]
+        .map(lndClean)
+        .join(' ')
+        .toLowerCase();
+
+
+      return (
+
+        (
+          !search ||
+          text.includes(search)
+        )
+
+        &&
+
+        (
+          region === 'all' ||
+          lndClean(
+            row.Region
+          ) === region
+        )
+
+        &&
+
+        (
+          branch === 'all' ||
+          lndClean(
+            row[
+              'Branch Name'
+            ]
+          ) === branch
+        )
+
+        &&
+
+        (
+          mode === 'all' ||
+          lndClean(
+            row.Mode
+          ) === mode
+        )
+
+        &&
+
+        (
+          topic === 'all' ||
+          lndClean(
+            row[
+              'Training Topic'
+            ]
+          ) === topic
+        )
+
+        &&
+
+        (
+          attendance === 'all' ||
+          lndClean(
+            row.Attendance
+          ) === attendance
+        )
+
+        &&
+
+        (
+          lndGroupFilter === 'all' ||
+          group
+            .toLowerCase()
+            .includes(
+              lndGroupFilter
+                .toLowerCase()
+            )
+        )
+
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   KPI CARDS
+========================================================= */
+
+function renderProfessionalLndKpis(rows){
+
+  const active =
+    rows.filter(
+      lndIsActive
+    );
+
+
+  const present =
+    active.filter(
+      lndIsPresent
+    );
+
+
+  const employees =
+    new Set(
+      active
+        .map(
+          lndEmployeeKey
+        )
+        .filter(Boolean)
+    );
+
+
+  const trained =
+    new Set(
+      present
+        .map(
+          lndEmployeeKey
+        )
+        .filter(Boolean)
+    );
+
+
+  const totalEmployees =
+    employees.size;
+
+
+  const employeesTrained =
+    trained.size;
+
+
+  const coverage =
+    totalEmployees
+      ?
+        employeesTrained /
+        totalEmployees *
+        100
+      :
+        0;
+
+
+  const hours =
+    present.reduce(
+      (sum,row) =>
+
+        sum +
+        (
+          lndNumber(
+            row[
+              'Duration (in hours)'
+            ]
+          )
+          || 0
+        ),
+
+      0
+    );
+
+
+  const avgHours =
+    employeesTrained
+      ?
+        hours /
+        employeesTrained
+      :
+        0;
+
+
+  const programs =
+    new Set(
+
+      present.map(
+        row =>
+
+          [
+
+            row[
+              'Training Topic'
+            ],
+
+            row.Date,
+
+            row[
+              'Branch Name'
+            ]
+
+          ]
+          .map(lndClean)
+          .join('|')
+
+      )
+
+    ).size;
+
+
+  const attended =
+    rows.filter(
+      lndIsPresent
+    ).length;
+
+
+  const absent =
+    rows.filter(
+      row =>
+        lndClean(
+          row.Attendance
+        ).toLowerCase()
+        ===
+        'absent'
+    ).length;
+
+
+  const completion =
+    attended + absent
+      ?
+        attended /
+        (
+          attended +
+          absent
+        )
+        *
+        100
+      :
+        0;
+
+
+  const feedback =
+    lndAverage(
+      rows.map(
+        row =>
+          lndNumber(
+            row[
+              'Feedback Score'
+            ]
+          )
+      )
+    );
+
+
+  const assessment =
+    lndAverage(
+      rows.map(
+        row =>
+          lndNumber(
+            row[
+              'Assesment Score'
+            ]
+          )
+      )
+    );
+
+
+  const data = [
+
+    {
+      title:
+        'Total Employees',
+
+      value:
+        totalEmployees,
+
+      sub:
+        'Active employee population',
+
+      accent:
+        LND_COLORS.teal
+    },
+
+    {
+      title:
+        'Employees Trained',
+
+      value:
+        employeesTrained,
+
+      sub:
+        'Unique employees attended training',
+
+      accent:
+        LND_COLORS.teal
+    },
+
+    {
+      title:
+        'Training Coverage %',
+
+      value:
+        coverage.toFixed(1) +
+        '%',
+
+      sub:
+        'Trained ÷ active employees',
+
+      accent:
+        LND_COLORS.green
+    },
+
+    {
+      title:
+        'Total Learning Hours',
+
+      value:
+        hours.toFixed(1),
+
+      sub:
+        'Aggregate learning hours',
+
+      accent:
+        LND_COLORS.teal
+    },
+
+    {
+      title:
+        'Avg. Hours / Employee',
+
+      value:
+        avgHours.toFixed(1),
+
+      sub:
+        'Learning hours per employee',
+
+      accent:
+        LND_COLORS.navy
+    },
+
+    {
+      title:
+        'Programs Conducted',
+
+      value:
+        programs,
+
+      sub:
+        'Unique training sessions',
+
+      accent:
+        LND_COLORS.amber
+    },
+
+    {
+      title:
+        'Completion Rate %',
+
+      value:
+        completion.toFixed(1) +
+        '%',
+
+      sub:
+        attended +
+        ' present · ' +
+        absent +
+        ' absent',
+
+      accent:
+        LND_COLORS.green
+    },
+
+    {
+      title:
+        'Avg. Training Rating',
+
+      value:
+        feedback === null
+          ? '-'
+          : feedback.toFixed(1) +
+            ' / 5',
+
+      sub:
+        'Participant feedback',
+
+      accent:
+        LND_COLORS.amber
+    },
+
+    {
+      title:
+        'Assessment Score',
+
+      value:
+        assessment === null
+          ? '-'
+          : assessment.toFixed(1) +
+            '%',
+
+      sub:
+        'Average assessment score',
+
+      accent:
+        LND_COLORS.navy
+    }
+
+  ];
+
+
+  const target =
+    document.getElementById(
+      'learningKpis'
+    );
+
+
+  if(!target){
+    return;
+  }
+
+
+  target.innerHTML =
+    data.map(
+      item => `
+
+        <div
+          class="lnd-kpi-card"
+          style="--accent:${item.accent}"
+        >
+
+          <div class="title">
+            ${item.title}
+          </div>
+
+          <div class="value">
+            ${item.value}
+          </div>
+
+          <div class="sub">
+            ${item.sub}
+          </div>
+
+        </div>
+
+      `
+    )
+    .join('');
+
+}
+
+
+/* =========================================================
+   MONTHLY DATA
+========================================================= */
+
+function getLndMonthly(rows){
+
+  const map = {};
+
+
+  rows.forEach(
+    row => {
+
+      const date =
+        lndDate(
+          row.Date
+        );
+
+
+      if(!date){
+        return;
+      }
+
+
+      const key =
+        date.getFullYear() +
+        '-' +
+        String(
+          date.getMonth() + 1
+        ).padStart(
+          2,
+          '0'
+        );
+
+
+      if(!map[key]){
+
+        map[key] = {
+
+          hours:0,
+
+          sessions:
+            new Set(),
+
+          employees:
+            new Set(),
+
+          activeEmployees:
+            new Set(),
+
+          assessment:[]
+
+        };
+
+      }
+
+
+      const item =
+        map[key];
+
+
+      if(
+        lndIsActive(row)
+      ){
+
+        item.activeEmployees.add(
+          lndEmployeeKey(row)
+        );
+
+      }
+
+
+      if(
+        lndIsPresent(row)
+      ){
+
+        item.employees.add(
+          lndEmployeeKey(row)
+        );
+
+
+        item.hours +=
+
+          lndNumber(
+            row[
+              'Duration (in hours)'
+            ]
+          )
+          || 0;
+
+
+        item.sessions.add(
+
+          [
+
+            row[
+              'Training Topic'
+            ],
+
+            row.Date,
+
+            row[
+              'Branch Name'
+            ]
+
+          ]
+          .map(lndClean)
+          .join('|')
+
+        );
+
+      }
+
+
+      const assessment =
+        lndNumber(
+          row[
+            'Assesment Score'
+          ]
+        );
+
+
+      if(
+        assessment !== null
+      ){
+
+        item.assessment.push(
+          assessment
+        );
+
+      }
+
+    }
+  );
+
+
+  return Object
+    .keys(map)
+    .sort()
+    .map(
+      key => {
+
+        const [
+          year,
+          month
+        ] =
+          key.split('-');
+
+
+        const item =
+          map[key];
+
+
+        return {
+
+          key,
+
+          label:
+            new Date(
+              Number(year),
+              Number(month) - 1,
+              1
+            )
+            .toLocaleString(
+              'en-IN',
+              {
+                month:'short'
+              }
+            ),
+
+          hours:
+            Number(
+              item.hours
+                .toFixed(1)
+            ),
+
+          programs:
+            item.sessions.size,
+
+          coverage:
+            item.activeEmployees.size
+              ?
+                item.employees.size /
+                item.activeEmployees.size *
+                100
+              :
+                0,
+
+          assessment:
+            lndAverage(
+              item.assessment
+            )
+
+        };
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   CHARTS
+========================================================= */
+
+function renderLndCharts(rows){
+
+  Chart.defaults.font.family =
+    "'Segoe UI','Inter',sans-serif";
+
+  Chart.defaults.color =
+    '#5B6472';
+
+  Chart.defaults.font.size =
+    11;
+
+
+  const monthly =
+    getLndMonthly(rows);
+
+
+  const labels =
+    monthly.map(
+      item =>
+        item.label
+    );
+
+
+  /* HOURS + PROGRAMS */
+
+  destroyLndChart(
+    'hoursPrograms'
+  );
+
+
+  const hoursCanvas =
+    document.getElementById(
+      'lndHoursProgramsChart'
+    );
+
+
+  if(hoursCanvas){
+
+    LND_CHARTS.hoursPrograms =
+      new Chart(
+        hoursCanvas,
+        {
+
+          type:'bar',
+
+          data:{
+
+            labels,
+
+            datasets:[
+
+              {
+
+                label:
+                  'Learning Hours',
+
+                data:
+                  monthly.map(
+                    item =>
+                      item.hours
+                  ),
+
+                backgroundColor:
+                  LND_COLORS.teal,
+
+                borderRadius:4,
+
+                maxBarThickness:30,
+
+                yAxisID:'y'
+
+              },
+
+              {
+
+                label:
+                  'Programs Conducted',
+
+                type:'line',
+
+                data:
+                  monthly.map(
+                    item =>
+                      item.programs
+                  ),
+
+                borderColor:
+                  LND_COLORS.amber,
+
+                backgroundColor:
+                  LND_COLORS.amber,
+
+                tension:.35,
+
+                pointRadius:3,
+
+                yAxisID:'y1'
+
+              }
+
+            ]
+
+          },
+
+          options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            plugins:{
+
+              legend:{
+
+                position:'bottom',
+
+                labels:{
+                  boxWidth:10,
+                  padding:14
+                }
+
+              }
+
+            },
+
+            scales:{
+
+              x:{
+                grid:{
+                  display:false
+                }
+              },
+
+              y:{
+
+                beginAtZero:true,
+
+                grid:{
+                  color:'#EEF1F4'
+                },
+
+                title:{
+                  display:true,
+                  text:'Hours'
+                }
+
+              },
+
+              y1:{
+
+                beginAtZero:true,
+
+                position:'right',
+
+                grid:{
+                  display:false
+                },
+
+                title:{
+                  display:true,
+                  text:'Programs'
+                }
+
+              }
+
+            }
+
+          }
+
+        }
+      );
+
+  }
+
+
+  /* COVERAGE */
+
+  destroyLndChart(
+    'coverage'
+  );
+
+
+  const coverageCanvas =
+    document.getElementById(
+      'lndCoverageChart'
+    );
+
+
+  if(coverageCanvas){
+
+    LND_CHARTS.coverage =
+      new Chart(
+        coverageCanvas,
+        {
+
+          type:'line',
+
+          data:{
+
+            labels,
+
+            datasets:[{
+
+              label:
+                'Coverage %',
+
+              data:
+                monthly.map(
+                  item =>
+                    Number(
+                      item.coverage
+                        .toFixed(1)
+                    )
+                ),
+
+              borderColor:
+                LND_COLORS.teal,
+
+              backgroundColor:
+                'rgba(23,97,110,.12)',
+
+              fill:true,
+
+              tension:.4,
+
+              pointRadius:3
+
+            }]
+
+          },
+
+          options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            plugins:{
+              legend:{
+                display:false
+              }
+            },
+
+            scales:{
+
+              x:{
+                grid:{
+                  display:false
+                }
+              },
+
+              y:{
+
+                beginAtZero:true,
+
+                max:100,
+
+                grid:{
+                  color:'#EEF1F4'
+                },
+
+                ticks:{
+                  callback:
+                    value =>
+                      value + '%'
+                }
+
+              }
+
+            }
+
+          }
+
+        }
+      );
+
+  }
+
+
+  /* COMPLETION */
+
+  destroyLndChart(
+    'completion'
+  );
+
+
+  const present =
+    rows.filter(
+      lndIsPresent
+    ).length;
+
+
+  const absent =
+    rows.filter(
+      row =>
+        lndClean(
+          row.Attendance
+        ).toLowerCase()
+        ===
+        'absent'
+    ).length;
+
+
+  const total =
+    present + absent;
+
+
+  const completion =
+    total
+      ?
+        present /
+        total *
+        100
+      :
+        0;
+
+
+  const completionCanvas =
+    document.getElementById(
+      'lndCompletionChart'
+    );
+
+
+  if(completionCanvas){
+
+    LND_CHARTS.completion =
+      new Chart(
+        completionCanvas,
+        {
+
+          type:'doughnut',
+
+          data:{
+
+            labels:[
+              'Present',
+              'Absent'
+            ],
+
+            datasets:[{
+
+              data:[
+
+                completion,
+
+                100 -
+                completion
+
+              ],
+
+              backgroundColor:[
+
+                LND_COLORS.green,
+
+                '#EEF1F4'
+
+              ],
+
+              borderWidth:0
+
+            }]
+
+          },
+
+          options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            cutout:'72%',
+
+            plugins:{
+
+              legend:{
+
+                position:'bottom',
+
+                labels:{
+                  boxWidth:10
+                }
+
+              }
+
+            }
+
+          }
+
+        }
+      );
+
+  }
+
+
+  /* RATING BY TOPIC */
+
+  destroyLndChart(
+    'rating'
+  );
+
+
+  const topicRatings = {};
+
+
+  rows.forEach(
+    row => {
+
+      const topic =
+        lndClean(
+          row[
+            'Training Topic'
+          ]
+        );
+
+
+      const rating =
+        lndNumber(
+          row[
+            'Feedback Score'
+          ]
+        );
+
+
+      if(
+        !topic ||
+        rating === null
+      ){
+        return;
+      }
+
+
+      if(!topicRatings[topic]){
+
+        topicRatings[topic] =
+          [];
+
+      }
+
+
+      topicRatings[topic]
+        .push(
+          rating
+        );
+
+    }
+  );
+
+
+  const ratingData =
+    Object
+      .entries(
+        topicRatings
+      )
+      .map(
+        ([topic,values]) => ({
+
+          topic,
+
+          rating:
+            lndAverage(
+              values
+            )
+
+        })
+      )
+      .sort(
+        (a,b) =>
+          b.rating -
+          a.rating
+      )
+      .slice(
+        0,
+        5
+      );
+
+
+  const ratingCanvas =
+    document.getElementById(
+      'lndRatingChart'
+    );
+
+
+  if(ratingCanvas){
+
+    LND_CHARTS.rating =
+      new Chart(
+        ratingCanvas,
+        {
+
+          type:'bar',
+
+          data:{
+
+            labels:
+              ratingData.map(
+                item =>
+                  item.topic
+              ),
+
+            datasets:[{
+
+              data:
+                ratingData.map(
+                  item =>
+                    Number(
+                      item.rating
+                        .toFixed(1)
+                    )
+                ),
+
+              backgroundColor:
+                LND_COLORS.amber,
+
+              borderRadius:4,
+
+              maxBarThickness:26
+
+            }]
+
+          },
+
+          options:{
+
+            indexAxis:'y',
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            plugins:{
+              legend:{
+                display:false
+              }
+            },
+
+            scales:{
+
+              x:{
+
+                beginAtZero:true,
+
+                max:5,
+
+                grid:{
+                  color:'#EEF1F4'
+                }
+
+              },
+
+              y:{
+                grid:{
+                  display:false
+                }
+              }
+
+            }
+
+          }
+
+        }
+      );
+
+  }
+
+
+  /* ASSESSMENT */
+
+  destroyLndChart(
+    'assessment'
+  );
+
+
+  const assessmentCanvas =
+    document.getElementById(
+      'lndAssessmentChart'
+    );
+
+
+  if(assessmentCanvas){
+
+    LND_CHARTS.assessment =
+      new Chart(
+        assessmentCanvas,
+        {
+
+          type:'line',
+
+          data:{
+
+            labels,
+
+            datasets:[{
+
+              label:
+                'Assessment %',
+
+              data:
+                monthly.map(
+                  item =>
+                    item.assessment === null
+                      ? null
+                      : Number(
+                          item.assessment
+                            .toFixed(1)
+                        )
+                ),
+
+              borderColor:
+                LND_COLORS.navy,
+
+              backgroundColor:
+                'rgba(31,56,100,.08)',
+
+              fill:true,
+
+              tension:.4,
+
+              pointRadius:3
+
+            }]
+
+          },
+
+          options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            plugins:{
+              legend:{
+                display:false
+              }
+            },
+
+            scales:{
+
+              x:{
+                grid:{
+                  display:false
+                }
+              },
+
+              y:{
+
+                beginAtZero:true,
+
+                max:100,
+
+                grid:{
+                  color:'#EEF1F4'
+                },
+
+                ticks:{
+                  callback:
+                    value =>
+                      value + '%'
+                }
+
+              }
+
+            }
+
+          }
+
+        }
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   REGION TABLE
+========================================================= */
+
+function renderLndRegionTable(rows){
+
+  const map = {};
+
+
+  rows.forEach(
+    row => {
+
+      const region =
+        lndClean(
+          row.Region
+        ) ||
+        'Unknown';
+
+
+      if(!map[region]){
+
+        map[region] = {
+
+          employees:
+            new Set(),
+
+          hours:0,
+
+          present:0,
+
+          absent:0,
+
+          assessment:[],
+
+          feedback:[]
+
+        };
+
+      }
+
+
+      const item =
+        map[region];
+
+
+      if(
+        lndIsPresent(row)
+      ){
+
+        item.employees.add(
+          lndEmployeeKey(row)
+        );
+
+
+        item.present++;
+
+
+        item.hours +=
+
+          lndNumber(
+            row[
+              'Duration (in hours)'
+            ]
+          )
+          || 0;
+
+      }
+
+
+      if(
+        lndClean(
+          row.Attendance
+        ).toLowerCase()
+        ===
+        'absent'
+      ){
+
+        item.absent++;
+
+      }
+
+
+      const assessment =
+        lndNumber(
+          row[
+            'Assesment Score'
+          ]
+        );
+
+
+      if(
+        assessment !== null
+      ){
+
+        item.assessment.push(
+          assessment
+        );
+
+      }
+
+
+      const feedback =
+        lndNumber(
+          row[
+            'Feedback Score'
+          ]
+        );
+
+
+      if(
+        feedback !== null
+      ){
+
+        item.feedback.push(
+          feedback
+        );
+
+      }
+
+    }
+  );
+
+
+  const target =
+    document.getElementById(
+      'lndRegionTableBody'
+    );
+
+
+  if(!target){
+    return;
+  }
+
+
+  target.innerHTML =
+
+    Object
+      .entries(map)
+
+      .sort(
+        (a,b) =>
+          b[1].employees.size -
+          a[1].employees.size
+      )
+
+      .map(
+        ([region,item]) => {
+
+
+          const total =
+            item.present +
+            item.absent;
+
+
+          const attendance =
+            total
+              ?
+                item.present /
+                total *
+                100
+              :
+                0;
+
+
+          const assessment =
+            lndAverage(
+              item.assessment
+            );
+
+
+          const feedback =
+            lndAverage(
+              item.feedback
+            );
+
+
+          let status =
+            {
+              text:'On Track',
+              cls:'green'
+            };
+
+
+          if(
+            attendance <
+            75
+          ){
+
+            status = {
+              text:'At Risk',
+              cls:'red'
+            };
+
+          }else if(
+            attendance <
+            85
+          ){
+
+            status = {
+              text:'Watch',
+              cls:'amber'
+            };
+
+          }
+
+
+          return `
+
+            <tr>
+
+              <td>
+                <strong>
+                  ${lndEscape(region)}
+                </strong>
+              </td>
+
+              <td>
+                ${item.employees.size}
+              </td>
+
+              <td>
+                ${item.hours.toFixed(1)}
+              </td>
+
+              <td>
+
+                <div class="lnd-progress-cell">
+
+                  <div class="lnd-progress">
+
+                    <div
+                      class="lnd-progress-fill"
+                      style="width:${attendance}%"
+                    ></div>
+
+                  </div>
+
+                  <span>
+                    ${attendance.toFixed(0)}%
+                  </span>
+
+                </div>
+
+              </td>
+
+              <td>
+                ${
+                  assessment === null
+                    ? '-'
+                    : assessment.toFixed(1) +
+                      '%'
+                }
+              </td>
+
+              <td>
+                ${
+                  feedback === null
+                    ? '-'
+                    : feedback.toFixed(1)
+                }
+              </td>
+
+              <td>
+
+                <span
+                  class="lnd-status-tag ${status.cls}"
+                >
+                  ${status.text}
+                </span>
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join('');
+
+}
+
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+function renderLndRegister(rows){
+
+  const target =
+    document.getElementById(
+      'lndAttendanceBody'
+    );
+
+
+  const count =
+    document.getElementById(
+      'lndVisibleCount'
+    );
+
+
+  if(count){
+
+    count.textContent =
+      rows.length;
+
+  }
+
+
+  if(!target){
+    return;
+  }
+
+
+  const sorted =
+    [...rows]
+      .sort(
+        (a,b) => {
+
+          const da =
+            lndDate(
+              a.Date
+            );
+
+          const db =
+            lndDate(
+              b.Date
+            );
+
+
+          return (
+
+            (
+              db
+                ? db.getTime()
+                : 0
+            )
+
+            -
+
+            (
+              da
+                ? da.getTime()
+                : 0
+            )
+
+          );
+
+        }
+      );
+
+
+  target.innerHTML =
+
+    sorted.map(
+      row => {
+
+
+        const attendance =
+          lndClean(
+            row.Attendance
+          );
+
+
+        const tagClass =
+          attendance
+            .toLowerCase()
+            ===
+            'present'
+
+            ?
+              'green'
+
+            :
+              'red';
+
+
+        return `
+
+          <tr>
+
+            <td>
+              ${lndEscape(row.Date)}
+            </td>
+
+            <td>
+
+              <strong>
+                ${lndEscape(
+                  row.Attendees
+                )}
+              </strong>
+
+            </td>
+
+            <td>
+              ${lndEscape(
+                row.Region
+              )}
+            </td>
+
+            <td>
+              ${lndEscape(
+                row[
+                  'Branch Name'
+                ]
+              )}
+            </td>
+
+            <td>
+              ${lndEscape(
+                row[
+                  'Training Topic'
+                ]
+              )}
+            </td>
+
+            <td>
+              ${lndEscape(
+                row.Mode
+              )}
+            </td>
+
+            <td>
+              ${lndEscape(
+                row[
+                  'Duration (in hours)'
+                ]
+              )}
+            </td>
+
+            <td>
+
+              <span
+                class="lnd-status-tag ${tagClass}"
+              >
+                ${attendance}
+              </span>
+
+            </td>
+
+            <td>
+              ${
+                lndEscape(
+                  row[
+                    'Assesment Score'
+                  ]
+                ) ||
+                '-'
+              }
+            </td>
+
+            <td>
+              ${
+                lndEscape(
+                  row[
+                    'Feedback Score'
+                  ]
+                ) ||
+                '-'
+              }
+            </td>
+
+            <td>
+              ${lndEscape(
+                row.L1
+              )}
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    )
+    .join('');
+
+}
+
+
+/* =========================================================
+   MASTER RENDER
+========================================================= */
+
+function renderLndDashboard(){
+
+  const rows =
+    getFilteredLndRows();
+
+
+  renderProfessionalLndKpis(
+    rows
+  );
+
+
+  renderLndCharts(
+    rows
+  );
+
+
+  renderLndRegionTable(
+    rows
+  );
+
+
+  renderLndRegister(
+    rows
+  );
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+[
+
+  'lndSearch',
+
+  'lndRegion',
+
+  'lndBranch',
+
+  'lndMode',
+
+  'lndTopic',
+
+  'lndAttendance'
+
+]
+.forEach(
+  id => {
+
+    const el =
+      document.getElementById(
+        id
+      );
+
+
+    if(!el){
+      return;
+    }
+
+
+    el.addEventListener(
+
+      id ===
+      'lndSearch'
+        ?
+          'input'
+        :
+          'change',
+
+      renderLndDashboard
+
+    );
+
+  }
 );
+
+
+loadLndLive(false);
 
 
 /* =========================
